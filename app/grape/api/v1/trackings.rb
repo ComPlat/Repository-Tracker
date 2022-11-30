@@ -2,7 +2,7 @@ module API::V1
   class Trackings < Grape::API
     version "v1", using: :path
 
-    args = [{ "tracking1" => "My first tracking" }, { "tracking2" => "My second tracking" }]
+    args = [{"tracking1" => "My first tracking"}, {"tracking2" => "My second tracking"}]
 
     namespace :trackings do
       desc "Return list of trackings"
@@ -26,7 +26,7 @@ module API::V1
         requires :content, type: String, desc: "Tracking content"
       end
       post do
-        args.push({ params[:title] => params[:content] })
+        args.push({params[:title] => params[:content]})
       end
     end
 
