@@ -20,10 +20,13 @@ describe API::V1::Trackings do
   end
 
   describe "POST /api/v1/trackings/" do
-    let(:post_content) { {title: "tracking_new", content: "My new tracking"} }
+    let(:title) { "tracking_new" }
+    let(:content) { "My new tracking" }
+    let(:post_content) { {title:, content:} }
 
     before { post "/api/v1/trackings/", params: post_content }
 
     it { expect(response).to have_http_status :created }
+    it { expect(JSON.parse(response.body)).to include(title => content) }
   end
 end
