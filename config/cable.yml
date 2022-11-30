@@ -2,7 +2,7 @@ development:
   adapter: async
 production:
   adapter: redis
-  channel_prefix: Repository_Downloader_production
+  channel_prefix: Repository_Tracker_production
   url: <%= ENV.fetch("REDIS_URL") { "redis://localhost:6379/1" } %>
 test:
   adapter: test

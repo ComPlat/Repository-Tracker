@@ -20,4 +20,4 @@ services:
       - db
       - chrome
     volumes:
-      - ./:/repository-downloader
+      - ./:/repository-tracker

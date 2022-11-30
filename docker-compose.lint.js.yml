@@ -5,4 +5,4 @@ services:
     environment:
       - RAILS_ENV=test
     volumes:
-      - ./:/repository-downloader
+      - ./:/repository-tracker
