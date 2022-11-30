@@ -11,7 +11,7 @@
 1. `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`
 2. `brew bundle`
 3. `open -a Postgres`
-4. Initialize database with version 12 in GUI
+4. Initialize database with version 14 in GUI
 
 ##### Native
 
