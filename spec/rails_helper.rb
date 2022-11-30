@@ -56,6 +56,12 @@ RSpec.configure do |config|
   #
   # The different available types are documented in the features, such as in
   # https://relishapp.com/rspec/rspec-rails/docs
+
+  # noinspection RubyResolve
+  config.define_derived_metadata(file_path: Regexp.new("/spec/grape/api")) do |metadata|
+    metadata[:type] = :request
+  end
+
   # noinspection RubyResolve
   config.infer_spec_type_from_file_location!
 
