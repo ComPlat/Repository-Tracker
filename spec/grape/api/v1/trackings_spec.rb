@@ -5,7 +5,6 @@ describe API::V1::Trackings do
     before { get "/api/v1/trackings" }
 
     it { expect(response).to have_http_status :ok }
-    it { expect(response.body).to eq expected_json }
     it { expect(response.content_type).to eq "application/json" }
   end
 
