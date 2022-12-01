@@ -28,11 +28,14 @@ import React, {
 // Types
 
 type DataType = {
-  address: string,
-  age: number,
-  description: string,
-  key: number,
-  name: string,
+  data_metadata: string,
+  date_time: string,
+  from: string,
+  id: number,
+  owner: string,
+  status: string,
+  to: string,
+  tracker_number: string,
 };
 
 type TablePaginationPosition =
@@ -40,32 +43,36 @@ type TablePaginationPosition =
 
 const columns: ColumnsType<DataType> = [
   {
-    dataIndex: 'name',
-    title: 'Name',
+    dataIndex: 'id',
+    title: 'ID',
   },
   {
-    dataIndex: 'age',
-    sorter: (a, b) => {
-      return a.age - b.age;
-    },
-    title: 'Age',
+    dataIndex: 'from',
+    title: 'From',
   },
   {
-    dataIndex: 'address',
-    filters: [
-      {
-        text: 'London',
-        value: 'London',
-      },
-      {
-        text: 'New York',
-        value: 'New York',
-      },
-    ],
-    onFilter: (value, record) => {
-      return record.address.startsWith(value as string);
-    },
-    title: 'Address',
+    dataIndex: 'to',
+    title: 'To',
+  },
+  {
+    dataIndex: 'date_time',
+    title: 'Date/Time',
+  },
+  {
+    dataIndex: 'status',
+    title: 'Status',
+  },
+  {
+    dataIndex: 'data_metadata',
+    title: 'Data/Metadata',
+  },
+  {
+    dataIndex: 'tracker_number',
+    title: 'Tracker Number',
+  },
+  {
+    dataIndex: 'owner',
+    title: 'Owner',
   },
   {
     key: 'action',
@@ -89,17 +96,20 @@ const columns: ColumnsType<DataType> = [
 const data: DataType[] = [];
 for (let index = 1; index <= 10_000; index++) {
   data.push({
-    address: `New York No. ${index} Lake Park`,
-    age: Number(`${index}2`),
-    description: `My name is John Brown, I am ${index}2 years old, living in New York No. ${index} Lake Park.`,
-    key: index,
-    name: 'John Brown',
+    data_metadata: `id: ${index}, data: metadata for some data`,
+    date_time: '01.01.1970 12:30.00',
+    from: 'ELN',
+    id: index,
+    owner: 'John Doe',
+    status: 'DRAFT',
+    to: 'RADAR4Chem',
+    tracker_number: `T221001-ERC-0${index}`,
   });
 }
 
 const defaultExpandable = {
   expandedRowRender: (record: DataType) => {
-    return <p>{record.description}</p>;
+    return <p>{record.data_metadata}</p>;
   },
 };
 const defaultTitle = () => {
