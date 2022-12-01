@@ -87,7 +87,7 @@ const columns: ColumnsType<DataType> = [
 ];
 
 const data: DataType[] = [];
-for (let index = 1; index <= 10; index++) {
+for (let index = 1; index <= 10_000; index++) {
   data.push({
     address: `New York No. ${index} Lake Park`,
     age: Number(`${index}2`),
@@ -227,7 +227,6 @@ const SmartTable: React.FC = () => {
 
   return (
     <>
-      <div className='py-8'><h1>Repository-Tracker</h1></div>
       <Form
         className='repository-tracker-smart-table'
         layout='inline'
