@@ -50,11 +50,17 @@ gem "dotenv-rails", "2.8.1"
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", "1.6.2", platforms: %i[mri mingw x64_mingw]
+
+  # Ruby Style Guide, with linter & automatic code fixer [https://github.com/testdouble/standard]
   gem "standard", "1.16.1", require: false
-  gem "rubocop-rails", "2.16.1", require: false
-  gem "rubocop-rspec", "2.13.2", require: false
-  gem "rspec-rails", "6.0.1"
-  gem "rails-controller-testing", "1.0.5"
+  gem "rubocop-rails", "2.16.1", require: false # [https://docs.rubocop.org/rubocop-rails/]
+  gem "rubocop-rspec", "2.13.2", require: false # [https://docs.rubocop.org/rubocop-rspec/]
+
+  # Behaviour-Driven Development tool for the TDD part focusing on the documentation and design aspects of TDD [https://relishapp.com/rspec/]
+  gem "rspec-rails", "6.0.1" # RSpec for Rails 5+ [https://relishapp.com/rspec/rspec-rails/docs]
+  gem "rails-controller-testing", "1.0.5" # Needed for Controller tests [https://github.com/rails/rails-controller-testing]
+  gem "shoulda-matchers", "5.2.0" # Simple One-Liner Tests for Rails [https://matchers.shoulda.io/]
+  gem "factory_bot_rails", "6.2.0" # fixtures replacement with a straightforward definition syntax, support for multiple build strategies and support for multiple factories for the same class [https://github.com/thoughtbot/factory_bot_rails]
 end
 
 group :development do
