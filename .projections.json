@@ -1,0 +1,4 @@
+{
+  "spec/integration/*_spec.rb":             {"type": "sintegration", "alternate": "app/models/{}.rb"},
+  "spec/factories/*.rb":                             {"type": "factory", "alternate": "app/models/{}.rb"}
+}
