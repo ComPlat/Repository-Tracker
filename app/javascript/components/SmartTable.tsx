@@ -285,7 +285,7 @@ const SmartTable: React.FC = () => {
         pagination={{
           position: [
             top as TablePaginationPosition,
-            bottom,
+            bottom as TablePaginationPosition,
           ],
         }}
         scroll={scroll}
