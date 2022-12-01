@@ -17,6 +17,26 @@ describe API::Base do
     it { is_expected.to eq({json: "application/json"}) }
   end
 
+  describe ".combined_routes" do
+    subject(:combined_routes) { described_class.combined_routes }
+
+    it { expect(combined_routes.length).to eq 2 }
+    it { expect(combined_routes).to include({"swagger_doc" => []}) }
+
+    describe "trackings routes" do
+      let(:expected_routes) do
+        # HINT: combined_routes["trackings"].map { |route|  [route.path, route.version] }
+        {"trackings" => [
+          be_a(Grape::Router::Route).and(have_attributes(path: "/:version/trackings(.json)", version: "v1")),
+          be_a(Grape::Router::Route).and(have_attributes(path: "/:version/trackings/:id(.json)", version: "v1")),
+          be_a(Grape::Router::Route).and(have_attributes(path: "/:version/trackings(.json)", version: "v1"))
+        ]}
+      end
+
+      it { expect(combined_routes).to include expected_routes }
+    end
+  end
+
   describe "response.headers" do
     let(:test_api) { Class.new(described_class) }
 
