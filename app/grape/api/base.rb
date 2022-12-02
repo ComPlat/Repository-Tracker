@@ -1,5 +1,9 @@
 module API
   class Base < Grape::API
+    rescue_from ActiveRecord::RecordNotFound do |error|
+      error! error.message, 404
+    end
+
     format :json
 
     # HINT: Needed to avoid CORS (Cross-Origin Resource Sharing) error.

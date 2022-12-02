@@ -2,12 +2,11 @@ module API::V1
   class Trackings < Grape::API
     version "v1", using: :path
 
-    args = [{"tracking1" => "My first tracking"}, {"tracking2" => "My second tracking"}]
-
     namespace :trackings do
       desc "Return list of trackings"
       get do
-        present args
+        # TODO: mb20221202 return only the user associated trackings
+        present Tracking.all
       end
 
       desc "Return a tracking"
@@ -16,17 +15,37 @@ module API::V1
       end
       route_param :id, type: Integer do
         get do
-          present args[params[:id]]
+          present Tracking.find(params[:id])
         end
       end
 
       desc "Create a tracking"
       params do
-        requires :title, type: String, desc: "Tracking title"
-        requires :content, type: String, desc: "Tracking content"
+        requires :from, type: String, desc: "Tracking sender"
+        requires :to, type: String, desc: "Tracking receiver"
+        requires :status, type: String, desc: "Tracking status"
+        requires :metadata, type: JSON
       end
+
+      # FIXME: mb20221202 user_id have to use from authentication!
       post do
-        args.push({params[:title] => params[:content]})
+        tracking = Tracking.create({
+          from: params[:from],
+          to: params[:to],
+          status: params[:status],
+          metadata: params[:metadata],
+          user_id: params[:user_id]
+        })
+
+        if tracking.valid?
+          {id: tracking.id,
+           from: tracking.from,
+           to: tracking.to,
+           status: tracking.status,
+           metadata: tracking.metadata}
+        else
+          error!("Unprocessable Entity, #{tracking.errors.messages}", 422)
+        end
       end
     end
 
