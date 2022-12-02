@@ -98,6 +98,8 @@ GEM
       responders
       warden (~> 1.2.3)
     diff-lcs (1.5.0)
+    doorkeeper (5.6.0)
+      railties (>= 5)
     dotenv (2.8.1)
     dotenv-rails (2.8.1)
       dotenv (= 2.8.1)
@@ -318,6 +320,7 @@ DEPENDENCIES
   cssbundling-rails (= 1.1.1)
   debug (= 1.6.2)
   devise (= 4.8.1)
+  doorkeeper (= 5.6)
   dotenv-rails (= 2.8.1)
   grape (= 1.6.2)
   grape-swagger (= 1.5.0)
