@@ -44,42 +44,60 @@ type TablePaginationPosition =
 const columns: ColumnsType<DataType> = [
   {
     dataIndex: 'id',
+    key: 'id',
+    sorter: (a, b) => {
+      return a.id - b.id;
+    },
     title: 'ID',
   },
   {
     dataIndex: 'from',
+    key: 'from',
+    sorter: true,
     title: 'From',
   },
   {
     dataIndex: 'to',
+    key: 'to',
+    sorter: true,
     title: 'To',
   },
   {
     dataIndex: 'date_time',
+    key: 'date_time',
+    sorter: true,
     title: 'Date/Time',
   },
   {
     dataIndex: 'status',
+    key: 'status',
+    sorter: true,
     title: 'Status',
   },
   {
     dataIndex: 'data_metadata',
+    key: 'data_metadata',
+    sorter: true,
     title: 'Data/Metadata',
   },
   {
     dataIndex: 'tracker_number',
+    key: 'tracker_number',
+    sorter: true,
     title: 'Tracker Number',
   },
   {
     dataIndex: 'owner',
+    key: 'owner',
+    sorter: true,
     title: 'Owner',
   },
   {
     key: 'action',
     render: () => {
       return <Space size='middle'>
-        <a>Delete</a>
-        <a>
+        <a href='https://google.de'>Delete</a>
+        <a href='https://google.de'>
           <Space>
             More actions
             <DownOutlined />
@@ -112,37 +130,12 @@ const defaultExpandable = {
     return <p>{record.data_metadata}</p>;
   },
 };
-const defaultTitle = () => {
-  return 'Here is title';
-};
-
-const defaultFooter = () => {
-  return 'Here is footer';
-};
 
 const SmartTable: React.FC = () => {
-  const bordered = useMemo(() => {
-    return true;
-  }, []);
-  const loading = useMemo(() => {
-    return false;
-  }, []);
   const [
     size,
     setSize,
   ] = useState<SizeType>('large');
-  const expandable = useMemo(() => {
-    return defaultExpandable;
-  }, []);
-  const showTitle = useMemo(() => {
-    return false;
-  }, []);
-  const showHeader = useMemo(() => {
-    return true;
-  }, []);
-  const showfooter = useMemo(() => {
-    return false;
-  }, []);
   const [
     rowSelection,
     setRowSelection,
@@ -169,10 +162,6 @@ const SmartTable: React.FC = () => {
     yScroll,
     setYScroll,
   ] = useState(false);
-  const [
-    xScroll,
-    setXScroll,
-  ] = useState<string | undefined>(undefined);
 
   const handleSizeChange = (event: RadioChangeEvent) => {
     setSize(event.target.value);
@@ -194,22 +183,9 @@ const SmartTable: React.FC = () => {
     setYScroll(enable);
   };
 
-  const handleXScrollChange = (event: RadioChangeEvent) => {
-    setXScroll(event.target.value);
-  };
-
   const handleDataChange = (newHasData: boolean) => {
     setHasData(newHasData);
   };
-
-  const scroll: { x?: number | string, y?: number | string, } = {};
-  if (yScroll) {
-    scroll.y = 240;
-  }
-
-  if (xScroll) {
-    scroll.x = '100vw';
-  }
 
   const tableColumns = columns.map((item) => {
     return {
@@ -217,22 +193,15 @@ const SmartTable: React.FC = () => {
       ellipsis,
     };
   });
-  if (xScroll === 'fixed') {
-    tableColumns[0].fixed = true;
-    tableColumns[tableColumns.length - 1].fixed = 'right';
-  }
 
   const tableProps: TableProps<DataType> = {
-    bordered,
-    expandable,
-    footer: showfooter ? defaultFooter : undefined,
-    loading,
+    bordered: true,
+    expandable: defaultExpandable,
+    loading: false,
     rowSelection,
-    scroll,
-    showHeader,
+    showHeader: true,
     size,
     tableLayout,
-    title: showTitle ? defaultTitle : undefined,
   };
 
   return (
@@ -240,9 +209,6 @@ const SmartTable: React.FC = () => {
       <Form
         className='repository-tracker-smart-table'
         layout='inline'
-        style={{
-          marginBottom: 24,
-        }}
       >
         <div className='p-2 flex'>
           <Form.Item label='Choose Items'>
@@ -269,15 +235,6 @@ const SmartTable: React.FC = () => {
             </Form.Item>
           </div>
           <div className='p-2'>
-            <Form.Item label='Table Scroll'>
-              <Radio.Group onChange={handleXScrollChange} value={xScroll}>
-                <Radio.Button value={undefined}>Unset</Radio.Button>
-                <Radio.Button value='scroll'>Scroll</Radio.Button>
-                <Radio.Button value='fixed'>Fixed Columns</Radio.Button>
-              </Radio.Group>
-            </Form.Item>
-          </div>
-          <div className='p-2'>
             <Form.Item label='Table Layout'>
               <Radio.Group onChange={handleTableLayoutChange} value={tableLayout}>
                 <Radio.Button value={undefined}>Unset</Radio.Button>
@@ -297,7 +254,6 @@ const SmartTable: React.FC = () => {
             bottom as TablePaginationPosition,
           ],
         }}
-        scroll={scroll}
       />
     </>
   );
