@@ -48,6 +48,7 @@ gem "grape-swagger-rails", "0.3.1"
 gem "dotenv-rails", "2.8.1"
 
 group :development, :test do
+  gem "byebug", "11.1.3"
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", "1.6.2", platforms: %i[mri mingw x64_mingw]
 
