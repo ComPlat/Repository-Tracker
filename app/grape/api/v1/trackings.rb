@@ -24,7 +24,7 @@ module API::V1
         requires :from, type: String, desc: "Tracking sender"
         requires :to, type: String, desc: "Tracking receiver"
         requires :status, type: String, desc: "Tracking status"
-        requires :metadata, type: JSON
+        requires :metadata, type: JSON, desc: "Tracking metadata"
       end
 
       # FIXME: mb20221202 user_id have to use from authentication!

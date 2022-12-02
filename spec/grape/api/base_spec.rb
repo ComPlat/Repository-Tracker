@@ -74,9 +74,12 @@ describe API::Base do
                     post: {description: "Create a tracking",
                            produces: ["application/json"],
                            consumes: ["application/json"],
-                           parameters: [{in: "formData", name: "title", description: "Tracking title", type: "string", required: true},
-                             {in: "formData", name: "content",
-                              description: "Tracking content", type: "string", required: true}],
+                           parameters: [
+                             {in: "formData", name: "from", description: "Tracking sender", type: "string", required: true},
+                             {in: "formData", name: "to", description: "Tracking receiver", type: "string", required: true},
+                             {in: "formData", name: "status", description: "Tracking status", type: "string", required: true},
+                             {in: "formData", name: "metadata", description: "Tracking metadata", type: "json", required: true}
+                           ],
                            responses: {"201": {description: "Create a tracking"}},
                            tags: ["trackings"],
                            operationId: "postV1Trackings"}},
