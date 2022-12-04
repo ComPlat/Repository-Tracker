@@ -23,6 +23,7 @@ module API::V1
       params do
         requires :from, type: String, desc: "Tracking sender"
         requires :to, type: String, desc: "Tracking receiver"
+        # TODO: Do we need status for the first create or only for update?
         requires :status, type: String, desc: "Tracking status"
         requires :metadata, type: JSON, desc: "Tracking metadata"
       end

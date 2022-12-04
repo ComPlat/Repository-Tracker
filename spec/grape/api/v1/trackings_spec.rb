@@ -34,48 +34,32 @@ describe API::V1::Trackings do
   describe "POST /api/v1/trackings/" do
     context "when validation errors occurs" do
       let(:tracking) { build :tracking, :with_realistic_attributes, :with_required_dependencies }
-      let(:json_request) {
-        {
-          from: tracking.from,
-          to: tracking.to,
-          status: tracking.status,
-          metadata: tracking.metadata
-        }
-      }
+      let(:tracking_request) { build_request(:tracking_request, :create_invalid) }
 
-      before { post "/api/v1/trackings/", params: json_request }
+      before { post "/api/v1/trackings/", params: tracking_request }
 
-      it { expect(response).to have_http_status :unprocessable_entity }
-      it { expect(JSON.parse(response.body)).to eq "error" => "Validation failed: User must exist" }
+      it { expect(response).to have_http_status :bad_request }
+      it { expect(JSON.parse(response.body)).to eq "error" => "from is missing" }
     end
 
     context "when tracking record is created" do
-      let(:tracking) { build :tracking, :with_realistic_attributes, :with_required_dependencies }
-      let(:json_request) {
-        {
-          from: tracking.from,
-          to: tracking.to,
-          status: tracking.status,
-          metadata: tracking.metadata,
-          user_id: tracking.user.id
-        }
-      }
+      let(:tracking_request) { build_request(:tracking_request, :create) }
       let(:expected_tracking) { Tracking.first }
 
-      before { post "/api/v1/trackings/", params: json_request }
+      before { post "/api/v1/trackings/", params: tracking_request }
 
       it { expect(response).to have_http_status :created }
 
       it do
         expect(JSON.parse(response.body)).to eq({"id" => expected_tracking.id,
-                                                  "from" => tracking.from,
-                                                  "to" => tracking.to,
-                                                  "status" => tracking.status,
-                                                  "metadata" => tracking.metadata,
+                                                  "from" => tracking_request[:from],
+                                                  "to" => tracking_request[:to],
+                                                  "status" => tracking_request[:status],
+                                                  "metadata" => tracking_request[:metadata],
                                                   "date_time" => expected_tracking.date_time.strftime("%Y-%m-%dT%H:%M:%S.%LZ"),
                                                   "updated_at" => expected_tracking.updated_at.strftime("%Y-%m-%dT%H:%M:%S.%LZ"),
                                                   "created_at" => expected_tracking.created_at.strftime("%Y-%m-%dT%H:%M:%S.%LZ"),
-                                                  "user_id" => tracking.user.id})
+                                                  "user_id" => tracking_request[:user_id]})
       end
     end
   end

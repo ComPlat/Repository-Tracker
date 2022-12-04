@@ -17,19 +17,19 @@ describe TrackingBuilder do
   end
 
   describe "#build" do
-    subject(:tracker_builder_build) { described_class.new(params).build }
+    subject(:builded_tracking) { described_class.new(params).build }
 
     it { is_expected.to be_a Tracking }
+    it { expect(builded_tracking.from).to eq params["from"] }
+    it { expect(builded_tracking.to).to eq params["to"] }
+    it { expect(builded_tracking.status).to eq params["status"] }
+    it { expect(builded_tracking.metadata).to eq params["metadata"] }
+    it { expect(builded_tracking.user_id).to eq params["user_id"] }
   end
 
   describe "#create!" do
     subject(:created_tracking) { described_class.new(params).create! }
 
     it { expect { created_tracking }.to change(Tracking, :count).from(0).to(1) }
-    it { expect(created_tracking.from).to eq params["from"] }
-    it { expect(created_tracking.to).to eq params["to"] }
-    it { expect(created_tracking.status).to eq params["status"] }
-    it { expect(created_tracking.metadata).to eq params["metadata"] }
-    it { expect(created_tracking.user_id).to eq params["user_id"] }
   end
 end
