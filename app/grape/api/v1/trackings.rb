@@ -15,7 +15,7 @@ module API::V1
       end
       route_param :id, type: Integer do
         get do
-          present Tracking.find(params[:id])
+          present Tracking.find params[:id]
         end
       end
 
@@ -29,23 +29,7 @@ module API::V1
 
       # FIXME: mb20221202 user_id have to use from authentication!
       post do
-        tracking = Tracking.create({
-          from: params[:from],
-          to: params[:to],
-          status: params[:status],
-          metadata: params[:metadata],
-          user_id: params[:user_id]
-        })
-
-        if tracking.valid?
-          {id: tracking.id,
-           from: tracking.from,
-           to: tracking.to,
-           status: tracking.status,
-           metadata: tracking.metadata}
-        else
-          error!("Unprocessable Entity, #{tracking.errors.messages}", 422)
-        end
+        present TrackingBuilder.new(params).create!
       end
     end
 
