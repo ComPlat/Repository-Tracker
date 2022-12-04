@@ -52,7 +52,7 @@ describe API::V1::Trackings do
       before { post "/api/v1/trackings/", params: json_request }
 
       it { expect(response).to have_http_status :unprocessable_entity }
-      it { expect(JSON.parse(response.body)).to eq "error" => "Unprocessable Entity, {:user=>[\"must exist\"]}" }
+      it { expect(JSON.parse(response.body)).to eq "error" => "Validation failed: User must exist" }
     end
 
     context "when tracking record is created" do
@@ -67,17 +67,22 @@ describe API::V1::Trackings do
           user_id: user.id
         }
       }
+      let(:expected_tracking) { Tracking.first }
 
       before { post "/api/v1/trackings/", params: json_request }
 
       it { expect(response).to have_http_status :created }
 
       it do
-        expect(JSON.parse(response.body)).to eq({"id" => Tracking.first.id,
+        expect(JSON.parse(response.body)).to eq({"id" => expected_tracking.id,
                                                   "from" => tracking.from,
                                                   "to" => tracking.to,
                                                   "status" => tracking.status,
-                                                  "metadata" => tracking.metadata})
+                                                  "metadata" => tracking.metadata,
+                                                  "date_time" => expected_tracking.date_time.strftime("%Y-%m-%dT%H:%M:%S.%LZ"),
+                                                  "updated_at" => expected_tracking.updated_at.strftime("%Y-%m-%dT%H:%M:%S.%LZ"),
+                                                  "created_at" => expected_tracking.created_at.strftime("%Y-%m-%dT%H:%M:%S.%LZ"),
+                                                  "user_id" => user.id})
       end
     end
   end

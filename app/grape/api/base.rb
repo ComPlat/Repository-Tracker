@@ -4,6 +4,10 @@ module API
       error! error.message, 404
     end
 
+    rescue_from ActiveRecord::RecordInvalid do |error|
+      error! error.message, 422
+    end
+
     format :json
 
     # HINT: Needed to avoid CORS (Cross-Origin Resource Sharing) error.
