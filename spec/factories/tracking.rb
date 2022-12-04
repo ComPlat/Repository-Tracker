@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :tracking do
-    trait :with_realistic_attributes  do
+    trait :with_realistic_attributes do
       from { ["ELN", "RARDA4KIT", "REPO"].sample }
       to { ["RARDA4Kit", "RARDA4Chem", "REPO", "nmrXiv"].sample }
       status { ["draft", "published", "submitted"].sample }
