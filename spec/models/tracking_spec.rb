@@ -10,10 +10,10 @@ describe Tracking, type: :model do
     end
   end
 
-  describe '#status' do 
+  describe "#status" do
     it { is_expected.to define_enum_for(:status).with_values(draft: "draft", published: "published", submitted: "submitted").backed_by_column_of_type(:enum) }
   end
-    
+
   describe "#draft?" do
     context "without set status (use default status 'draft' from database)" do
       subject { tracking.draft? }
