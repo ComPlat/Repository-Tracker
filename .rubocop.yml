@@ -20,3 +20,6 @@ Rails:
     - bin/bundle
 RSpec:
   Enabled: true
+    
+RSpec/ExampleLength: 
+  Max: 10
