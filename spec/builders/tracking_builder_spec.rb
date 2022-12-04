@@ -1,6 +1,6 @@
 describe TrackingBuilder do
   let(:user) { create(:user) }
-  let(:tracking) { build(:tracking) }
+  let(:tracking) { build(:tracking, :with_realistic_attributes) }
   let(:params) do
     {
       "from" => tracking.from,

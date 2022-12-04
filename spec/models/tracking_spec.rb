@@ -2,13 +2,13 @@ describe Tracking do
   let(:user) { build(:user) }
 
   describe "#valid?" do
-    subject(:tracking) { build(:tracking, user:) }
+    subject(:tracking) { build(:tracking, :with_realistic_attributes, user:) }
 
     it { is_expected.to be_valid }
   end
 
   describe "#date_time" do
-    # Test before_create hook
+    # HINT Test before_create hook
     subject { tracking.date_time }
 
     let(:tracking) { create(:tracking, user:) }

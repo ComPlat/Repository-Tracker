@@ -1,7 +1,7 @@
 describe API::V1::Trackings do
   describe "GET /api/v1/trackings/" do
     let(:user) { build(:user) }
-    let!(:trackings) { create_list(:tracking, 3, user:) }
+    let!(:trackings) { create_list(:tracking, 3, :with_realistic_attributes, user:) }
 
     before { get "/api/v1/trackings" }
 
@@ -14,21 +14,19 @@ describe API::V1::Trackings do
     let(:user) { build(:user) }
 
     context "when tracking id exists" do
-      let(:tracking1) { create(:tracking, user:) }
-      let(:tracking2) { create(:tracking, user:) }
-      let(:tracking3) { create(:tracking, user:) }
+      let(:trackings) { create_list :tracking, 3, :with_realistic_attributes, user: }
 
-      before { get "/api/v1/trackings/#{tracking2.id}" }
+      before { get "/api/v1/trackings/#{trackings.last.id}" }
 
       it { expect(response).to have_http_status :ok }
-      it { expect(response.body).to eq tracking2.to_json }
+      it { expect(response.body).to eq trackings.last.to_json }
       it { expect(response.content_type).to eq "application/json" }
     end
 
     context "when tracking does not exist" do
-      let(:expected_json_error) { {error: "Couldn't find Tracking with 'id'=1"}.to_json }
+      let(:expected_json_error) { {error: "Couldn't find Tracking with 'id'=0"}.to_json }
 
-      before { get "/api/v1/trackings/1" }
+      before { get "/api/v1/trackings/0" }
 
       it { expect(response).to have_http_status :not_found }
       it { expect(response.body).to eq expected_json_error }
@@ -38,8 +36,8 @@ describe API::V1::Trackings do
 
   describe "POST /api/v1/trackings/" do
     context "when validation errors occurs" do
-      let(:user) { create(:user) }
-      let(:tracking) { build(:tracking, user:) }
+      let(:user) { build(:user) }
+      let(:tracking) { build(:tracking, :with_realistic_attributes, user:) }
       let(:json_request) {
         {
           from: tracking.from,
@@ -57,7 +55,7 @@ describe API::V1::Trackings do
 
     context "when tracking record is created" do
       let(:user) { create(:user) }
-      let(:tracking) { build(:tracking, user:) }
+      let(:tracking) { build(:tracking, :with_realistic_attributes, user:) }
       let(:json_request) {
         {
           from: tracking.from,
