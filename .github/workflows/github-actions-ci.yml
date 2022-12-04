@@ -1,3 +1,6 @@
+concurrency: 
+  group: ${{ github.head_ref }}
+  cancel-in-progress: true
 name: CI
 run-name: ${{ github.actor }} is running specs
 on: [push]
