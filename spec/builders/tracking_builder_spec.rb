@@ -1,13 +1,12 @@
 describe TrackingBuilder do
-  let(:user) { create(:user) }
-  let(:tracking) { build(:tracking, :with_realistic_attributes) }
+  let(:tracking) { build(:tracking, :with_realistic_attributes, :with_required_dependencies) }
   let(:params) do
     {
       "from" => tracking.from,
       "to" => tracking.to,
       "status" => tracking.status,
       "metadata" => tracking.metadata,
-      "user_id" => user.id
+      "user_id" => tracking.user.id
     }
   end
 

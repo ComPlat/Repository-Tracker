@@ -1,7 +1,6 @@
 describe API::V1::Trackings do
   describe "GET /api/v1/trackings/" do
-    let(:user) { build(:user) }
-    let!(:trackings) { create_list(:tracking, 3, :with_realistic_attributes, user:) }
+    let!(:trackings) { create_list :tracking, 3, :with_realistic_attributes, :with_required_dependencies }
 
     before { get "/api/v1/trackings" }
 
@@ -11,10 +10,8 @@ describe API::V1::Trackings do
   end
 
   describe "GET /api/v1/trackings/:id" do
-    let(:user) { build(:user) }
-
     context "when tracking id exists" do
-      let(:trackings) { create_list :tracking, 3, :with_realistic_attributes, user: }
+      let(:trackings) { create_list :tracking, 3, :with_realistic_attributes, :with_required_dependencies }
 
       before { get "/api/v1/trackings/#{trackings.last.id}" }
 
@@ -36,8 +33,7 @@ describe API::V1::Trackings do
 
   describe "POST /api/v1/trackings/" do
     context "when validation errors occurs" do
-      let(:user) { build(:user) }
-      let(:tracking) { build(:tracking, :with_realistic_attributes, user:) }
+      let(:tracking) { build :tracking, :with_realistic_attributes, :with_required_dependencies }
       let(:json_request) {
         {
           from: tracking.from,
@@ -54,15 +50,14 @@ describe API::V1::Trackings do
     end
 
     context "when tracking record is created" do
-      let(:user) { create(:user) }
-      let(:tracking) { build(:tracking, :with_realistic_attributes, user:) }
+      let(:tracking) { build :tracking, :with_realistic_attributes, :with_required_dependencies }
       let(:json_request) {
         {
           from: tracking.from,
           to: tracking.to,
           status: tracking.status,
           metadata: tracking.metadata,
-          user_id: user.id
+          user_id: tracking.user.id
         }
       }
       let(:expected_tracking) { Tracking.first }
@@ -80,7 +75,7 @@ describe API::V1::Trackings do
                                                   "date_time" => expected_tracking.date_time.strftime("%Y-%m-%dT%H:%M:%S.%LZ"),
                                                   "updated_at" => expected_tracking.updated_at.strftime("%Y-%m-%dT%H:%M:%S.%LZ"),
                                                   "created_at" => expected_tracking.created_at.strftime("%Y-%m-%dT%H:%M:%S.%LZ"),
-                                                  "user_id" => user.id})
+                                                  "user_id" => tracking.user.id})
       end
     end
   end
