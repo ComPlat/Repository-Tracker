@@ -56,6 +56,7 @@ group :development, :test do
   gem "standard", "1.16.1", require: false
   gem "rubocop-rails", "2.16.1", require: false # [https://docs.rubocop.org/rubocop-rails/]
   gem "rubocop-rspec", "2.13.2", require: false # [https://docs.rubocop.org/rubocop-rspec/]
+  gem "rubocop-thread_safety", "0.4.4", require: false # [https://github.com/rubocop/rubocop-thread_safety]
 
   # Behaviour-Driven Development tool for the TDD part focusing on the documentation and design aspects of TDD [https://relishapp.com/rspec/]
   gem "rspec-rails", "6.0.1" # RSpec for Rails 5+ [https://relishapp.com/rspec/rspec-rails/docs]
