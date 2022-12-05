@@ -38,8 +38,8 @@ const dataFrom: string[] = [
   'REPO',
 ];
 const dataOwner: string[] = [
-  'John Doe',
-  'Jane Doe',
+  'Alan W.',
+  'Mary S.',
 ];
 const dataStatus: string[] = [
   'DRAFT',
@@ -170,11 +170,11 @@ const columns: ColumnsType<DataType> = [
     filters: [
       {
         text: dataOwner[0],
-        value: 'John Doe',
+        value: 'Alan W.',
       },
       {
         text: dataOwner[1],
-        value: 'Jane Doe',
+        value: 'Mary S.',
       },
     ],
     key: 'owner',
