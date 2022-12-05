@@ -141,36 +141,29 @@ const SmartTable: React.FC = () => {
 
   return (
     <>
-      <Form
-        layout='inline'
-      >
-        <div className='p-2 flex'>
-          <Form.Item label='Choose Items'>
-            <Switch checked={Boolean(rowSelection)} onChange={handleRowSelectionChange} />
+      <Form layout='inline'>
+        <div className='py-2'>
+          <Form.Item label='Size'>
+            <Radio.Group onChange={handleSizeChange} value={size}>
+              <Radio.Button value='large'>Large</Radio.Button>
+              <Radio.Button value='middle'>Middle</Radio.Button>
+              <Radio.Button value='small'>Small</Radio.Button>
+            </Radio.Group>
           </Form.Item>
         </div>
-        <div className='p-2 flex'>
-          <div className='p-2'>
-            <Form.Item label='Size'>
-              <Radio.Group onChange={handleSizeChange} value={size}>
-                <Radio.Button value='large'>Large</Radio.Button>
-                <Radio.Button value='middle'>Middle</Radio.Button>
-                <Radio.Button value='small'>Small</Radio.Button>
-              </Radio.Group>
-            </Form.Item>
-          </div>
-        </div>
       </Form>
-      <Table
-        {...tableProps}
-        columns={tableColumns}
-        dataSource={data}
-        pagination={{
-          position: [
-            'bottomCenter',
-          ],
-        }}
-      />
+      <div className='py-4'>
+        <Table
+          {...tableProps}
+          columns={tableColumns}
+          dataSource={data}
+          pagination={{
+            position: [
+              'bottomCenter',
+            ],
+          }}
+        />
+      </div>
     </>
   );
 };
