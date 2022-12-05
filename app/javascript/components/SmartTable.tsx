@@ -44,13 +44,21 @@ const columns: ColumnsType<DataType> = [
   {
     dataIndex: 'from',
     key: 'from',
-    sorter: true,
+    sorter: (a, b) => {
+      return a.from.localeCompare(b.from, 'en', {
+        sensitivity: 'base',
+      });
+    },
     title: 'From',
   },
   {
     dataIndex: 'to',
     key: 'to',
-    sorter: true,
+    sorter: (a, b) => {
+      return a.to.localeCompare(b.to, 'en', {
+        sensitivity: 'base',
+      });
+    },
     title: 'To',
   },
   {
@@ -62,7 +70,11 @@ const columns: ColumnsType<DataType> = [
   {
     dataIndex: 'status',
     key: 'status',
-    sorter: true,
+    sorter: (a, b) => {
+      return a.status.localeCompare(b.status, 'en', {
+        sensitivity: 'base',
+      });
+    },
     title: 'Status',
   },
   {
@@ -80,7 +92,11 @@ const columns: ColumnsType<DataType> = [
   {
     dataIndex: 'owner',
     key: 'owner',
-    sorter: true,
+    sorter: (a, b) => {
+      return a.owner.localeCompare(b.owner, 'en', {
+        sensitivity: 'base',
+      });
+    },
     title: 'Owner',
   },
   {
@@ -108,16 +124,20 @@ const dataFrom: string[] = [
   'RADAR4Kit',
   'REPO',
 ];
-const dataTo: string[] = [
-  'RADAR4Kit',
-  'RADAR4Chem',
-  'REPO',
-  'nmrXiv',
+const dataOwner: string[] = [
+  'John Doe',
+  'Jane Doe',
 ];
 const dataStatus: string[] = [
   'DRAFT',
   'PUBLISHED',
   'SUBMITTED',
+];
+const dataTo: string[] = [
+  'RADAR4Kit',
+  'RADAR4Chem',
+  'REPO',
+  'nmrXiv',
 ];
 for (let index = 1; index <= 10_000; index++) {
   data.push({
@@ -125,7 +145,7 @@ for (let index = 1; index <= 10_000; index++) {
     date_time: '01.01.1970 12:30.00',
     from: dataFrom[Math.floor(Math.random() * dataFrom.length)] ?? '',
     id: index,
-    owner: 'John Doe',
+    owner: dataOwner[Math.floor(Math.random() * dataOwner.length)] ?? '',
     status: dataStatus[Math.floor(Math.random() * dataStatus.length)] ?? '',
     to: dataTo[Math.floor(Math.random() * dataTo.length)] ?? '',
     tracker_number: `T221001-ERC-0${index}`,
@@ -153,6 +173,7 @@ const SmartTable: React.FC = () => {
     loading: false,
     showHeader: true,
     size,
+    tableLayout: 'fixed',
   };
 
   return (
