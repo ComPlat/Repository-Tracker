@@ -1,10 +1,28 @@
 /* eslint-disable canonical/prefer-inline-type-import */
-import {DownOutlined,} from '@ant-design/icons';
-import {Form, Radio, type RadioChangeEvent, Space, Switch, Table,} from 'antd';
-import type {SizeType,} from 'antd/es/config-provider/SizeContext';
-import type {ColumnsType, TableProps,} from 'antd/es/table';
-import type {TableRowSelection,} from 'antd/es/table/interface';
-import React, {useState,} from 'react';
+import {
+  DownOutlined,
+} from '@ant-design/icons';
+import {
+  Form,
+  Radio,
+  type RadioChangeEvent,
+  Space,
+  Switch,
+  Table,
+} from 'antd';
+import type {
+  SizeType,
+} from 'antd/es/config-provider/SizeContext';
+import type {
+  ColumnsType,
+  TableProps,
+} from 'antd/es/table';
+import type {
+  TableRowSelection,
+} from 'antd/es/table/interface';
+import React, {
+  useState,
+} from 'react';
 
 // Types
 
@@ -158,14 +176,14 @@ const SmartTable: React.FC = () => {
         </div>
       </Form>
       <Table
-          {...tableProps}
-          columns={tableColumns}
-          dataSource={data}
-          pagination={{
-            position: [
-              'bottomCenter',
-            ],
-          }}
+        {...tableProps}
+        columns={tableColumns}
+        dataSource={data}
+        pagination={{
+          position: [
+            'bottomCenter',
+          ],
+        }}
       />
     </>
   );
