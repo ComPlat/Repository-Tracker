@@ -32,6 +32,27 @@ type DataType = {
   tracker_number: string,
 };
 
+const dataFrom: string[] = [
+  'ELN',
+  'RADAR4Kit',
+  'REPO',
+];
+const dataOwner: string[] = [
+  'John Doe',
+  'Jane Doe',
+];
+const dataStatus: string[] = [
+  'DRAFT',
+  'PUBLISHED',
+  'SUBMITTED',
+];
+const dataTo: string[] = [
+  'RADAR4Kit',
+  'RADAR4Chem',
+  'REPO',
+  'nmrXiv',
+];
+
 const columns: ColumnsType<DataType> = [
   {
     dataIndex: 'id',
@@ -43,7 +64,24 @@ const columns: ColumnsType<DataType> = [
   },
   {
     dataIndex: 'from',
+    filters: [
+      {
+        text: dataFrom[0],
+        value: 'ELN',
+      },
+      {
+        text: dataFrom[1],
+        value: 'RADAR4Kit',
+      },
+      {
+        text: dataFrom[2],
+        value: 'REPO',
+      },
+    ],
     key: 'from',
+    onFilter: (value, record) => {
+      return record.from.startsWith(value as string);
+    },
     sorter: (a, b) => {
       return a.from.localeCompare(b.from, 'en', {
         sensitivity: 'base',
@@ -53,7 +91,28 @@ const columns: ColumnsType<DataType> = [
   },
   {
     dataIndex: 'to',
+    filters: [
+      {
+        text: dataTo[0],
+        value: 'RADAR4Kit',
+      },
+      {
+        text: dataTo[1],
+        value: 'RADAR4Chem',
+      },
+      {
+        text: dataTo[2],
+        value: 'REPO',
+      },
+      {
+        text: dataTo[3],
+        value: 'nmrXiv',
+      },
+    ],
     key: 'to',
+    onFilter: (value, record) => {
+      return record.to.startsWith(value as string);
+    },
     sorter: (a, b) => {
       return a.to.localeCompare(b.to, 'en', {
         sensitivity: 'base',
@@ -69,7 +128,24 @@ const columns: ColumnsType<DataType> = [
   },
   {
     dataIndex: 'status',
+    filters: [
+      {
+        text: dataStatus[0],
+        value: 'DRAFT',
+      },
+      {
+        text: dataStatus[1],
+        value: 'PUBLISHED',
+      },
+      {
+        text: dataStatus[2],
+        value: 'SUBMITTED',
+      },
+    ],
     key: 'status',
+    onFilter: (value, record) => {
+      return record.status.startsWith(value as string);
+    },
     sorter: (a, b) => {
       return a.status.localeCompare(b.status, 'en', {
         sensitivity: 'base',
@@ -91,7 +167,20 @@ const columns: ColumnsType<DataType> = [
   },
   {
     dataIndex: 'owner',
+    filters: [
+      {
+        text: dataOwner[0],
+        value: 'John Doe',
+      },
+      {
+        text: dataOwner[1],
+        value: 'Jane Doe',
+      },
+    ],
     key: 'owner',
+    onFilter: (value, record) => {
+      return record.owner.startsWith(value as string);
+    },
     sorter: (a, b) => {
       return a.owner.localeCompare(b.owner, 'en', {
         sensitivity: 'base',
@@ -119,26 +208,6 @@ const columns: ColumnsType<DataType> = [
 ];
 
 const data: DataType[] = [];
-const dataFrom: string[] = [
-  'ELN',
-  'RADAR4Kit',
-  'REPO',
-];
-const dataOwner: string[] = [
-  'John Doe',
-  'Jane Doe',
-];
-const dataStatus: string[] = [
-  'DRAFT',
-  'PUBLISHED',
-  'SUBMITTED',
-];
-const dataTo: string[] = [
-  'RADAR4Kit',
-  'RADAR4Chem',
-  'REPO',
-  'nmrXiv',
-];
 for (let index = 1; index <= 10_000; index++) {
   data.push({
     data_metadata: `id: ${index}, data: metadata for some data`,
