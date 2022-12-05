@@ -121,17 +121,9 @@ const SmartTable: React.FC = () => {
     size,
     setSize,
   ] = useState<SizeType>('large');
-  const [
-    rowSelection,
-    setRowSelection,
-  ] = useState<TableRowSelection<DataType> | undefined>({});
 
   const handleSizeChange = (event: RadioChangeEvent) => {
     setSize(event.target.value);
-  };
-
-  const handleRowSelectionChange = (enable: boolean) => {
-    setRowSelection(enable ? {} : undefined);
   };
 
   const tableColumns = columns.map((item) => {
@@ -143,7 +135,6 @@ const SmartTable: React.FC = () => {
   const tableProps: TableProps<DataType> = {
     bordered: true,
     loading: false,
-    rowSelection,
     showHeader: true,
     size,
   };
