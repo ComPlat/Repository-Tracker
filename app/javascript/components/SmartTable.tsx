@@ -1,4 +1,3 @@
-/* eslint-disable canonical/prefer-inline-type-import */
 import {
   DownOutlined,
 } from '@ant-design/icons';
@@ -7,7 +6,6 @@ import {
   Radio,
   type RadioChangeEvent,
   Space,
-  Switch,
   Table,
 } from 'antd';
 import type {
@@ -17,9 +15,6 @@ import type {
   ColumnsType,
   TableProps,
 } from 'antd/es/table';
-import type {
-  TableRowSelection,
-} from 'antd/es/table/interface';
 import React, {
   useState,
 } from 'react';
