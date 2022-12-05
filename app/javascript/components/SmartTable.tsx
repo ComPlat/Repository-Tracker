@@ -103,15 +103,31 @@ const columns: ColumnsType<DataType> = [
 ];
 
 const data: DataType[] = [];
+const dataFrom: string[] = [
+  'ELN',
+  'RADAR4Kit',
+  'REPO',
+];
+const dataTo: string[] = [
+  'RADAR4Kit',
+  'RADAR4Chem',
+  'REPO',
+  'nmrXiv',
+];
+const dataStatus: string[] = [
+  'DRAFT',
+  'PUBLISHED',
+  'SUBMITTED',
+];
 for (let index = 1; index <= 10_000; index++) {
   data.push({
     data_metadata: `id: ${index}, data: metadata for some data`,
     date_time: '01.01.1970 12:30.00',
-    from: 'ELN',
+    from: dataFrom[Math.floor(Math.random() * dataFrom.length)] ?? '',
     id: index,
     owner: 'John Doe',
-    status: 'DRAFT',
-    to: 'RADAR4Chem',
+    status: dataStatus[Math.floor(Math.random() * dataStatus.length)] ?? '',
+    to: dataTo[Math.floor(Math.random() * dataTo.length)] ?? '',
     tracker_number: `T221001-ERC-0${index}`,
   });
 }
