@@ -1,29 +1,10 @@
 /* eslint-disable canonical/prefer-inline-type-import */
-import {
-  DownOutlined,
-} from '@ant-design/icons';
-import {
-  Form,
-  Radio,
-  type RadioChangeEvent,
-  Space,
-  Switch,
-  Table,
-} from 'antd';
-import type {
-  SizeType,
-} from 'antd/es/config-provider/SizeContext';
-import type {
-  ColumnsType,
-  TableProps,
-} from 'antd/es/table';
-import type {
-  TableRowSelection,
-} from 'antd/es/table/interface';
-import React, {
-  useMemo,
-  useState,
-} from 'react';
+import {DownOutlined,} from '@ant-design/icons';
+import {Form, Radio, type RadioChangeEvent, Space, Switch, Table,} from 'antd';
+import type {SizeType,} from 'antd/es/config-provider/SizeContext';
+import type {ColumnsType, TableProps,} from 'antd/es/table';
+import type {TableRowSelection,} from 'antd/es/table/interface';
+import React, {useState,} from 'react';
 
 // Types
 
@@ -37,9 +18,6 @@ type DataType = {
   to: string,
   tracker_number: string,
 };
-
-type TablePaginationPosition =
-    'bottomCenter' | 'bottomLeft' | 'bottomRight' | 'topCenter' | 'topLeft' | 'topRight';
 
 const columns: ColumnsType<DataType> = [
   {
@@ -125,12 +103,6 @@ for (let index = 1; index <= 10_000; index++) {
   });
 }
 
-const defaultExpandable = {
-  expandedRowRender: (record: DataType) => {
-    return <p>{record.data_metadata}</p>;
-  },
-};
-
 const SmartTable: React.FC = () => {
   const [
     size,
@@ -140,88 +112,37 @@ const SmartTable: React.FC = () => {
     rowSelection,
     setRowSelection,
   ] = useState<TableRowSelection<DataType> | undefined>({});
-  const [
-    hasData,
-    setHasData,
-  ] = useState(true);
-  const [
-    tableLayout,
-    setTableLayout,
-  ] = useState(undefined);
-  const top = useMemo(() => {
-    return 'none';
-  }, []);
-  const bottom = useMemo(() => {
-    return 'bottomCenter';
-  }, []);
-  const [
-    ellipsis,
-    setEllipsis,
-  ] = useState(false);
-  const [
-    yScroll,
-    setYScroll,
-  ] = useState(false);
 
   const handleSizeChange = (event: RadioChangeEvent) => {
     setSize(event.target.value);
-  };
-
-  const handleTableLayoutChange = (event: RadioChangeEvent) => {
-    setTableLayout(event.target.value);
-  };
-
-  const handleEllipsisChange = (enable: boolean) => {
-    setEllipsis(enable);
   };
 
   const handleRowSelectionChange = (enable: boolean) => {
     setRowSelection(enable ? {} : undefined);
   };
 
-  const handleYScrollChange = (enable: boolean) => {
-    setYScroll(enable);
-  };
-
-  const handleDataChange = (newHasData: boolean) => {
-    setHasData(newHasData);
-  };
-
   const tableColumns = columns.map((item) => {
     return {
       ...item,
-      ellipsis,
     };
   });
 
   const tableProps: TableProps<DataType> = {
     bordered: true,
-    expandable: defaultExpandable,
     loading: false,
     rowSelection,
     showHeader: true,
     size,
-    tableLayout,
   };
 
   return (
     <>
       <Form
-        className='repository-tracker-smart-table'
         layout='inline'
       >
         <div className='p-2 flex'>
           <Form.Item label='Choose Items'>
             <Switch checked={Boolean(rowSelection)} onChange={handleRowSelectionChange} />
-          </Form.Item>
-          <Form.Item label='Fixed Header'>
-            <Switch checked={Boolean(yScroll)} onChange={handleYScrollChange} />
-          </Form.Item>
-          <Form.Item label='Has Data'>
-            <Switch checked={Boolean(hasData)} onChange={handleDataChange} />
-          </Form.Item>
-          <Form.Item label='Ellipsis'>
-            <Switch checked={Boolean(ellipsis)} onChange={handleEllipsisChange} />
           </Form.Item>
         </div>
         <div className='p-2 flex'>
@@ -234,26 +155,17 @@ const SmartTable: React.FC = () => {
               </Radio.Group>
             </Form.Item>
           </div>
-          <div className='p-2'>
-            <Form.Item label='Table Layout'>
-              <Radio.Group onChange={handleTableLayoutChange} value={tableLayout}>
-                <Radio.Button value={undefined}>Unset</Radio.Button>
-                <Radio.Button value='fixed'>Fixed</Radio.Button>
-              </Radio.Group>
-            </Form.Item>
-          </div>
         </div>
       </Form>
       <Table
-        {...tableProps}
-        columns={tableColumns}
-        dataSource={hasData ? data : []}
-        pagination={{
-          position: [
-            top as TablePaginationPosition,
-            bottom as TablePaginationPosition,
-          ],
-        }}
+          {...tableProps}
+          columns={tableColumns}
+          dataSource={data}
+          pagination={{
+            position: [
+              'bottomCenter',
+            ],
+          }}
       />
     </>
   );
