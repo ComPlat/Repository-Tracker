@@ -92,8 +92,8 @@ const columns: ColumnsType<DataType> = [
     key: 'action',
     render: () => {
       return <Space size='middle'>
-        <a href='https://google.de'>Delete</a>
-        <a href='https://google.de'>
+        <a href='/'>Delete</a>
+        <a href='/'>
           <Space>
             More actions
             <DownOutlined />
