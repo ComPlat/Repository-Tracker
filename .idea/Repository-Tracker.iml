@@ -146,6 +146,7 @@
     <option name="generators">
       <list>
         <option value="active_record:application_record" />
+        <option value="active_record:devise" />
         <option value="active_record:migration" />
         <option value="active_record:model" />
         <option value="active_record:multi_db" />
@@ -153,6 +154,18 @@
         <option value="benchmark" />
         <option value="channel" />
         <option value="controller" />
+        <option value="devise" />
+        <option value="devise:controllers" />
+        <option value="devise:install" />
+        <option value="devise:views" />
+        <option value="doorkeeper:application_owner" />
+        <option value="doorkeeper:confidential_applications" />
+        <option value="doorkeeper:enable_polymorphic_resource_owner" />
+        <option value="doorkeeper:install" />
+        <option value="doorkeeper:migration" />
+        <option value="doorkeeper:pkce" />
+        <option value="doorkeeper:previous_refresh_token" />
+        <option value="doorkeeper:views" />
         <option value="generator" />
         <option value="helper" />
         <option value="integration_test" />
@@ -161,7 +174,10 @@
         <option value="mailer" />
         <option value="migration" />
         <option value="model" />
+        <option value="mongoid:devise" />
         <option value="resource" />
+        <option value="responders:install" />
+        <option value="responders_controller" />
         <option value="rspec:channel" />
         <option value="rspec:controller" />
         <option value="rspec:feature" />
@@ -199,6 +215,7 @@
     <option name="myGenerators">
       <list>
         <option value="active_record:application_record" />
+        <option value="active_record:devise" />
         <option value="active_record:migration" />
         <option value="active_record:model" />
         <option value="active_record:multi_db" />
@@ -206,6 +223,18 @@
         <option value="benchmark" />
         <option value="channel" />
         <option value="controller" />
+        <option value="devise" />
+        <option value="devise:controllers" />
+        <option value="devise:install" />
+        <option value="devise:views" />
+        <option value="doorkeeper:application_owner" />
+        <option value="doorkeeper:confidential_applications" />
+        <option value="doorkeeper:enable_polymorphic_resource_owner" />
+        <option value="doorkeeper:install" />
+        <option value="doorkeeper:migration" />
+        <option value="doorkeeper:pkce" />
+        <option value="doorkeeper:previous_refresh_token" />
+        <option value="doorkeeper:views" />
         <option value="generator" />
         <option value="helper" />
         <option value="integration_test" />
@@ -214,7 +243,10 @@
         <option value="mailer" />
         <option value="migration" />
         <option value="model" />
+        <option value="mongoid:devise" />
         <option value="resource" />
+        <option value="responders:install" />
+        <option value="responders_controller" />
         <option value="rspec:channel" />
         <option value="rspec:controller" />
         <option value="rspec:feature" />
@@ -430,6 +462,7 @@
           <RakeTaskImpl id="spec">
             <subtasks>
               <RakeTaskImpl description="Run the code examples in spec/controllers" fullCommand="spec:controllers" id="controllers" />
+              <RakeTaskImpl description="Run the code examples in spec/grape" fullCommand="spec:grape" id="grape" />
               <RakeTaskImpl description="Run the code examples in spec/models" fullCommand="spec:models" id="models" />
               <RakeTaskImpl description="Run the code examples in spec/requests" fullCommand="spec:requests" id="requests" />
               <RakeTaskImpl description="Run the code examples in spec/routing" fullCommand="spec:routing" id="routing" />
