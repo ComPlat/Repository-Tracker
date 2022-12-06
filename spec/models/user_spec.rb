@@ -8,5 +8,15 @@ describe User do
   end
 
   it { is_expected.to be_valid }
-  it { is_expected.to have_many(:trackings) }
+
+  describe "#trackings" do
+    subject(:user) { create :user }
+
+    let(:tracking) { create :tracking, user: }
+
+    it { is_expected.to have_many(:trackings) }
+
+    it { expect(user.trackings).to eq [] }
+    it { expect(user.trackings).to eq [tracking] }
+  end
 end
