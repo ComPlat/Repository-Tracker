@@ -16,7 +16,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_04_142945) do
 
   # Custom types defined in this database.
   # Note that some types may not work with other database engines. Be careful if changing database.
-  create_enum "tracking_status", ["draft", "published", "submitted"]
+  create_enum "tracking_status", %w[draft published submitted reviewing pending accepted reviewed rejected deleted]
 
   create_table "trackings", force: :cascade do |t|
     t.text "from"

@@ -1,9 +1,9 @@
-describe Tracking, type: :model do
-  let(:user) { build(:user) }
+describe Tracking do
+  let(:user) { build :user }
 
   describe "factories" do
     context "with traits :with_realistic_attributes, :with_required_dependencies" do
-      subject(:factory) { build(:tracking, :with_realistic_attributes, :with_required_dependencies) }
+      subject(:factory) { build :tracking, :with_realistic_attributes, :with_required_dependencies }
 
       it { is_expected.to be_valid }
       it { expect(factory.save).to be true }
@@ -11,7 +11,26 @@ describe Tracking, type: :model do
   end
 
   describe "#status" do
-    it { is_expected.to define_enum_for(:status).with_values(draft: "draft", published: "published", submitted: "submitted").backed_by_column_of_type(:enum) }
+    let(:values) {
+      {draft: "draft",
+       published: "published",
+       submitted: "submitted",
+       reviewing: "reviewing",
+       pending: "pending",
+       accepted: "accepted",
+       reviewed: "reviewed",
+       rejected: "rejected",
+       deleted: "deleted"}
+    }
+
+    it { is_expected.to define_enum_for(:status).with_values(values).backed_by_column_of_type(:enum) }
+
+    it {
+      expect { build(:tracking, status: "invalid_status") }
+        .to raise_error ArgumentError, "'invalid_status' is not a valid status"
+    }
+
+    it { values.values.map { |value| expect(create(:tracking, :with_required_dependencies, status: value).status).to eq value } }
   end
 
   describe "#draft?" do
@@ -20,9 +39,7 @@ describe Tracking, type: :model do
 
       let(:tracking) { described_class.new(user:) }
 
-      before do
-        tracking.save
-      end
+      before { tracking.save }
 
       it { is_expected.to be true }
     end

@@ -1,6 +1,6 @@
 class CreateTrackings < ActiveRecord::Migration[7.0]
   def change
-    create_enum :tracking_status, ["draft", "published", "submitted"]
+    create_enum :tracking_status, %w[draft published submitted reviewing pending accepted reviewed rejected deleted]
 
     create_table :trackings do |t|
       t.text :from
