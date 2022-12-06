@@ -18,6 +18,10 @@ module.exports = {
       parserOptions: {
         project: './tsconfig.json',
       },
+      rules: {
+        // HINT: Rule conflicts with TS1371: This import is never used as a value and must use 'import type' because 'importsNotUsedAsValues' is set to 'error'.
+        'canonical/prefer-inline-type-import': 0,
+      },
     },
     {
       extends: [
@@ -28,6 +32,10 @@ module.exports = {
       files: '*.tsx',
       parserOptions: {
         project: './tsconfig.json',
+      },
+      rules: {
+        // HINT: Rule conflicts with TS1371: This import is never used as a value and must use 'import type' because 'importsNotUsedAsValues' is set to 'error'.
+        'canonical/prefer-inline-type-import': 0,
       },
     },
     {
