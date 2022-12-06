@@ -1,13 +1,9 @@
 # frozen_string_literal: true
 
 class RequestStrategy
-  def initialize
-    @strategy = FactoryBot.strategy_by_name(:build).new
-  end
+  def initialize = @strategy = FactoryBot.strategy_by_name(:build).new
 
   delegate :association, to: :@strategy
 
-  def result(evaluation)
-    @strategy.result(evaluation).to_h
-  end
+  def result(evaluation) = @strategy.result(evaluation).to_h
 end
