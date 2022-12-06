@@ -1,6 +1,18 @@
 describe Tracking do
   let(:user) { build :user }
 
+  describe "columns" do
+    it { is_expected.to have_db_column(:id).of_type(:integer) }
+    it { is_expected.to have_db_column(:from).of_type(:text) }
+    it { is_expected.to have_db_column(:date_time).of_type(:datetime) }
+    it { is_expected.to have_db_column(:status).of_type(:enum) }
+    it { is_expected.to have_db_column(:metadata).of_type(:jsonb) }
+    it { is_expected.to have_db_column(:user_id).of_type(:integer) }
+    it { is_expected.to have_db_column(:created_at).of_type(:datetime) }
+    it { is_expected.to have_db_column(:updated_at).of_type(:datetime) }
+    it { is_expected.to have_db_index(:user_id) }
+  end
+
   describe "factories" do
     context "with traits :with_realistic_attributes, :with_required_dependencies" do
       subject(:factory) { build :tracking, :with_realistic_attributes, :with_required_dependencies }
