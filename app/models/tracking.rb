@@ -1,5 +1,5 @@
 class Tracking < ApplicationRecord
-  belongs_to :user
+  belongs_to :user, inverse_of: :trackings
   # HINT: https://api.rubyonrails.org/v7.0.4/classes/ActiveRecord/Enum.html
   enum status: {draft: "draft",
                 published: "published",

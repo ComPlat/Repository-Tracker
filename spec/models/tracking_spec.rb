@@ -22,6 +22,14 @@ describe Tracking do
     end
   end
 
+  describe "#user" do
+    let(:user) { create :user }
+
+    it { is_expected.to belong_to(:user).inverse_of(:trackings) }
+    it { expect(create(:tracking, user:).user).to eq user }
+    it { expect { create :tracking }.to raise_error ActiveRecord::RecordInvalid, "Validation failed: User must exist" }
+  end
+
   describe "#status" do
     let(:values) {
       {draft: "draft",

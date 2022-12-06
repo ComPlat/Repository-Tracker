@@ -14,7 +14,7 @@ describe User do
 
     let(:tracking) { create :tracking, user: }
 
-    it { is_expected.to have_many(:trackings) }
+    it { is_expected.to have_many(:trackings).inverse_of(:user) }
 
     it { expect(user.trackings).to eq [] }
     it { expect(user.trackings).to eq [tracking] }
