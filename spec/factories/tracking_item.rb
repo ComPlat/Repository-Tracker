@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :tracking_request, class: OpenStruct do
+  factory :tracking_item_request, class: OpenStruct do
     to { build(:tracking, :with_realistic_attributes).to }
     status { build(:tracking, :with_realistic_attributes).status }
     metadata { build(:tracking, :with_realistic_attributes).metadata }
@@ -18,9 +18,9 @@ FactoryBot.define do
     end
   end
 
-  factory :tracking do
+  factory :tracking_item do
     trait :with_required_dependencies do
-      user { create :tracking, :with_required_attributes }
+      user { create :user, :with_required_attributes }
     end
 
     trait :with_required_attributes do

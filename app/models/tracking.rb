@@ -1,6 +1,7 @@
 class Tracking < ApplicationRecord
-  belongs_to :user, inverse_of: :trackings
-  # HINT: https://api.rubyonrails.org/v7.0.4/classes/ActiveRecord/Enum.html
+  # validates :date_time, presence: true
+  validates :status, presence: true
+
   enum status: {draft: "draft",
                 published: "published",
                 submitted: "submitted",
@@ -10,6 +11,8 @@ class Tracking < ApplicationRecord
                 reviewed: "reviewed",
                 rejected: "rejected",
                 deleted: "deleted"}
+
+  belongs_to :tracking_item, inverse_of: :trackings
 
   before_create { self.date_time = created_at }
 end

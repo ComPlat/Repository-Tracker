@@ -1,33 +1,24 @@
 describe Tracking do
-  let(:user) { build :user }
+  describe "factory" do
+    it { expect(build(:tracking)).to be_invalid }
+    it { expect(build(:tracking, :with_required_attributes)).to be_invalid }
+    it { expect(build(:tracking, :with_required_dependencies)).to be_invalid }
+    it { expect(build(:tracking, :with_required_attributes, :with_required_dependencies)).to be_valid }
+  end
 
-  describe "columns" do
+  describe "#id" do
     it { is_expected.to have_db_column(:id).of_type(:integer) }
-    it { is_expected.to have_db_column(:from).of_type(:text) }
+  end
+
+  describe "#date_time" do
     it { is_expected.to have_db_column(:date_time).of_type(:datetime) }
-    it { is_expected.to have_db_column(:status).of_type(:enum) }
-    it { is_expected.to have_db_column(:metadata).of_type(:jsonb) }
-    it { is_expected.to have_db_column(:user_id).of_type(:integer) }
-    it { is_expected.to have_db_column(:created_at).of_type(:datetime) }
-    it { is_expected.to have_db_column(:updated_at).of_type(:datetime) }
-    it { is_expected.to have_db_index(:user_id) }
-  end
-
-  describe "factories" do
-    context "with traits :with_realistic_attributes, :with_required_dependencies" do
-      subject(:factory) { build :tracking, :with_realistic_attributes, :with_required_dependencies }
-
-      it { is_expected.to be_valid }
-      it { expect(factory.save).to be true }
-    end
-  end
-
-  describe "#user" do
-    let(:user) { create :user }
-
-    it { is_expected.to belong_to(:user).inverse_of(:trackings) }
-    it { expect(create(:tracking, user:).user).to eq user }
-    it { expect { create :tracking }.to raise_error ActiveRecord::RecordInvalid, "Validation failed: User must exist" }
+    # HINT: Presence not needed, because
+    #   # HINT Test before_create hook
+    #   subject { tracking.date_time }
+    #
+    #   let(:tracking) { create(:tracking, user:) }
+    #
+    #   it { is_expected.to eq tracking.created_at }
   end
 
   describe "#status" do
@@ -43,34 +34,42 @@ describe Tracking do
        deleted: "deleted"}
     }
 
+    it { is_expected.to validate_presence_of(:status) }
+    it { is_expected.to have_db_column(:status).of_type(:enum) }
     it { is_expected.to define_enum_for(:status).with_values(values).backed_by_column_of_type(:enum) }
-
-    it {
-      expect { build(:tracking, status: "invalid_status") }
-        .to raise_error ArgumentError, "'invalid_status' is not a valid status"
-    }
-
-    it { values.values.map { |value| expect(create(:tracking, :with_required_dependencies, status: value).status).to eq value } }
+    it { expect { build(:tracking, status: "invalid_status") }.to raise_error ArgumentError, "'invalid_status' is not a valid status" }
+    it { values.values.map { |value| expect(create(:tracking, :with_required_attributes, status: value).role).to eq value } }
   end
 
-  describe "#draft?" do
-    context "without set status (use default status 'draft' from database)" do
-      subject { tracking.draft? }
-
-      let(:tracking) { described_class.new(user:) }
-
-      before { tracking.save }
-
-      it { is_expected.to be true }
-    end
+  describe "#metadata" do
+    it { is_expected.to have_db_column(:metadata).of_type(:jsonb) }
   end
 
-  describe "#date_time" do
-    # HINT Test before_create hook
-    subject { tracking.date_time }
-
-    let(:tracking) { create(:tracking, user:) }
-
-    it { is_expected.to eq tracking.created_at }
+  describe "#created_at" do
+    it { is_expected.to have_db_column(:created_at).of_type(:datetime) }
   end
+
+  describe "#updated_at" do
+    it { is_expected.to have_db_column(:updated_at).of_type(:datetime) }
+  end
+
+  # describe "#user" do
+  #   let(:user) { create :user }
+  #
+  #   it { is_expected.to belong_to(:user).inverse_of(:trackings) }
+  #   it { expect(create(:tracking, user:).user).to eq user }
+  #   it { expect { create :tracking }.to raise_error ActiveRecord::RecordInvalid, "Validation failed: User must exist" }
+  # end
+  #
+  # describe "#draft?" do
+  #   context "without set status (use default status 'draft' from database)" do
+  #     subject { tracking.draft? }
+  #
+  #     let(:tracking) { described_class.new(user:) }
+  #
+  #     before { tracking.save }
+  #
+  #     it { is_expected.to be true }
+  #   end
+  # end
 end
