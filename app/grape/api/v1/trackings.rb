@@ -1,8 +1,16 @@
+require "doorkeeper/grape/helpers"
+
 module API::V1
   class Trackings < Grape::API
     version "v1", using: :path
 
     args = [{"tracking1" => "My first tracking"}, {"tracking2" => "My second tracking"}]
+
+    helpers Doorkeeper::Grape::Helpers
+
+    before do
+      doorkeeper_authorize!
+    end
 
     namespace :trackings do
       desc "Return list of trackings"
