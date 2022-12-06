@@ -62,10 +62,5 @@ RSpec.describe "SPA" do
       visit "/"
       expect(page).to have_text "Owner"
     end
-
-    it do
-      visit "/"
-      expect(page).to have_text "Action"
-    end
   end
 end

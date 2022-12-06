@@ -1,11 +1,7 @@
 import {
-  DownOutlined,
-} from '@ant-design/icons';
-import {
   Form,
   Radio,
   type RadioChangeEvent,
-  Space,
   Table,
 } from 'antd';
 import type {
@@ -187,23 +183,6 @@ const columns: ColumnsType<DataType> = [
       });
     },
     title: 'Owner',
-  },
-  {
-    key: 'action',
-    render: () => {
-      return <Space size='middle'>
-        <a href='/'>Delete</a>
-        <a href='/'>
-          <Space>
-            More actions
-            <DownOutlined />
-          </Space>
-        </a>
-      </Space>;
-    },
-    sorter: true,
-    title: 'Action'
-    ,
   },
 ];
 
