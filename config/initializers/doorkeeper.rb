@@ -222,7 +222,7 @@ Doorkeeper.configure do
   # `grant_type` - the grant type of the request (see Doorkeeper::OAuth)
   # `scopes` - the requested scopes (see Doorkeeper::OAuth::Scopes)
   #
-  # use_refresh_token
+  use_refresh_token
 
   # Provide support for an owner to be assigned to each registered application (disabled by default)
   # Optional parameter confirmation: true (default: false) if you want to enforce ownership of
@@ -298,7 +298,7 @@ Doorkeeper.configure do
   #
   # You can completely disable this feature with:
   #
-  # allow_blank_redirect_uri false
+  allow_blank_redirect_uri true
   #
   # Or you can define your custom check:
   #
@@ -437,6 +437,7 @@ Doorkeeper.configure do
   # skip_authorization do |resource_owner, client|
   #   client.superapp? or resource_owner.admin?
   # end
+  skip_authorization { true } # HINT: https://doorkeeper.gitbook.io/guides/configuration/skip-authorization
 
   # Configure custom constraints for the Token Introspection request.
   # By default this configuration option allows to introspect a token by another
