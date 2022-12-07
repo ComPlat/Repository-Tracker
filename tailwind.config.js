@@ -7,4 +7,7 @@ module.exports = {
     './app/javascript/**/*.ts',
     './app/javascript/**/*.tsx',
   ],
+  corePlugins: {
+    preflight: false,
+  },
 };
