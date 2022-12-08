@@ -11,7 +11,10 @@ describe TrackingItem do
   end
 
   describe "#name" do
+    subject(:tracking_item) { build(:tracking_item, :with_required_attributes, :with_required_dependencies) }
+
     it { is_expected.to validate_presence_of(:name) }
+    it { is_expected.to validate_uniqueness_of(:name) }
     it { is_expected.to have_db_column(:name).of_type(:text) }
     it { is_expected.to have_db_index(:name).unique }
   end
