@@ -35,10 +35,24 @@ describe Tracking do
     it { is_expected.to have_db_column(:status).of_type(:enum) }
     it { is_expected.to define_enum_for(:status).with_values(values).backed_by_column_of_type(:enum) }
     it { expect { build(:tracking, status: "invalid_status") }.to raise_error ArgumentError, "'invalid_status' is not a valid status" }
-    it { values.values.map { |value| expect(create(:tracking, :with_required_attributes, :with_required_dependencies, status: value).status).to eq value } }
+
+    it {
+      values.values.map { |value|
+        expect(create(:tracking, :with_required_attributes, :with_required_dependencies, status: value).status)
+          .to eq value
+      }
+    }
+
+    it {
+      values.values.map { |value|
+        expect(create(:tracking, :with_required_attributes, :with_required_dependencies, status: value).public_send("#{value}?"))
+          .to be true
+      }
+    }
   end
 
   describe "#metadata" do
+    it { is_expected.to validate_presence_of(:metadata) }
     it { is_expected.to have_db_column(:metadata).of_type(:jsonb) }
   end
 
@@ -64,15 +78,39 @@ describe Tracking do
     }
   end
 
-  # describe "#draft?" do
-  #   context "without set status (use default status 'draft' from database)" do
-  #     subject { tracking.draft? }
-  #
-  #     let(:tracking) { described_class.new(user:) }
-  #
-  #     before { tracking.save }
-  #
-  #     it { is_expected.to be true }
-  #   end
-  # end
+  describe "#from_trackable_system" do
+    let(:from_trackable_system) { create :trackable_system, :with_required_attributes }
+
+    it { is_expected.to have_db_index(:from_trackable_system_id) }
+    it { is_expected.to have_db_column(:from_trackable_system_id).of_type(:integer) }
+    it { is_expected.to belong_to(:from_trackable_system).class_name("TrackableSystem").inverse_of(:from_trackings) }
+
+    it {
+      expect(create(:tracking, :with_required_attributes, :with_required_dependencies, from_trackable_system:).from_trackable_system)
+        .to eq from_trackable_system
+    }
+
+    it {
+      expect { create :tracking, :with_required_attributes, :with_required_dependencies, from_trackable_system: nil }
+        .to raise_error ActiveRecord::RecordInvalid, "Validation failed: From trackable system must exist"
+    }
+  end
+
+  describe "#to_trackable_system" do
+    let(:to_trackable_system) { create :trackable_system, :with_required_attributes }
+
+    it { is_expected.to have_db_index(:to_trackable_system_id) }
+    it { is_expected.to have_db_column(:to_trackable_system_id).of_type(:integer) }
+    it { is_expected.to belong_to(:to_trackable_system).class_name("TrackableSystem").inverse_of(:to_trackings) }
+
+    it {
+      expect(create(:tracking, :with_required_attributes, :with_required_dependencies, to_trackable_system:).to_trackable_system)
+        .to eq to_trackable_system
+    }
+
+    it {
+      expect { create :tracking, :with_required_attributes, :with_required_dependencies, to_trackable_system: nil }
+        .to raise_error ActiveRecord::RecordInvalid, "Validation failed: To trackable system must exist"
+    }
+  end
 end
