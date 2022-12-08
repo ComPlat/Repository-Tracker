@@ -5,6 +5,7 @@ describe Tracking do
     it { expect(build(:tracking, :with_required_dependencies)).to be_invalid }
     it { expect(build(:tracking, :with_required_attributes, :with_required_dependencies)).to be_valid }
     it { expect(create(:tracking, :with_required_attributes, :with_required_dependencies)).to be_persisted }
+    it { expect(create(:tracking, :with_required_attributes, :with_required_dependencies)).to be_valid }
   end
 
   describe "#id" do
