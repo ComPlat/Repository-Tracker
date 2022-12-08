@@ -2,6 +2,8 @@ describe User do
   describe "factory" do
     it { expect(build(:user)).to be_invalid }
     it { expect(build(:user, :with_required_attributes)).to be_valid }
+    it { expect(create(:user, :with_required_attributes)).to be_persisted }
+    it { expect(create(:user, :with_required_attributes)).to be_valid }
   end
 
   describe "#id" do
