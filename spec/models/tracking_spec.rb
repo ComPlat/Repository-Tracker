@@ -4,6 +4,7 @@ describe Tracking do
     it { expect(build(:tracking, :with_required_attributes)).to be_invalid }
     it { expect(build(:tracking, :with_required_dependencies)).to be_invalid }
     it { expect(build(:tracking, :with_required_attributes, :with_required_dependencies)).to be_valid }
+    it { expect(create(:tracking, :with_required_attributes, :with_required_dependencies)).to be_persisted }
   end
 
   describe "#id" do
@@ -11,14 +12,10 @@ describe Tracking do
   end
 
   describe "#date_time" do
+    let(:tracking) { create(:tracking, :with_required_attributes, :with_required_dependencies) }
+
     it { is_expected.to have_db_column(:date_time).of_type(:datetime) }
-    # HINT: Presence not needed, because
-    #   # HINT Test before_create hook
-    #   subject { tracking.date_time }
-    #
-    #   let(:tracking) { create(:tracking, user:) }
-    #
-    #   it { is_expected.to eq tracking.created_at }
+    it { expect(tracking.date_time).to eq tracking.created_at }
   end
 
   describe "#status" do
@@ -38,7 +35,7 @@ describe Tracking do
     it { is_expected.to have_db_column(:status).of_type(:enum) }
     it { is_expected.to define_enum_for(:status).with_values(values).backed_by_column_of_type(:enum) }
     it { expect { build(:tracking, status: "invalid_status") }.to raise_error ArgumentError, "'invalid_status' is not a valid status" }
-    it { values.values.map { |value| expect(create(:tracking, :with_required_attributes, status: value).role).to eq value } }
+    it { values.values.map { |value| expect(create(:tracking, :with_required_attributes, :with_required_dependencies, status: value).status).to eq value } }
   end
 
   describe "#metadata" do
@@ -53,14 +50,20 @@ describe Tracking do
     it { is_expected.to have_db_column(:updated_at).of_type(:datetime) }
   end
 
-  # describe "#user" do
-  #   let(:user) { create :user }
-  #
-  #   it { is_expected.to belong_to(:user).inverse_of(:trackings) }
-  #   it { expect(create(:tracking, user:).user).to eq user }
-  #   it { expect { create :tracking }.to raise_error ActiveRecord::RecordInvalid, "Validation failed: User must exist" }
-  # end
-  #
+  describe "#tracking_item" do
+    let(:tracking_item) { create :tracking_item, :with_required_attributes, :with_required_dependencies }
+
+    it { is_expected.to have_db_index(:tracking_item_id) }
+    it { is_expected.to have_db_column(:tracking_item_id).of_type(:integer) }
+    it { is_expected.to belong_to(:tracking_item).inverse_of(:trackings) }
+    it { expect(create(:tracking, :with_required_attributes, :with_required_dependencies, tracking_item:).tracking_item).to eq tracking_item }
+
+    it {
+      expect { create :tracking, :with_required_attributes, :with_required_dependencies, tracking_item: nil }
+        .to raise_error ActiveRecord::RecordInvalid, "Validation failed: Tracking item must exist" # TODO: Why Tracking item and not TrackingItem?
+    }
+  end
+
   # describe "#draft?" do
   #   context "without set status (use default status 'draft' from database)" do
   #     subject { tracking.draft? }

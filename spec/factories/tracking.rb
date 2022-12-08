@@ -20,11 +20,14 @@ FactoryBot.define do
 
   factory :tracking do
     trait :with_required_dependencies do
-      user { create :tracking, :with_required_attributes }
+      tracking_item { create :tracking_item, :with_required_attributes, :with_required_dependencies }
+      from_trackable_system { create :trackable_system, :with_required_attributes }
+      to_trackable_system { create :trackable_system, :with_required_attributes }
     end
 
     trait :with_required_attributes do
-      sequence(:name) { |i| "name#{i}" }
+      metadata { {key: 'value'} }
+      # sequence(:name) { |i| "name#{i}" }
     end
 
     # trait :with_realistic_attributes do
