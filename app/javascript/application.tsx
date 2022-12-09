@@ -2,7 +2,10 @@ import {
   Typography,
 } from 'antd';
 import React from 'react';
-import ReactDOM from 'react-dom';
+import {
+  createRoot,
+} from 'react-dom/client';
+import assertNonNullish from '../helpers/assertNonNullish';
 import SmartTable from './components/SmartTable';
 
 const {
@@ -18,4 +21,8 @@ const App = () => {
   );
 };
 
-ReactDOM.render(<App />, document.querySelector('#spa'));
+const container = document.querySelector('#spa');
+assertNonNullish(container, 'Unable to find DOM element #spa');
+
+const root = createRoot(container);
+root.render(<App />);
