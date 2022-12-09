@@ -1,7 +1,11 @@
 import {
+  SearchOutlined,
+} from '@ant-design/icons';
+import {
   Form,
   Radio,
   type RadioChangeEvent,
+  Space,
   Table,
 } from 'antd';
 import type {
@@ -16,8 +20,14 @@ import React, {
   useState,
 } from 'react';
 import {
-  printTestPersons,
-} from '../helpers/printTestPersons';
+  FilterObjects,
+} from '../helpers/FilterObjects';
+import {
+  TestPersons,
+} from '../helpers/TestPersons';
+import {
+  AutoCompleteSearch,
+} from './AutoCompleteSearch';
 
 // Types
 type DataType = {
@@ -52,15 +62,19 @@ const SmartTable: React.FC = () => {
   const [
     size,
     setSize,
-  ] = useState<SizeType>('large');
+  ] = useState<SizeType>('small');
   const [
     dataOwner,
     setDataOwner,
   ] = useState<string[]>([]);
+  const [
+    searchSelection,
+    setSearchSelection,
+  ] = useState<string[]>([]);
 
   useEffect(() => {
     const setPersonNamesToState = async () => {
-      await printTestPersons('https://fakerapi.it/api/v1/users?_quantity=100').then((person) => {
+      await TestPersons('https://fakerapi.it/api/v1/users?_quantity=100').then((person) => {
         setDataOwner(person);
       }).catch((error) => {
         return error;
@@ -93,20 +107,7 @@ const SmartTable: React.FC = () => {
     },
     {
       dataIndex: 'from',
-      filters: [
-        {
-          text: dataFrom[0],
-          value: 'ELN',
-        },
-        {
-          text: dataFrom[1],
-          value: 'RADAR4Kit',
-        },
-        {
-          text: dataFrom[2],
-          value: 'REPO',
-        },
-      ],
+      filters: FilterObjects(dataFrom),
       key: 'from',
       onFilter: (value, record) => {
         return record.from.startsWith(value as string);
@@ -120,24 +121,7 @@ const SmartTable: React.FC = () => {
     },
     {
       dataIndex: 'to',
-      filters: [
-        {
-          text: dataTo[0],
-          value: 'RADAR4Kit',
-        },
-        {
-          text: dataTo[1],
-          value: 'RADAR4Chem',
-        },
-        {
-          text: dataTo[2],
-          value: 'REPO',
-        },
-        {
-          text: dataTo[3],
-          value: 'nmrXiv',
-        },
-      ],
+      filters: FilterObjects(dataTo),
       key: 'to',
       onFilter: (value, record) => {
         return record.to.startsWith(value as string);
@@ -157,20 +141,7 @@ const SmartTable: React.FC = () => {
     },
     {
       dataIndex: 'status',
-      filters: [
-        {
-          text: dataStatus[0],
-          value: 'DRAFT',
-        },
-        {
-          text: dataStatus[1],
-          value: 'PUBLISHED',
-        },
-        {
-          text: dataStatus[2],
-          value: 'SUBMITTED',
-        },
-      ],
+      filters: FilterObjects(dataStatus),
       key: 'status',
       onFilter: (value, record) => {
         return record.status.startsWith(value as string);
@@ -196,15 +167,18 @@ const SmartTable: React.FC = () => {
     },
     {
       dataIndex: 'owner',
-      filters: dataOwner.map((item) => {
-        return {
-          text: item,
-          value: item,
-        };
-      }),
+      filterDropdown: () => {
+        return AutoCompleteSearch(dataOwner, (value) => {
+          setSearchSelection(value);
+        });
+      },
+      filteredValue: [
+        ...searchSelection,
+      ],
+      filterIcon: <SearchOutlined />,
       key: 'owner',
       onFilter: (value, record) => {
-        return record.owner.startsWith(value as string);
+        return record.owner.toLowerCase().includes(String(value).toLowerCase());
       },
       sorter: (a, b) => {
         return a.owner.localeCompare(b.owner, 'en', {
@@ -236,9 +210,9 @@ const SmartTable: React.FC = () => {
   });
 
   return (
-    <>
+    <div>
       <Form layout='inline'>
-        <div className='py-2'>
+        <div>
           <Form.Item label='Size'>
             <Radio.Group onChange={handleSizeChange} value={size}>
               <Radio.Button value='large'>Large</Radio.Button>
@@ -248,19 +222,21 @@ const SmartTable: React.FC = () => {
           </Form.Item>
         </div>
       </Form>
-      <div className='py-4'>
-        <Table
-          {...tableProps}
-          columns={tableColumns}
-          dataSource={data}
-          pagination={{
-            position: [
-              'bottomCenter',
-            ],
-          }}
-        />
+      <div>
+        <Space size='large'>
+          <Table
+            {...tableProps}
+            columns={tableColumns}
+            dataSource={data}
+            pagination={{
+              position: [
+                'bottomCenter',
+              ],
+            }}
+          />
+        </Space>
       </div>
-    </>
+    </div>
   );
 };
 
