@@ -42,6 +42,7 @@ RSpec.configure do |config|
   config.before do
     FactoryBot.reload
     FactoryBot.register_strategy(:build_request, RequestStrategy)
+    FactoryBot.register_strategy(:find_or_create, FindOrCreateStrategy)
   end
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures

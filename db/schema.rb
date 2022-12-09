@@ -16,11 +16,15 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_06_163114) do
 
   # Custom types defined in this database.
   # Note that some types may not work with other database engines. Be careful if changing database.
-  create_enum "tracking_status", ["draft", "published", "submitted", "reviewing", "pending", "accepted", "reviewed", "rejected", "deleted"]
-  create_enum "user_roles", ["user", "super", "admin"]
+  create_enum "trackable_systems_name",
+    %w[radar4kit radar4chem chemotion_repository chemotion_electronic_laboratory_notebook nmrxiv]
+  create_enum "trackings_status",
+    %w[draft published submitted reviewing pending accepted reviewed rejected deleted]
+  create_enum "users_role",
+    %w[user super admin]
 
   create_table "trackable_systems", force: :cascade do |t|
-    t.text "name", null: false
+    t.enum "name", null: false, enum_type: "trackable_systems_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_trackable_systems_on_name", unique: true
@@ -37,7 +41,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_06_163114) do
 
   create_table "trackings", force: :cascade do |t|
     t.datetime "date_time", null: false
-    t.enum "status", default: "draft", null: false, enum_type: "tracking_status"
+    t.enum "status", default: "draft", null: false, enum_type: "trackings_status"
     t.jsonb "metadata", null: false
     t.bigint "tracking_item_id", null: false
     t.bigint "from_trackable_system_id", null: false
@@ -51,7 +55,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_06_163114) do
 
   create_table "users", force: :cascade do |t|
     t.text "name", null: false
-    t.enum "role", default: "user", null: false, enum_type: "user_roles"
+    t.enum "role", default: "user", null: false, enum_type: "users_role"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
