@@ -6,8 +6,12 @@ module.exports = {
     'canonical/module',
   ],
   ignorePatterns: [
+    // HINT: Build result
     'app/assets/*',
+    // HINT: Dependencies
     'node_modules/*',
+    // HINT: PostCSS config does not allow modern JS.
+    'postcss.config.js',
   ],
   overrides: [
     {
@@ -36,6 +40,22 @@ module.exports = {
       rules: {
         // HINT: Rule conflicts with TS1371: This import is never used as a value and must use 'import type' because 'importsNotUsedAsValues' is set to 'error'.
         'canonical/prefer-inline-type-import': 0,
+        // HINT: Rule conflicts with design philosophy and technical implementation of AntDesign, see:
+        //       https://ant.design/docs/react/customize-theme
+        //       https://ant.design/docs/blog/css-in-js
+        'react/forbid-component-props': [
+          2,
+          {
+            forbid: [
+              {
+                allowedFor: [
+                  'Select',
+                ],
+                propName: 'style',
+              },
+            ],
+          },
+        ],
       },
     },
     {
