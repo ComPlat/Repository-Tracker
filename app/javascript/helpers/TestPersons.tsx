@@ -14,7 +14,7 @@ const getResponseFromApi = async (url: string) => {
   });
 };
 
-export const printTestPersons = async (url: string) => {
+export const TestPersons = async (url: string) => {
   return await getResponseFromApi(url).then(async (response) => {
     return response;
   });
