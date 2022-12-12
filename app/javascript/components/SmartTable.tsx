@@ -168,7 +168,11 @@ const SmartTable: React.FC = () => {
     {
       dataIndex: 'date_time',
       key: 'date_time',
-      sorter: true,
+      sorter: (first: DataType, second: DataType) => {
+        return first.date_time.localeCompare(second.date_time, 'en', {
+          sensitivity: 'base',
+        });
+      },
       title: 'Date/Time',
     },
     {
@@ -196,14 +200,22 @@ const SmartTable: React.FC = () => {
       dataIndex: 'data_metadata',
       filteredValue: null,
       key: 'data_metadata',
-      sorter: true,
+      sorter: (first: DataType, second: DataType) => {
+        return first.data_metadata.localeCompare(second.data_metadata, 'en', {
+          sensitivity: 'base',
+        });
+      },
       title: 'Data/Metadata',
     },
     {
       dataIndex: 'tracker_number',
       filteredValue: null,
       key: 'tracker_number',
-      sorter: true,
+      sorter: (first: DataType, second: DataType) => {
+        return first.tracker_number.localeCompare(second.tracker_number, 'en', {
+          sensitivity: 'base',
+        });
+      },
       title: 'Tracker Number',
     },
     {
