@@ -113,6 +113,7 @@ const SmartTable: React.FC = () => {
   const columns: ColumnsType<DataType> = [
     {
       dataIndex: 'id',
+      filteredValue: null,
       key: 'id',
       onFilter: (value: boolean | number | string, record: DataType) => {
         return record.id.toString().includes(value as string);
@@ -193,12 +194,14 @@ const SmartTable: React.FC = () => {
     },
     {
       dataIndex: 'data_metadata',
+      filteredValue: null,
       key: 'data_metadata',
       sorter: true,
       title: 'Data/Metadata',
     },
     {
       dataIndex: 'tracker_number',
+      filteredValue: null,
       key: 'tracker_number',
       sorter: true,
       title: 'Tracker Number',
