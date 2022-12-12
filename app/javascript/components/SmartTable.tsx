@@ -284,6 +284,7 @@ const SmartTable: React.FC = () => {
                 'bottomCenter',
               ],
             }}
+            rowKey='id'
           />
         </Space>
       </div>
