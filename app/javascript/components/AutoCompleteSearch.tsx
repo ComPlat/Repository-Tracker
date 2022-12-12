@@ -3,6 +3,9 @@ import {
   Select,
 } from 'antd';
 import React from 'react';
+import {
+  FilterObjects,
+} from '../helpers/FilterObjects';
 
 export const AutoCompleteSearch = (data: string[], onChange: ((value: never[], option: Array<{ text: string, value: string, }> | { text: string, value: string, }) => void)) => {
   return <Card
@@ -16,12 +19,7 @@ export const AutoCompleteSearch = (data: string[], onChange: ((value: never[], o
       mode='multiple'
       onChange={onChange}
       options={
-        data.map((item: string) => {
-          return {
-            text: item,
-            value: item,
-          };
-        })
+        FilterObjects(data)
       }
       placeholder='Search...'
       style={{
