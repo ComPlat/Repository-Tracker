@@ -1,7 +1,4 @@
 import {
-  SearchOutlined,
-} from '@ant-design/icons';
-import {
   Form,
   Radio,
   type RadioChangeEvent,
@@ -28,6 +25,9 @@ import {
 import {
   AutoCompleteSearch,
 } from './AutoCompleteSearch';
+import {
+  CustomFilterIcon,
+} from './CustomFilterIcon';
 
 // Types
 type DataType = {
@@ -172,10 +172,8 @@ const SmartTable: React.FC = () => {
           setSearchSelection(value);
         });
       },
-      filteredValue: [
-        ...searchSelection,
-      ],
-      filterIcon: <SearchOutlined />,
+      // filteredValue: searchSelection,
+      filterIcon: CustomFilterIcon(searchSelection.length !== 0),
       key: 'owner',
       onFilter: (value, record) => {
         return record.owner.toLowerCase().includes(String(value).toLowerCase());

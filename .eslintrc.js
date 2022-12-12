@@ -50,6 +50,7 @@ module.exports = {
               {
                 allowedFor: [
                   'Select',
+                  'SearchOutlined',
                 ],
                 propName: 'style',
               },
