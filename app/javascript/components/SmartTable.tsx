@@ -9,7 +9,9 @@ import type {
   SizeType,
 } from 'antd/es/config-provider/SizeContext';
 import type {
+  ColumnGroupType,
   ColumnsType,
+  ColumnType,
   TableProps,
 } from 'antd/es/table';
 import React, {
@@ -68,8 +70,8 @@ const SmartTable: React.FC = () => {
     setDataOwner,
   ] = useState<string[]>([]);
   const [
-    searchSelection,
-    setSearchSelection,
+    ownerSelection,
+    setOwnerSelection,
   ] = useState<string[]>([]);
 
   useEffect(() => {
@@ -100,8 +102,11 @@ const SmartTable: React.FC = () => {
     {
       dataIndex: 'id',
       key: 'id',
-      sorter: (a, b) => {
-        return a.id - b.id;
+      onFilter: (value: boolean | number | string, record: DataType) => {
+        return record.id.toString().includes(value as string);
+      },
+      sorter: (first: DataType, second: DataType) => {
+        return first.id - second.id;
       },
       title: 'ID',
     },
@@ -109,11 +114,11 @@ const SmartTable: React.FC = () => {
       dataIndex: 'from',
       filters: FilterObjects(dataFrom),
       key: 'from',
-      onFilter: (value, record) => {
+      onFilter: (value: boolean | number | string, record: DataType) => {
         return record.from.startsWith(value as string);
       },
-      sorter: (a, b) => {
-        return a.from.localeCompare(b.from, 'en', {
+      sorter: (first: DataType, second: DataType) => {
+        return first.from.localeCompare(second.from, 'en', {
           sensitivity: 'base',
         });
       },
@@ -123,11 +128,11 @@ const SmartTable: React.FC = () => {
       dataIndex: 'to',
       filters: FilterObjects(dataTo),
       key: 'to',
-      onFilter: (value, record) => {
+      onFilter: (value: boolean | number | string, record: DataType) => {
         return record.to.startsWith(value as string);
       },
-      sorter: (a, b) => {
-        return a.to.localeCompare(b.to, 'en', {
+      sorter: (first: DataType, second: DataType) => {
+        return first.to.localeCompare(second.to, 'en', {
           sensitivity: 'base',
         });
       },
@@ -143,11 +148,11 @@ const SmartTable: React.FC = () => {
       dataIndex: 'status',
       filters: FilterObjects(dataStatus),
       key: 'status',
-      onFilter: (value, record) => {
+      onFilter: (value: boolean | number | string, record: DataType) => {
         return record.status.startsWith(value as string);
       },
-      sorter: (a, b) => {
-        return a.status.localeCompare(b.status, 'en', {
+      sorter: (first: DataType, second: DataType) => {
+        return first.status.localeCompare(second.status, 'en', {
           sensitivity: 'base',
         });
       },
@@ -169,17 +174,17 @@ const SmartTable: React.FC = () => {
       dataIndex: 'owner',
       filterDropdown: () => {
         return AutoCompleteSearch(dataOwner, (value) => {
-          setSearchSelection(value);
+          setOwnerSelection(value);
         });
       },
-      filteredValue: searchSelection,
-      filterIcon: CustomFilterIcon(searchSelection.length !== 0),
+      filteredValue: ownerSelection,
+      filterIcon: CustomFilterIcon(ownerSelection.length !== 0),
       key: 'owner',
-      onFilter: (value, record) => {
+      onFilter: (value: boolean | number | string, record: DataType) => {
         return record.owner.toLowerCase().includes(String(value).toLowerCase());
       },
-      sorter: (a, b) => {
-        return a.owner.localeCompare(b.owner, 'en', {
+      sorter: (first: DataType, second: DataType) => {
+        return first.owner.localeCompare(second.owner, 'en', {
           sensitivity: 'base',
         });
       },
@@ -201,7 +206,7 @@ const SmartTable: React.FC = () => {
     });
   }
 
-  const tableColumns = columns.map((item) => {
+  const tableColumns = columns.map((item: ColumnGroupType<DataType> | ColumnType<DataType>) => {
     return {
       ...item,
     };
