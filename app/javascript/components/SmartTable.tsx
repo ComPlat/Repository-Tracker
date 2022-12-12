@@ -70,6 +70,18 @@ const SmartTable: React.FC = () => {
     setDataOwner,
   ] = useState<string[]>([]);
   const [
+    fromSelection,
+    setFromSelection,
+  ] = useState<string[]>([]);
+  const [
+    toSelection,
+    setToSelection,
+  ] = useState<string[]>([]);
+  const [
+    statusSelection,
+    setStatusSelection,
+  ] = useState<string[]>([]);
+  const [
     ownerSelection,
     setOwnerSelection,
   ] = useState<string[]>([]);
@@ -112,6 +124,13 @@ const SmartTable: React.FC = () => {
     },
     {
       dataIndex: 'from',
+      filterDropdown: () => {
+        return AutoCompleteSearch(dataFrom, (value) => {
+          setFromSelection(value);
+        });
+      },
+      filteredValue: fromSelection.length === 0 ? null : ownerSelection && fromSelection,
+      filterIcon: CustomFilterIcon(fromSelection.length !== 0),
       filters: FilterObjects(dataFrom),
       key: 'from',
       onFilter: (value: boolean | number | string, record: DataType) => {
@@ -126,6 +145,13 @@ const SmartTable: React.FC = () => {
     },
     {
       dataIndex: 'to',
+      filterDropdown: () => {
+        return AutoCompleteSearch(dataTo, (value) => {
+          setToSelection(value);
+        });
+      },
+      filteredValue: toSelection.length === 0 ? null : ownerSelection && toSelection,
+      filterIcon: CustomFilterIcon(toSelection.length !== 0),
       filters: FilterObjects(dataTo),
       key: 'to',
       onFilter: (value: boolean | number | string, record: DataType) => {
@@ -146,6 +172,13 @@ const SmartTable: React.FC = () => {
     },
     {
       dataIndex: 'status',
+      filterDropdown: () => {
+        return AutoCompleteSearch(dataStatus, (value) => {
+          setStatusSelection(value);
+        });
+      },
+      filteredValue: statusSelection.length === 0 ? null : ownerSelection && statusSelection,
+      filterIcon: CustomFilterIcon(statusSelection.length !== 0),
       filters: FilterObjects(dataStatus),
       key: 'status',
       onFilter: (value: boolean | number | string, record: DataType) => {
