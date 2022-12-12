@@ -172,7 +172,7 @@ const SmartTable: React.FC = () => {
           setSearchSelection(value);
         });
       },
-      // filteredValue: searchSelection,
+      filteredValue: searchSelection,
       filterIcon: CustomFilterIcon(searchSelection.length !== 0),
       key: 'owner',
       onFilter: (value, record) => {
