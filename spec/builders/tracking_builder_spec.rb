@@ -1,13 +1,11 @@
 describe TrackingBuilder do
-  let(:tracking) { build(:tracking, :with_realistic_attributes, :with_required_dependencies) }
+  let(:tracking) { build(:tracking, :with_required_attributes, :with_required_dependencies) }
   let(:params) do
-    {
-      "from" => tracking.from,
-      "to" => tracking.to,
-      "status" => tracking.status,
-      "metadata" => tracking.metadata,
-      "user_id" => tracking.user.id
-    }
+    {"status" => tracking.status,
+     "metadata" => tracking.metadata,
+     "from_trackable_system_name" => tracking.from_trackable_system.name,
+     "to_trackable_system_name" => tracking.to_trackable_system.name,
+     "tracking_item_name" => tracking.tracking_item.name}
   end
 
   describe ".new" do
@@ -17,14 +15,16 @@ describe TrackingBuilder do
   end
 
   describe "#build" do
-    subject(:builded_tracking) { described_class.new(params).build }
+    subject(:built_tracking) { described_class.new(params).build }
 
     it { is_expected.to be_a Tracking }
-    it { expect(builded_tracking.from).to eq params["from"] }
-    it { expect(builded_tracking.to).to eq params["to"] }
-    it { expect(builded_tracking.status).to eq params["status"] }
-    it { expect(builded_tracking.metadata).to eq params["metadata"] }
-    it { expect(builded_tracking.user_id).to eq params["user_id"] }
+    it { expect(built_tracking.id).to be_nil }
+    it { expect(built_tracking.date_time).to be_nil }
+    it { expect(built_tracking.status).to eq params["status"] }
+    it { expect(built_tracking.metadata).to eq params["metadata"] }
+    it { expect(built_tracking.tracking_item).to eq TrackingItem.find_by(name: params["tracking_item_name"]) }
+    it { expect(built_tracking.from_trackable_system).to eq TrackableSystem.find_by(name: params["from_trackable_system_name"]) }
+    it { expect(built_tracking.to_trackable_system).to eq TrackableSystem.find_by(name: params["to_trackable_system_name"]) }
   end
 
   describe "#create!" do
