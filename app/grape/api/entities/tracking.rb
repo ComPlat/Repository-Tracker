@@ -14,7 +14,10 @@ module API
         tracking.from_trackable_system.name
       end
       expose :to_trackable_system_name do |tracking, _options|
-        tracking.from_trackable_system.name
+        tracking.to_trackable_system.name
+      end
+      expose :owner_name do |tracking, _options|
+        tracking.tracking_item.user.name
       end
     end
   end

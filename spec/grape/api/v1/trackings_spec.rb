@@ -51,13 +51,14 @@ describe API::V1::Trackings do
       it { expect(response).to have_http_status :created }
 
       it do
-        expect(JSON.parse(response.body)).to eq({"id" => expected_tracking.id,
+        expect(JSON.parse(response.body)).to eq("id" => expected_tracking.id,
           "date_time" => expected_tracking.date_time.strftime("%Y-%m-%dT%H:%M:%S.%LZ"),
           "status" => tracking_request[:status],
           "metadata" => tracking_request[:metadata],
           "tracking_item_name" => tracking_request[:tracking_item_name],
           "from_trackable_system_name" => tracking_request[:from_trackable_system_name],
-          "to_trackable_system_name" => tracking_request[:from_trackable_system_name]})
+          "to_trackable_system_name" => tracking_request[:from_trackable_system_name],
+          "owner_name" => expected_tracking.tracking_item.user.name)
       end
     end
   end
