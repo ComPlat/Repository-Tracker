@@ -1,6 +1,6 @@
 describe API::V1::Trackings do
   describe "GET /api/v1/trackings/" do
-    let!(:trackings) { create_list :tracking, 3, :with_realistic_attributes, :with_required_dependencies }
+    let!(:trackings) { create_list :tracking, 3, :with_required_attributes, :with_required_dependencies }
 
     before { get "/api/v1/trackings" }
 
@@ -11,7 +11,7 @@ describe API::V1::Trackings do
 
   describe "GET /api/v1/trackings/:id" do
     context "when tracking id exists" do
-      let(:trackings) { create_list :tracking, 3, :with_realistic_attributes, :with_required_dependencies }
+      let(:trackings) { create_list :tracking, 3, :with_required_attributes, :with_required_dependencies }
 
       before { get "/api/v1/trackings/#{trackings.last.id}" }
 
@@ -33,13 +33,13 @@ describe API::V1::Trackings do
 
   describe "POST /api/v1/trackings/" do
     context "when validation errors occurs" do
-      let(:tracking) { build :tracking, :with_realistic_attributes, :with_required_dependencies }
+      let(:tracking) { build :tracking, :with_required_attributes, :with_required_dependencies }
       let(:tracking_request) { build_request(:tracking_request, :create_invalid) }
 
       before { post "/api/v1/trackings/", params: tracking_request }
 
       it { expect(response).to have_http_status :bad_request }
-      it { expect(JSON.parse(response.body)).to eq "error" => "from is missing" }
+      it { expect(JSON.parse(response.body)).to eq "error" => "status is missing, metadata is missing, tracking_item_name is missing, from_trackable_system_name is missing, to_trackable_system_name is missing" }
     end
 
     context "when tracking record is created" do
@@ -52,14 +52,12 @@ describe API::V1::Trackings do
 
       it do
         expect(JSON.parse(response.body)).to eq({"id" => expected_tracking.id,
-                                                  "from" => tracking_request[:from],
-                                                  "to" => tracking_request[:to],
-                                                  "status" => tracking_request[:status],
-                                                  "metadata" => tracking_request[:metadata],
-                                                  "date_time" => expected_tracking.date_time.strftime("%Y-%m-%dT%H:%M:%S.%LZ"),
-                                                  "updated_at" => expected_tracking.updated_at.strftime("%Y-%m-%dT%H:%M:%S.%LZ"),
-                                                  "created_at" => expected_tracking.created_at.strftime("%Y-%m-%dT%H:%M:%S.%LZ"),
-                                                  "user_id" => tracking_request[:user_id]})
+          "date_time" => expected_tracking.date_time.strftime("%Y-%m-%dT%H:%M:%S.%LZ"),
+          "status" => tracking_request[:status],
+          "metadata" => tracking_request[:metadata],
+          "tracking_item_name" => tracking_request[:tracking_item_name],
+          "from_trackable_system_name" => tracking_request[:from_trackable_system_name],
+          "to_trackable_system_name" => tracking_request[:from_trackable_system_name]})
       end
     end
   end

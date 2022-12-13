@@ -23,8 +23,9 @@ class TrackingBuilder
   def tracking_item_id = @tracking_item_id ||=
                            TrackingItem.find_or_create_by!(name: @params["tracking_item_name"]).id
 
-  def from_trackable_system_id = @from_trackable_system_id ||=
-                                   TrackableSystem.find_or_create_by!(name: @params["from_trackable_system_name"]).id
+  def from_trackable_system_id
+    @from_trackable_system_id ||= TrackableSystem.find_or_create_by!(name: @params["from_trackable_system_name"]).id
+  end
 
   def to_trackable_system_id = @to_trackable_system_id ||=
                                  TrackableSystem.find_or_create_by!(name: @params["to_trackable_system_name"]).id

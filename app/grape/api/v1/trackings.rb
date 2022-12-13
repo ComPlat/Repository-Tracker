@@ -21,16 +21,16 @@ module API::V1
 
       desc "Create a tracking"
       params do
-        requires :from, type: String, desc: "Tracking sender"
-        requires :to, type: String, desc: "Tracking receiver"
-        # TODO: Do we need status for the first create or only for update?
         requires :status, type: String, desc: "Tracking status"
         requires :metadata, type: JSON, desc: "Tracking metadata"
+        requires :tracking_item_name, type: String, desc: "Tracking unique identifier"
+        requires :from_trackable_system_name, type: String, desc: "Tracking source"
+        requires :to_trackable_system_name, type: String, desc: "Tracking receiver"
       end
 
-      # FIXME: mb20221202 user_id have to use from authentication!
+      # TODO: mb20221202 user_id have to use from authentication!
       post do
-        present TrackingBuilder.new(params).create!
+        present TrackingBuilder.new(params).create!, with: API::Entities::Tracking
       end
     end
 
