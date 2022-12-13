@@ -20,6 +20,7 @@ FactoryBot.define do
 
   factory :tracking do
     trait :with_required_dependencies do
+      status { :draft }
       tracking_item { create :tracking_item, :with_required_attributes, :with_required_dependencies }
       from_trackable_system { find_or_create :trackable_system, :with_required_attributes }
       to_trackable_system { find_or_create :trackable_system, :with_required_attributes }
@@ -28,12 +29,5 @@ FactoryBot.define do
     trait :with_required_attributes do
       metadata { {key: "value"} }
     end
-
-    # trait :with_realistic_attributes do
-    #   # from { %w[ELN RARDA4KIT REPO].sample }
-    #   # to { %w[RARDA4Kit RARDA4Chem REPO nmrXiv].sample }
-    #   # status { %w[draft published submitted].sample }
-    #   # metadata { {"item1" => "value1", "item2" => "value2", "item3" => "value3"} }
-    # end
   end
 end

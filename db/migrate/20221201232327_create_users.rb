@@ -4,7 +4,7 @@ class CreateUsers < ActiveRecord::Migration[7.0]
 
     create_table :users do |t|
       t.text :name, null: false
-      t.enum :role, enum_type: "users_role", default: "user", null: false
+      t.enum :role, enum_type: "users_role", null: false
 
       t.timestamps
     end

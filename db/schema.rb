@@ -41,7 +41,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_06_163114) do
 
   create_table "trackings", force: :cascade do |t|
     t.datetime "date_time", null: false
-    t.enum "status", default: "draft", null: false, enum_type: "trackings_status"
+    t.enum "status", null: false, enum_type: "trackings_status"
     t.jsonb "metadata", null: false
     t.bigint "tracking_item_id", null: false
     t.bigint "from_trackable_system_id", null: false
@@ -55,7 +55,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_06_163114) do
 
   create_table "users", force: :cascade do |t|
     t.text "name", null: false
-    t.enum "role", default: "user", null: false, enum_type: "users_role"
+    t.enum "role", null: false, enum_type: "users_role"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
