@@ -137,30 +137,15 @@ RSpec.describe "SPA" do
     end
 
     it do
-      find(".ant-radio-group", text: "Small").click
-      expect(page).to have_text "1"
-    end
-  end
-
-  describe "Column search" do
-    before do
-      visit "/"
+      find(".ant-table-small")
+      find(".ant-radio-group", text: "Middle").click
+      expect(page).to have_selector(".ant-table-middle")
     end
 
-    context "when search for 'ELN' in 'From' column" do
-      before do
-        find(".ant-table-filter-column", text: "From", match: :first).find(".ant-table-filter-trigger").click
-        find(".ant-select-selection-overflow").click.fill_in(with: "ELN")
-        find(".ant-select-item-option-content", text: "ELN").click
-      end
-
-      it do
-        expect(first(".ant-table-cell", text: "ELN")).to have_content "ELN"
-      end
-
-      it do
-        expect(page).to have_content("ELN", count: 12)
-      end
+    it do
+      find(".ant-table-small")
+      find(".ant-radio-group", text: "Large").click
+      expect(page).to have_none_of_selectors(".ant-table-small")
     end
   end
 
