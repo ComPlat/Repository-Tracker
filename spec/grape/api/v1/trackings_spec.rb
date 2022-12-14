@@ -12,12 +12,24 @@ describe API::V1::Trackings do
   describe "GET /api/v1/trackings/:id" do
     context "when tracking id exists" do
       let(:trackings) { create_list :tracking, 3, :with_required_attributes, :with_required_dependencies }
+      let(:expected_tracking) { trackings.last }
 
-      before { get "/api/v1/trackings/#{trackings.last.id}" }
+      before { get "/api/v1/trackings/#{expected_tracking.id}" }
 
       it { expect(response).to have_http_status :ok }
-      it { expect(response.body).to eq trackings.last.to_json }
       it { expect(response.content_type).to eq "application/json" }
+      it { expect(JSON.parse(response.body)).to eq JSON.parse(API::Entities::Tracking.new(expected_tracking).to_json) }
+
+      it do
+        expect(JSON.parse(response.body)).to eq("id" => expected_tracking.id,
+          "date_time" => expected_tracking.date_time.strftime("%Y-%m-%dT%H:%M:%S.%LZ"),
+          "status" => expected_tracking.status,
+          "metadata" => expected_tracking.metadata,
+          "tracking_item_name" => expected_tracking.tracking_item.name,
+          "from_trackable_system_name" => expected_tracking.from_trackable_system.name,
+          "to_trackable_system_name" => expected_tracking.to_trackable_system.name,
+          "owner_name" => expected_tracking.tracking_item.user.name)
+      end
     end
 
     context "when tracking does not exist" do
@@ -49,6 +61,8 @@ describe API::V1::Trackings do
       before { post "/api/v1/trackings/", params: tracking_request }
 
       it { expect(response).to have_http_status :created }
+      it { expect(response.content_type).to eq "application/json" }
+      it { expect(JSON.parse(response.body)).to eq JSON.parse(API::Entities::Tracking.new(expected_tracking).to_json) }
 
       it do
         expect(JSON.parse(response.body)).to eq("id" => expected_tracking.id,

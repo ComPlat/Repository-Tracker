@@ -15,7 +15,7 @@ module API::V1
       end
       route_param :id, type: Integer do
         get do
-          present Tracking.find params[:id]
+          present Tracking.find(params[:id]), with: API::Entities::Tracking
         end
       end
 
