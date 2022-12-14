@@ -1,11 +1,10 @@
 FactoryBot.define do
   factory :tracking_item_request, class: OpenStruct do
-    to { build(:tracking, :with_realistic_attributes).to }
-    status { build(:tracking, :with_realistic_attributes).status }
-    metadata { build(:tracking, :with_realistic_attributes).metadata }
-    user_id { create(:user).id }
-
     trait :create do
+      to { build(:tracking, :with_realistic_attributes).to }
+      status { build(:tracking, :with_realistic_attributes).status }
+      metadata { build(:tracking, :with_realistic_attributes).metadata }
+      user_id { create(:user).id }
       from { build(:tracking, :with_realistic_attributes).from }
     end
 
