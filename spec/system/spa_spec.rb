@@ -138,9 +138,10 @@ RSpec.describe "SPA" do
 
     context "when search for 'ELN' in 'From' column" do
       before do
-        find(".ant-table-filter-column", text: "From", match: :first).find(".ant-table-filter-trigger").click
+        first(".ant-table-filter-column", text: "From").find(".ant-table-filter-trigger").click
         find(".ant-select-selection-overflow").click.fill_in(with: "ELN")
-        find(".ant-select-item-option-content", text: "ELN").click
+        first(".ant-select-item-option-content").click
+        find(:xpath, "/html").click
       end
 
       it do
@@ -152,9 +153,10 @@ RSpec.describe "SPA" do
 
     context "when search for 'RADAR4Kit' in 'To' column" do
       before do
-        find(".ant-table-filter-column", text: "To", match: :first).find(".ant-table-filter-trigger").click
+        first(".ant-table-filter-column", text: "To").find(".ant-table-filter-trigger").click
         find(".ant-select-selection-overflow").click.fill_in(with: "RADAR4Kit")
-        find(".ant-select-item-option-content", text: "RADAR4Kit").click
+        first(".ant-select-item-option-content").click
+        find(:xpath, "/html").click
       end
 
       it do
@@ -166,9 +168,10 @@ RSpec.describe "SPA" do
 
     context "when search for 'DRAFT' in 'Status' column" do
       before do
-        find(".ant-table-filter-column", text: "Status", match: :first).find(".ant-table-filter-trigger").click
+        first(".ant-table-filter-column", text: "Status").find(".ant-table-filter-trigger").click
         find(".ant-select-selection-overflow").click.fill_in(with: "DRAFT")
-        find(".ant-select-item-option-content", text: "DRAFT").click
+        first(".ant-select-item-option-content").click
+        find(:xpath, "/html").click
       end
 
       it do
@@ -180,15 +183,16 @@ RSpec.describe "SPA" do
 
     context "when search for 'ELN', 'RADAR4Kit' and 'DRAFT' together" do
       before do
-        find(".ant-table-filter-column", text: "From", match: :first).find(".ant-table-filter-trigger").click
+        first(".ant-table-filter-column", text: "From").find(".ant-table-filter-trigger").click
         find(".ant-select-selection-overflow").click.fill_in(with: "ELN")
-        find(".ant-select-item-option-content", text: "ELN").click
-        find(".ant-table-filter-column", text: "To", match: :first).find(".ant-table-filter-trigger").click
+        first(".ant-select-item-option-content").click
+        first(".ant-table-filter-column", text: "To").find(".ant-table-filter-trigger").click
         find(".ant-select-selection-overflow").click.fill_in(with: "RADAR4Kit")
-        find(".ant-select-item-option-content", text: "RADAR4Kit").click
-        find(".ant-table-filter-column", text: "Status", match: :first).find(".ant-table-filter-trigger").click
+        first(".ant-select-item-option-content").click
+        first(".ant-table-filter-column", text: "Status").find(".ant-table-filter-trigger").click
         find(".ant-select-selection-overflow").click.fill_in(with: "DRAFT")
-        find(".ant-select-item-option-content", text: "DRAFT").click
+        first(".ant-select-item-option-content").click
+        find(:xpath, "/html").click
       end
 
       it do
@@ -206,6 +210,25 @@ RSpec.describe "SPA" do
       it do
         within(find(:xpath, "//table/tbody/tr[1]/td[5]")) do
           expect(page).to have_content "DRAFT"
+        end
+      end
+    end
+
+    context "when first owner is selected for search" do
+      let(:owner_name) { first(".ant-select-item-option-content").text }
+
+      before do
+        visit "/"
+        first(".ant-table-filter-column", text: "Owner").find(".ant-table-filter-trigger").click
+        find(".ant-select-selection-overflow").click
+        owner_name
+        first(".ant-select-item-option-content").click
+        find(:xpath, "/html").click
+      end
+
+      it do
+        within(find(:xpath, "//table/tbody/tr[1]/td[8]")) do
+          expect(page).to have_content owner_name
         end
       end
     end
@@ -219,12 +242,14 @@ RSpec.describe "SPA" do
     it do
       find(".ant-table-small")
       find(".ant-radio-group", text: "Middle").click
+
       expect(page).to have_selector(".ant-table-middle")
     end
 
     it do
       find(".ant-table-small")
       find(".ant-radio-group", text: "Large").click
+
       expect(page).to have_none_of_selectors(".ant-table-small")
     end
   end
