@@ -26,12 +26,5 @@ FactoryBot.define do
     trait :with_required_attributes do
       sequence(:name) { |i| "name#{i}" }
     end
-
-    # trait :with_realistic_attributes do
-    #   # from { %w[ELN RARDA4KIT REPO].sample }
-    #   # to { %w[RARDA4Kit RARDA4Chem REPO nmrXiv].sample }
-    #   # status { %w[draft published submitted].sample }
-    #   # metadata { {"item1" => "value1", "item2" => "value2", "item3" => "value3"} }
-    # end
   end
 end
