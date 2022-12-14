@@ -62,7 +62,7 @@ describe API::Base do
     let(:parsed_and_symbolized_response_body) { JSON.parse(response.body).deep_symbolize_keys }
 
     it { expect(response).to have_http_status(:ok) }
-    it { expect(parsed_and_symbolized_response_body.keys.size).to eq 7 } # TODO: Change global api default values!
+    it { expect(parsed_and_symbolized_response_body.keys.size).to eq 7 }
     it { expect(parsed_and_symbolized_response_body[:info]).to eq(title: "API title", version: "0.0.1") }
     it { expect(parsed_and_symbolized_response_body[:swagger]).to eq "2.0" }
     it { expect(parsed_and_symbolized_response_body[:produces]).to eq ["application/json"] }
