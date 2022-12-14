@@ -1,5 +1,13 @@
 module API
   class Base < Grape::API
+    rescue_from ActiveRecord::RecordNotFound do |error|
+      error! error.message, 404
+    end
+
+    rescue_from ActiveRecord::RecordInvalid do |error|
+      error! error.message, 422
+    end
+
     format :json
 
     # HINT: Needed to avoid CORS (Cross-Origin Resource Sharing) error.
@@ -10,6 +18,6 @@ module API
     end
 
     mount API::V1::Trackings
-    add_swagger_documentation
+    add_swagger_documentation host: ENV["HOST_URI"]
   end
 end

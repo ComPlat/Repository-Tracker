@@ -10,7 +10,58 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 0) do
+ActiveRecord::Schema[7.0].define(version: 2022_12_06_163114) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  # Custom types defined in this database.
+  # Note that some types may not work with other database engines. Be careful if changing database.
+  create_enum "trackable_systems_name",
+    %w[radar4kit radar4chem chemotion_repository chemotion_electronic_laboratory_notebook nmrxiv]
+  create_enum "trackings_status",
+    %w[draft published submitted reviewing pending accepted reviewed rejected deleted]
+  create_enum "users_role",
+    %w[user super admin]
+
+  create_table "trackable_systems", force: :cascade do |t|
+    t.enum "name", null: false, enum_type: "trackable_systems_name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_trackable_systems_on_name", unique: true
+  end
+
+  create_table "tracking_items", force: :cascade do |t|
+    t.text "name", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_tracking_items_on_name", unique: true
+    t.index ["user_id"], name: "index_tracking_items_on_user_id"
+  end
+
+  create_table "trackings", force: :cascade do |t|
+    t.datetime "date_time", null: false
+    t.enum "status", null: false, enum_type: "trackings_status"
+    t.jsonb "metadata", null: false
+    t.bigint "tracking_item_id", null: false
+    t.bigint "from_trackable_system_id", null: false
+    t.bigint "to_trackable_system_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["from_trackable_system_id"], name: "index_trackings_on_from_trackable_system_id"
+    t.index ["to_trackable_system_id"], name: "index_trackings_on_to_trackable_system_id"
+    t.index ["tracking_item_id"], name: "index_trackings_on_tracking_item_id"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.text "name", null: false
+    t.enum "role", null: false, enum_type: "users_role"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_foreign_key "tracking_items", "users"
+  add_foreign_key "trackings", "trackable_systems", column: "from_trackable_system_id"
+  add_foreign_key "trackings", "trackable_systems", column: "to_trackable_system_id"
+  add_foreign_key "trackings", "tracking_items"
 end

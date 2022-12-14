@@ -57,47 +57,72 @@ describe API::Base do
   end
 
   describe "/api/swagger_doc.json" do
-    let(:expected_body) do
-      {info: {title: "API title", version: "0.0.1"},
-       swagger: "2.0",
-       produces: ["application/json"],
-       host: ENV["HOST_URI"], # HINT: Default value for host URI
-       basePath: "/api",
-       tags: [{name: "trackings", description: "Operations about trackings"}],
-       paths: {"/v1/trackings":
-                   {get:
-                       {description: "Return list of trackings",
-                        produces: ["application/json"],
-                        responses: {"200": {description: "Return list of trackings"}},
-                        tags: ["trackings"],
-                        operationId: "getV1Trackings"},
-                    post: {description: "Create a tracking",
-                           produces: ["application/json"],
-                           consumes: ["application/json"],
-                           parameters: [{in: "formData", name: "title", description: "Tracking title", type: "string", required: true},
-                             {in: "formData", name: "content",
-                              description: "Tracking content", type: "string", required: true}],
-                           responses: {"201": {description: "Create a tracking"}},
-                           tags: ["trackings"],
-                           operationId: "postV1Trackings"}},
-               "/v1/trackings/{id}":
-                   {get:
-                       {description: "Return a tracking",
-                        produces: ["application/json"],
-                        parameters: [{in: "path",
-                                      name: "id",
-                                      description: "Tracking ID",
-                                      type: "integer",
-                                      format: "int32",
-                                      required: true}],
-                        responses: {"200": {description: "Return a tracking"}},
-                        tags: ["trackings"],
-                        operationId: "getV1TrackingsId"}}}}
-    end
-
     before { get "/api/swagger_doc.json" }
 
+    let(:parsed_and_symbolized_response_body) { JSON.parse(response.body).deep_symbolize_keys }
+
     it { expect(response).to have_http_status(:ok) }
-    it { expect(JSON.parse(response.body).deep_symbolize_keys).to eq expected_body }
+    it { expect(parsed_and_symbolized_response_body.keys.size).to eq 7 }
+    it { expect(parsed_and_symbolized_response_body[:info]).to eq(title: "API title", version: "0.0.1") }
+    it { expect(parsed_and_symbolized_response_body[:swagger]).to eq "2.0" }
+    it { expect(parsed_and_symbolized_response_body[:produces]).to eq ["application/json"] }
+    it { expect(parsed_and_symbolized_response_body[:host]).to eq ENV["HOST_URI"] }
+    it { expect(parsed_and_symbolized_response_body[:basePath]).to eq "/api" }
+    it { expect(parsed_and_symbolized_response_body[:tags]).to eq [{description: "Operations about trackings", name: "trackings"}] }
+    it { expect(parsed_and_symbolized_response_body[:paths].keys.size).to eq 2 }
+    it { expect(parsed_and_symbolized_response_body[:paths][:"/v1/trackings"].keys.size).to eq 2 }
+    it { expect(parsed_and_symbolized_response_body[:paths][:"/v1/trackings"][:get].keys.size).to eq 5 }
+
+    it {
+      expect(parsed_and_symbolized_response_body[:paths][:"/v1/trackings"][:get]).to eq(description: "Return list of trackings",
+        operationId: "getV1Trackings",
+        produces: ["application/json"],
+        responses: {"200": {description: "Return list of trackings"}},
+        tags: ["trackings"])
+    }
+
+    it { expect(parsed_and_symbolized_response_body[:paths][:"/v1/trackings"][:post].keys.size).to eq 7 }
+
+    describe ":paths, [:''/v1/trackings'], :post" do
+      let(:expected_result) {
+        {consumes: ["application/json"],
+         description: "Create a tracking",
+         operationId: "postV1Trackings",
+         parameters: be_a(Array),
+         produces: ["application/json"],
+         responses: {"201": {description: "Create a tracking"}},
+         tags: ["trackings"]}
+      }
+
+      it { expect(parsed_and_symbolized_response_body[:paths][:"/v1/trackings"][:post]).to match expected_result }
+    end
+
+    describe ":paths, [:'/v1/trackings'], :post, :parameters" do
+      let(:expected_result) {
+        [{description: "Tracking status", in: "formData", name: "status", required: true, type: "string"},
+          {description: "Tracking metadata", in: "formData", name: "metadata", required: true, type: "json"},
+          {description: "Tracking unique identifier", in: "formData", name: "tracking_item_name", required: true, type: "string"},
+          {description: "Tracking source", in: "formData", name: "from_trackable_system_name", required: true, type: "string"},
+          {description: "Tracking receiver", in: "formData", name: "to_trackable_system_name", required: true, type: "string"}]
+      }
+
+      it { expect(parsed_and_symbolized_response_body[:paths][:"/v1/trackings"][:post][:parameters]).to eq expected_result }
+    end
+
+    it { expect(parsed_and_symbolized_response_body[:paths][:"/v1/trackings/{id}"].keys.size).to eq 1 }
+    it { expect(parsed_and_symbolized_response_body[:paths][:"/v1/trackings/{id}"][:get].keys.size).to eq 6 }
+
+    describe ":paths, [:'/v1/trackings/{id}'], :get" do
+      let(:expected_result) {
+        {description: "Return a tracking",
+         operationId: "getV1TrackingsId",
+         parameters: [{description: "Tracking ID", format: "int32", in: "path", name: "id", required: true, type: "integer"}],
+         produces: ["application/json"],
+         responses: {"200": {description: "Return a tracking"}},
+         tags: ["trackings"]}
+      }
+
+      it { expect(parsed_and_symbolized_response_body[:paths][:"/v1/trackings/{id}"][:get]).to eq expected_result }
+    end
   end
 end
