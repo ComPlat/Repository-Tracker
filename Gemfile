@@ -10,16 +10,16 @@ gem "rails", "7.0.4"
 gem "sprockets-rails", "3.4.2"
 
 # Use postgresql as the database for Active Record
-gem "pg", "1.4.4"
+gem "pg", "1.4.5"
 
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", "5.6.5"
 
 # Bundle and transpile JavaScript [https://github.com/rails/jsbundling-rails]
-gem "jsbundling-rails", "1.0.3"
+gem "jsbundling-rails", "1.1.1"
 
 # Bundle and process CSS [https://github.com/rails/cssbundling-rails]
-gem "cssbundling-rails", "1.1.1"
+gem "cssbundling-rails", "1.1.2"
 
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"
@@ -34,7 +34,7 @@ gem "cssbundling-rails", "1.1.1"
 gem "tzinfo-data", "1.2022.5", platforms: %i[mingw mswin x64_mingw jruby]
 
 # Reduces boot times through caching; required in config/boot.rb
-gem "bootsnap", "1.13.0", require: false
+gem "bootsnap", "1.15.0", require: false
 
 # Use Grape to create a REST API and generate a Swagger UI to interact with the endpoints
 gem "grape", "1.6.2"
@@ -54,9 +54,9 @@ group :development, :test do
   gem "irb", "1.4.2" # HINT: Version 1.4.3 breaks ruby-debug-ide with version 3.0.0.beta.5
 
   # Ruby Style Guide, with linter & automatic code fixer [https://github.com/testdouble/standard]
-  gem "standard", "1.16.1", require: false
-  gem "rubocop-rails", "2.16.1", require: false # [https://docs.rubocop.org/rubocop-rails/]
-  gem "rubocop-rspec", "2.13.2", require: false # [https://docs.rubocop.org/rubocop-rspec/]
+  gem "standard", "1.19.1", require: false
+  gem "rubocop-rails", "2.17.3", require: false # [https://docs.rubocop.org/rubocop-rails/]
+  gem "rubocop-rspec", "2.16.0 ", require: false # [https://docs.rubocop.org/rubocop-rspec/]
   gem "rubocop-thread_safety", "0.4.4", require: false # [https://github.com/rubocop/rubocop-thread_safety]
 
   # Behaviour-Driven Development tool for the TDD part focusing on the documentation and design aspects of TDD [https://relishapp.com/rspec/]
@@ -79,7 +79,7 @@ end
 
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
-  gem "capybara", "3.37.1"
+  gem "capybara", "3.38.0"
   gem "selenium-webdriver", "4.5.0"
   gem "webdrivers", "5.2.0"
 end
