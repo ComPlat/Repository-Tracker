@@ -131,6 +131,86 @@ RSpec.describe "SPA" do
     end
   end
 
+  describe "Column search" do
+    before do
+      visit "/"
+    end
+
+    context "when search for 'ELN' in 'From' column" do
+      before do
+        find(".ant-table-filter-column", text: "From", match: :first).find(".ant-table-filter-trigger").click
+        find(".ant-select-selection-overflow").click.fill_in(with: "ELN")
+        find(".ant-select-item-option-content", text: "ELN").click
+      end
+
+      it do
+        within(find(:xpath, "//table/tbody/tr[1]/td[2]")) do
+          expect(page).to have_content "ELN"
+        end
+      end
+    end
+
+    context "when search for 'RADAR4Kit' in 'To' column" do
+      before do
+        find(".ant-table-filter-column", text: "To", match: :first).find(".ant-table-filter-trigger").click
+        find(".ant-select-selection-overflow").click.fill_in(with: "RADAR4Kit")
+        find(".ant-select-item-option-content", text: "RADAR4Kit").click
+      end
+
+      it do
+        within(find(:xpath, "//table/tbody/tr[1]/td[3]")) do
+          expect(page).to have_content "RADAR4Kit"
+        end
+      end
+    end
+
+    context "when search for 'DRAFT' in 'Status' column" do
+      before do
+        find(".ant-table-filter-column", text: "Status", match: :first).find(".ant-table-filter-trigger").click
+        find(".ant-select-selection-overflow").click.fill_in(with: "DRAFT")
+        find(".ant-select-item-option-content", text: "DRAFT").click
+      end
+
+      it do
+        within(find(:xpath, "//table/tbody/tr[1]/td[5]")) do
+          expect(page).to have_content "DRAFT"
+        end
+      end
+    end
+
+    context "when search for 'ELN', 'RADAR4Kit' and 'DRAFT' together" do
+      before do
+        find(".ant-table-filter-column", text: "From", match: :first).find(".ant-table-filter-trigger").click
+        find(".ant-select-selection-overflow").click.fill_in(with: "ELN")
+        find(".ant-select-item-option-content", text: "ELN").click
+        find(".ant-table-filter-column", text: "To", match: :first).find(".ant-table-filter-trigger").click
+        find(".ant-select-selection-overflow").click.fill_in(with: "RADAR4Kit")
+        find(".ant-select-item-option-content", text: "RADAR4Kit").click
+        find(".ant-table-filter-column", text: "Status", match: :first).find(".ant-table-filter-trigger").click
+        find(".ant-select-selection-overflow").click.fill_in(with: "DRAFT")
+        find(".ant-select-item-option-content", text: "DRAFT").click
+      end
+
+      it do
+        within(find(:xpath, "//table/tbody/tr[1]/td[2]")) do
+          expect(page).to have_content "ELN"
+        end
+      end
+
+      it do
+        within(find(:xpath, "//table/tbody/tr[1]/td[3]")) do
+          expect(page).to have_content "RADAR4Kit"
+        end
+      end
+
+      it do
+        within(find(:xpath, "//table/tbody/tr[1]/td[5]")) do
+          expect(page).to have_content "DRAFT"
+        end
+      end
+    end
+  end
+
   describe "Buttons to change table size" do
     before do
       visit "/"
