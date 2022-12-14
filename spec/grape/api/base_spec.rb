@@ -83,36 +83,46 @@ describe API::Base do
 
     it { expect(parsed_and_symbolized_response_body[:paths][:"/v1/trackings"][:post].keys.size).to eq 7 }
 
-    it {
-      expect(parsed_and_symbolized_response_body[:paths][:"/v1/trackings"][:post]).to match(consumes: ["application/json"],
-        description: "Create a tracking",
-        operationId: "postV1Trackings",
-        parameters: be_a(Array),
-        produces: ["application/json"],
-        responses: {"201": {description: "Create a tracking"}},
-        tags: ["trackings"])
-    }
+    describe ":paths, [:''/v1/trackings'], :post" do
+      let(:expected_result) {
+        {consumes: ["application/json"],
+         description: "Create a tracking",
+         operationId: "postV1Trackings",
+         parameters: be_a(Array),
+         produces: ["application/json"],
+         responses: {"201": {description: "Create a tracking"}},
+         tags: ["trackings"]}
+      }
 
-    it {
-      expect(parsed_and_symbolized_response_body[:paths][:"/v1/trackings"][:post][:parameters]).to eq([
-        {description: "Tracking status", in: "formData", name: "status", required: true, type: "string"},
-        {description: "Tracking metadata", in: "formData", name: "metadata", required: true, type: "json"},
-        {description: "Tracking unique identifier", in: "formData", name: "tracking_item_name", required: true, type: "string"},
-        {description: "Tracking source", in: "formData", name: "from_trackable_system_name", required: true, type: "string"},
-        {description: "Tracking receiver", in: "formData", name: "to_trackable_system_name", required: true, type: "string"}
-      ])
-    }
+      it { expect(parsed_and_symbolized_response_body[:paths][:"/v1/trackings"][:post]).to match expected_result }
+    end
+
+    describe ":paths, [:'/v1/trackings'], :post, :parameters" do
+      let(:expected_result) {
+        [{description: "Tracking status", in: "formData", name: "status", required: true, type: "string"},
+          {description: "Tracking metadata", in: "formData", name: "metadata", required: true, type: "json"},
+          {description: "Tracking unique identifier", in: "formData", name: "tracking_item_name", required: true, type: "string"},
+          {description: "Tracking source", in: "formData", name: "from_trackable_system_name", required: true, type: "string"},
+          {description: "Tracking receiver", in: "formData", name: "to_trackable_system_name", required: true, type: "string"}]
+      }
+
+      it { expect(parsed_and_symbolized_response_body[:paths][:"/v1/trackings"][:post][:parameters]).to eq expected_result }
+    end
 
     it { expect(parsed_and_symbolized_response_body[:paths][:"/v1/trackings/{id}"].keys.size).to eq 1 }
     it { expect(parsed_and_symbolized_response_body[:paths][:"/v1/trackings/{id}"][:get].keys.size).to eq 6 }
 
-    it {
-      expect(parsed_and_symbolized_response_body[:paths][:"/v1/trackings/{id}"][:get]).to eq(description: "Return a tracking",
-        operationId: "getV1TrackingsId",
-        parameters: [{description: "Tracking ID", format: "int32", in: "path", name: "id", required: true, type: "integer"}],
-        produces: ["application/json"],
-        responses: {"200": {description: "Return a tracking"}},
-        tags: ["trackings"])
-    }
+    describe ":paths, [:'/v1/trackings/{id}'], :get" do
+      let(:expected_result) {
+        {description: "Return a tracking",
+         operationId: "getV1TrackingsId",
+         parameters: [{description: "Tracking ID", format: "int32", in: "path", name: "id", required: true, type: "integer"}],
+         produces: ["application/json"],
+         responses: {"200": {description: "Return a tracking"}},
+         tags: ["trackings"]}
+      }
+
+      it { expect(parsed_and_symbolized_response_body[:paths][:"/v1/trackings/{id}"][:get]).to eq expected_result }
+    end
   end
 end
