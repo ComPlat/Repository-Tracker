@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class RequestStrategy
   def initialize = @strategy = FactoryBot.strategy_by_name(:build).new
 
