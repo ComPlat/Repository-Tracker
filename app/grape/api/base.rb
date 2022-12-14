@@ -18,6 +18,6 @@ module API
     end
 
     mount API::V1::Trackings
-    add_swagger_documentation
+    add_swagger_documentation host: ENV["HOST_URI"]
   end
 end
