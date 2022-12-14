@@ -2,12 +2,11 @@ module API::V1
   class Trackings < Grape::API
     version "v1", using: :path
 
-    args = [{"tracking1" => "My first tracking"}, {"tracking2" => "My second tracking"}]
-
     namespace :trackings do
       desc "Return list of trackings"
       get do
-        present args
+        # TODO: mb20221202 return only the user associated trackings
+        present Tracking.all
       end
 
       desc "Return a tracking"
@@ -16,17 +15,22 @@ module API::V1
       end
       route_param :id, type: Integer do
         get do
-          present args[params[:id]]
+          present Tracking.find(params[:id]), with: API::Entities::Tracking
         end
       end
 
       desc "Create a tracking"
       params do
-        requires :title, type: String, desc: "Tracking title"
-        requires :content, type: String, desc: "Tracking content"
+        requires :status, type: String, desc: "Tracking status"
+        requires :metadata, type: JSON, desc: "Tracking metadata"
+        requires :tracking_item_name, type: String, desc: "Tracking unique identifier"
+        requires :from_trackable_system_name, type: String, desc: "Tracking source"
+        requires :to_trackable_system_name, type: String, desc: "Tracking receiver"
       end
+
+      # TODO: mb20221202 user_id have to use from authentication!
       post do
-        args.push({params[:title] => params[:content]})
+        present TrackingBuilder.new(params).create!, with: API::Entities::Tracking
       end
     end
 
