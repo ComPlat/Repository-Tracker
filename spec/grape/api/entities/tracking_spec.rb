@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe API::Entities::Tracking do
-  let(:tracking) { create :tracking, :with_required_attributes, :with_required_dependencies }
+  let(:tracking) { create(:tracking, :with_required_attributes, :with_required_dependencies) }
   let(:tracking_entity) { described_class.new tracking }
 
   describe ".new" do

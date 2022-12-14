@@ -1,6 +1,6 @@
 describe API::V1::Trackings do
   describe "GET /api/v1/trackings/" do
-    let!(:trackings) { create_list :tracking, 3, :with_required_attributes, :with_required_dependencies }
+    let!(:trackings) { create_list(:tracking, 3, :with_required_attributes, :with_required_dependencies) }
 
     before { get "/api/v1/trackings" }
 
@@ -11,7 +11,7 @@ describe API::V1::Trackings do
 
   describe "GET /api/v1/trackings/:id" do
     context "when tracking id exists" do
-      let(:trackings) { create_list :tracking, 3, :with_required_attributes, :with_required_dependencies }
+      let(:trackings) { create_list(:tracking, 3, :with_required_attributes, :with_required_dependencies) }
       let(:expected_tracking) { trackings.last }
 
       before { get "/api/v1/trackings/#{expected_tracking.id}" }
@@ -45,7 +45,7 @@ describe API::V1::Trackings do
 
   describe "POST /api/v1/trackings/" do
     context "when validation errors occurs" do
-      let(:tracking) { build :tracking, :with_required_attributes, :with_required_dependencies }
+      let(:tracking) { build(:tracking, :with_required_attributes, :with_required_dependencies) }
       let(:tracking_request) { build_request(:tracking_request, :create_invalid) }
 
       before { post "/api/v1/trackings/", params: tracking_request }

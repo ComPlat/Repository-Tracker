@@ -34,9 +34,9 @@ describe User do
   end
 
   describe "#tracking_items" do
-    subject(:user) { create :user, :with_required_attributes }
+    subject(:user) { create(:user, :with_required_attributes) }
 
-    let(:tracking_item) { create :tracking_item, :with_required_attributes, user: }
+    let(:tracking_item) { create(:tracking_item, :with_required_attributes, user:) }
 
     it { is_expected.to have_many(:tracking_items).inverse_of(:user) }
     it { expect(user.tracking_items).to eq [] }

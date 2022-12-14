@@ -30,19 +30,19 @@ describe TrackingItem do
   end
 
   describe "#user" do
-    let(:user) { create :user, :with_required_attributes }
+    let(:user) { create(:user, :with_required_attributes) }
 
     it { is_expected.to have_db_index(:user_id) }
     it { is_expected.to have_db_column(:user_id).of_type(:integer) }
     it { is_expected.to belong_to(:user).inverse_of(:tracking_items) }
     it { expect(create(:tracking_item, :with_required_attributes, user:).user).to eq user }
-    it { expect { create :tracking_item, :with_required_attributes }.to raise_error ActiveRecord::RecordInvalid, "Validation failed: User must exist" }
+    it { expect { create(:tracking_item, :with_required_attributes) }.to raise_error ActiveRecord::RecordInvalid, "Validation failed: User must exist" }
   end
 
   describe "#trackings" do
-    subject(:tracking_item) { create :tracking_item, :with_required_attributes, :with_required_dependencies }
+    subject(:tracking_item) { create(:tracking_item, :with_required_attributes, :with_required_dependencies) }
 
-    let(:tracking) { create :tracking, :with_required_attributes, :with_required_dependencies, tracking_item: }
+    let(:tracking) { create(:tracking, :with_required_attributes, :with_required_dependencies, tracking_item:) }
 
     it { is_expected.to have_many(:trackings).inverse_of(:tracking_item) }
     it { expect(tracking_item.trackings).to eq [] }

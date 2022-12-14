@@ -59,19 +59,19 @@ describe Tracking do
     it { is_expected.to belong_to(:tracking_item).inverse_of(:trackings) }
 
     it {
-      tracking_item = build :tracking_item
+      tracking_item = build(:tracking_item)
 
       expect(build(:tracking, tracking_item:).tracking_item).to eq tracking_item
     }
 
     it {
-      expect { create :tracking, :with_required_attributes, :with_required_dependencies, tracking_item: nil }
+      expect { create(:tracking, :with_required_attributes, :with_required_dependencies, tracking_item: nil) }
         .to raise_error ActiveRecord::RecordInvalid, "Validation failed: Tracking item must exist"
     }
   end
 
   describe "#from_trackable_system" do
-    let(:from_trackable_system) { build :trackable_system }
+    let(:from_trackable_system) { build(:trackable_system) }
 
     it { is_expected.to have_db_index(:from_trackable_system_id) }
     it { is_expected.to have_db_column(:from_trackable_system_id).of_type(:integer) }
@@ -79,13 +79,13 @@ describe Tracking do
     it { expect(build(:tracking, from_trackable_system:).from_trackable_system).to eq from_trackable_system }
 
     it {
-      expect { create :tracking, :with_required_attributes, :with_required_dependencies, from_trackable_system: nil }
+      expect { create(:tracking, :with_required_attributes, :with_required_dependencies, from_trackable_system: nil) }
         .to raise_error ActiveRecord::RecordInvalid, "Validation failed: From trackable system must exist"
     }
   end
 
   describe "#to_trackable_system" do
-    let(:to_trackable_system) { build :trackable_system }
+    let(:to_trackable_system) { build(:trackable_system) }
 
     it { is_expected.to have_db_index(:to_trackable_system_id) }
     it { is_expected.to have_db_column(:to_trackable_system_id).of_type(:integer) }
@@ -93,7 +93,7 @@ describe Tracking do
     it { expect(build(:tracking, to_trackable_system:).to_trackable_system).to eq to_trackable_system }
 
     it {
-      expect { create :tracking, :with_required_attributes, :with_required_dependencies, to_trackable_system: nil }
+      expect { create(:tracking, :with_required_attributes, :with_required_dependencies, to_trackable_system: nil) }
         .to raise_error ActiveRecord::RecordInvalid, "Validation failed: To trackable system must exist"
     }
   end

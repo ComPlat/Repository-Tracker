@@ -14,7 +14,7 @@ FactoryBot.define do
 
   factory :tracking do
     trait :with_required_dependencies do
-      tracking_item { create :tracking_item, :with_required_attributes, :with_required_dependencies }
+      tracking_item { create(:tracking_item, :with_required_attributes, :with_required_dependencies) }
       from_trackable_system { find_or_create :trackable_system, :with_required_attributes }
       to_trackable_system { find_or_create :trackable_system, :with_required_attributes }
     end
