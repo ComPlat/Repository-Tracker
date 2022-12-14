@@ -57,7 +57,7 @@ describe API::V1::Trackings do
           "metadata" => tracking_request[:metadata],
           "tracking_item_name" => tracking_request[:tracking_item_name],
           "from_trackable_system_name" => tracking_request[:from_trackable_system_name],
-          "to_trackable_system_name" => tracking_request[:from_trackable_system_name],
+          "to_trackable_system_name" => tracking_request[:to_trackable_system_name],
           "owner_name" => expected_tracking.tracking_item.user.name)
       end
     end
