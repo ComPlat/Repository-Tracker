@@ -88,7 +88,7 @@ const SmartTable: React.FC = () => {
 
   useEffect(() => {
     const setPersonNamesToState = async () => {
-      await TestPersons('https://fakerapi.it/api/v1/users?_quantity=100').then((person) => {
+      await TestPersons().then((person) => {
         setDataOwner(person);
       }).catch((error) => {
         return error;
