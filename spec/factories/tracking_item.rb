@@ -11,11 +11,6 @@ FactoryBot.define do
 
     trait :create_invalid do
     end
-
-    trait :update do
-      id { "1" }
-      status { %w[draft published submitted].sample }
-    end
   end
 
   factory :tracking_item do
