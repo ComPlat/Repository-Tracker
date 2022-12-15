@@ -4,7 +4,7 @@ class CreateDoorkeeperTables < ActiveRecord::Migration[7.0]
   def change
     create_table :oauth_applications do |t|
       t.string :name, null: false
-      t.string :uid, null: false
+      t.string :uid, null: false, index: {unique: true}
       t.string :secret, null: false
 
       # Remove `null: false` if you are planning to use grant flows
@@ -13,10 +13,11 @@ class CreateDoorkeeperTables < ActiveRecord::Migration[7.0]
       t.text :redirect_uri # HINT: Removed 'null:false' because there is no authorization with Facebook, Twitter etc.
       t.string :scopes, null: false, default: ""
       t.boolean :confidential, null: false, default: true
+
+      t.references :resource_owner, null: false, foreign_key: {to_table: :users}
+
       t.timestamps null: false
     end
-
-    add_index :oauth_applications, :uid, unique: true
 
     # HINT: Suggested to comment this out
     # create_table :oauth_access_grants do |t|
@@ -38,21 +39,22 @@ class CreateDoorkeeperTables < ActiveRecord::Migration[7.0]
     # )
 
     create_table :oauth_access_tokens do |t|
-      t.references :resource_owner, index: true
+      t.references :resource_owner, null: false, index: {unique: true}, foreign_key: {to_table: :users}
+      t.references :application, null: false, index: {unique: true}, foreign_key: {to_table: :oauth_applications}
 
       # Remove `null: false` if you are planning to use Password
       # Credentials Grant flow that doesn't require an application.
-      t.references :application, null: false
+      # t.references :application, null: false
 
       # If you use a custom token generator you may need to change this column
       # from string to text, so that it accepts tokens larger than 255
       # characters. More info on custom token generators in:
       # https://github.com/doorkeeper-gem/doorkeeper/tree/v3.0.0.rc1#custom-access-token-generator
       #
-      # t.text :token, null: false
-      t.string :token, null: false
+      t.text :token, null: false, index: {unique: true}
+      # t.string :token, null: false
 
-      t.string :refresh_token
+      t.string :refresh_token, index: {unique: true}
       t.integer :expires_in
       t.datetime :revoked_at
       t.datetime :created_at, null: false
@@ -73,17 +75,5 @@ class CreateDoorkeeperTables < ActiveRecord::Migration[7.0]
       # revoked after use.
       t.string :previous_refresh_token, null: false, default: ""
     end
-
-    add_index :oauth_access_tokens, :token, unique: true
-    add_index :oauth_access_tokens, :refresh_token, unique: true
-    add_foreign_key(
-      :oauth_access_tokens,
-      :oauth_applications,
-      column: :application_id
-    )
-
-    # Uncomment below to ensure a valid reference to the resource owner's table
-    # add_foreign_key :oauth_access_grants, <model>, column: :resource_owner_id
-    # add_foreign_key :oauth_access_tokens, <model>, column: :resource_owner_id
   end
 end
