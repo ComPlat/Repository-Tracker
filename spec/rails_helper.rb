@@ -30,9 +30,23 @@ rescue ActiveRecord::PendingMigrationError => e
   abort e.to_s.strip
 end
 
+Shoulda::Matchers.configure do |config|
+  config.integrate do |with|
+    with.test_framework :rspec
+    with.library :rails
+  end
+end
+
 RSpec.configure do |config|
+  config.include FactoryBot::Syntax::Methods
+  config.before do
+    FactoryBot.reload
+    FactoryBot.register_strategy(:build_request, RequestStrategy)
+    FactoryBot.register_strategy(:find_or_create, FindOrCreateStrategy)
+  end
+
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-  config.fixture_path = "#{::Rails.root}/spec/fixtures"
+  config.fixture_path = Rails.root.join("/spec/fixtures")
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
