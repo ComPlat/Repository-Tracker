@@ -1,4 +1,5 @@
 describe API::V1::Trackings do
+  # TODO: Implement "GET /api/v1/tracking_items/:name/trackings"
   describe "GET /api/v1/trackings/" do
     let!(:trackings) { create_list(:tracking, 3, :with_required_attributes, :with_required_dependencies) }
 
