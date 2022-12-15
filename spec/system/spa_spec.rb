@@ -91,6 +91,11 @@ RSpec.describe "SPA" do
         first(".ant-table-column-title", text: "Tracker Number").click
         expect(page).to have_text "T221001-ERC-00"
       end
+
+      it do
+        first(".ant-table-column-title", text: "Owner").click
+        expect(page).to have_text "Alvina Nolan"
+      end
     end
 
     describe "Descending order" do
@@ -127,6 +132,11 @@ RSpec.describe "SPA" do
       it do
         first(".ant-table-column-title", text: "Tracker Number").click.click
         expect(page).to have_text "T221001-ERC-09999"
+      end
+
+      it do
+        first(".ant-table-column-title", text: "Owner").click.click
+        expect(page).to have_text "Zelma Beatty"
       end
     end
   end
