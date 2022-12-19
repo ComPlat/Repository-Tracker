@@ -209,7 +209,22 @@ RSpec.describe "SPA" do
       end
     end
 
-    context "when search for 'chemotion_electronic_laboratory_notebook', 'radar4kit' and 'draft' together" do
+    context "when search for 'name1' in 'Tracker Number' column" do
+      before do
+        first(".ant-table-filter-column", text: "Tracker Number").find(".ant-table-filter-trigger").click
+        find(".ant-select-selection-overflow").click.fill_in(with: "name1")
+        first(".ant-select-item-option-content").click
+        find(:xpath, "/html").click
+      end
+
+      it do
+        within(find(:xpath, "//table/tbody/tr[1]/td[7]")) do
+          expect(page).to have_content "name1"
+        end
+      end
+    end
+
+    context "when search for 'chemotion_electronic_laboratory_notebook', 'radar4kit', 'draft' and 'name1' together" do
       before do
         first(".ant-table-filter-column", text: "From").find(".ant-table-filter-trigger").click
         find(".ant-select-selection-overflow").click.fill_in(with: "chemotion_electronic_laboratory_notebook")
@@ -219,6 +234,9 @@ RSpec.describe "SPA" do
         first(".ant-select-item-option-content").click
         first(".ant-table-filter-column", text: "Status").find(".ant-table-filter-trigger").click
         find(".ant-select-selection-overflow").click.fill_in(with: "draft")
+        first(".ant-select-item-option-content").click
+        first(".ant-table-filter-column", text: "Tracker Number").find(".ant-table-filter-trigger").click
+        find(".ant-select-selection-overflow").click.fill_in(with: "name1")
         first(".ant-select-item-option-content").click
         find(:xpath, "/html").click
       end
@@ -238,6 +256,12 @@ RSpec.describe "SPA" do
       it do
         within(find(:xpath, "//table/tbody/tr[1]/td[5]")) do
           expect(page).to have_content "draft"
+        end
+      end
+
+      it do
+        within(find(:xpath, "//table/tbody/tr[1]/td[7]")) do
+          expect(page).to have_content "name1"
         end
       end
     end

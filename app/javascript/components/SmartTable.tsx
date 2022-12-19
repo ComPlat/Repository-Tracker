@@ -1,5 +1,3 @@
-// TODO: Add search fields to owner and tracker number (again).
-
 import {
   Form,
   Radio,
@@ -64,6 +62,10 @@ const SmartTable: React.FC = () => {
   const [
     statusSelection,
     setStatusSelection,
+  ] = useState<string[]>([]);
+  const [
+    trackingItemsSelection,
+    setTrackingItemsSelection,
   ] = useState<string[]>([]);
   const [
     ownerSelection,
@@ -214,7 +216,17 @@ const SmartTable: React.FC = () => {
     },
     {
       dataIndex: 'tracking_item_name',
-      filteredValue: null,
+      filterDropdown: () => {
+        return AutoCompleteSearch([
+          ...new Set(trackingItems.map((item) => {
+            return item.tracking_item_name;
+          })),
+        ], (value) => {
+          setTrackingItemsSelection(value);
+        });
+      },
+      filteredValue: trackingItemsSelection.length === 0 ? null : ownerSelection && trackingItemsSelection,
+      filterIcon: CustomFilterIcon(trackingItemsSelection.length !== 0),
       key: 'tracker_number',
       sorter: (first: DataType, second: DataType) => {
         return first.tracking_item_name.localeCompare(second.tracking_item_name, 'en', {
