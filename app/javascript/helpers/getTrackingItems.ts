@@ -30,6 +30,7 @@ const getTrackings = async () => {
 const trackingItemAsObject = (tracking: Tracking): Tracking => {
   return Object.assign(tracking, {
     date_time: DateTime(tracking.date_time),
+    metadata: JSON.stringify(tracking.metadata),
   });
 };
 

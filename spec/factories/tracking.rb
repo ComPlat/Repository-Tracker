@@ -21,7 +21,7 @@ FactoryBot.define do
 
     trait :with_required_attributes do
       status { :draft }
-      metadata { {key: "value"} }
+      sequence(:metadata) { |i| {key: "value#{i}"} }
     end
   end
 end

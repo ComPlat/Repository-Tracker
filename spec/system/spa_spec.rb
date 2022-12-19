@@ -102,7 +102,7 @@ RSpec.describe "SPA" do
 
       it do
         first(".ant-table-column-title", text: "Data/Metadata").click
-        expect(page).to have_text ""
+        expect(page).to have_text "{\"key\":\"value1\"}"
       end
 
       it do
@@ -144,7 +144,7 @@ RSpec.describe "SPA" do
 
       it do
         first(".ant-table-column-title", text: "Data/Metadata").click.click
-        expect(page).to have_text ""
+        expect(page).to have_text "{\"key\":\"value100\"}"
       end
 
       it do

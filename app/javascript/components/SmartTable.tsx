@@ -200,6 +200,7 @@ const SmartTable: React.FC = () => {
       key: 'data_metadata',
       sorter: (first: DataType, second: DataType) => {
         return first.metadata.localeCompare(second.metadata, 'en', {
+          numeric: true,
           sensitivity: 'base',
         });
       },
