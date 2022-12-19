@@ -112,9 +112,11 @@ const SmartTable: React.FC = () => {
     {
       dataIndex: 'from_trackable_system_name',
       filterDropdown: () => {
-        return AutoCompleteSearch(trackingItems.map((item) => {
-          return item.from_trackable_system_name;
-        }), (value) => {
+        return AutoCompleteSearch([
+          ...new Set(trackingItems.map((item) => {
+            return item.from_trackable_system_name;
+          })),
+        ], (value) => {
           setFromSelection(value);
         });
       },
@@ -137,9 +139,11 @@ const SmartTable: React.FC = () => {
     {
       dataIndex: 'to_trackable_system_name',
       filterDropdown: () => {
-        return AutoCompleteSearch(trackingItems.map((item) => {
-          return item.to_trackable_system_name;
-        }), (value) => {
+        return AutoCompleteSearch([
+          ...new Set(trackingItems.map((item) => {
+            return item.to_trackable_system_name;
+          })),
+        ], (value) => {
           setToSelection(value);
         });
       },
@@ -172,9 +176,11 @@ const SmartTable: React.FC = () => {
     {
       dataIndex: 'status',
       filterDropdown: () => {
-        return AutoCompleteSearch(trackingItems.map((item) => {
-          return item.status;
-        }), (value) => {
+        return AutoCompleteSearch([
+          ...new Set(trackingItems.map((item) => {
+            return item.status;
+          })),
+        ], (value) => {
           setStatusSelection(value);
         });
       },
@@ -221,9 +227,11 @@ const SmartTable: React.FC = () => {
     {
       dataIndex: 'owner_name',
       filterDropdown: () => {
-        return AutoCompleteSearch(trackingItems.map((item) => {
-          return item.owner_name;
-        }), (value) => {
+        return AutoCompleteSearch([
+          ...new Set(trackingItems.map((item) => {
+            return item.owner_name;
+          })),
+        ], (value) => {
           setOwnerSelection(value);
         });
       },
