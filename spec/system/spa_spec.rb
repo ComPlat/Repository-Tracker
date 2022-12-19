@@ -1,4 +1,22 @@
 RSpec.describe "SPA" do
+  let(:tracking1) {
+    create(:tracking, :with_required_dependencies, :with_required_attributes,
+      from_trackable_system: create(:trackable_system, :with_required_attributes,
+        name: "chemotion_electronic_laboratory_notebook"),
+      to_trackable_system: create(:trackable_system, :with_required_attributes,
+        name: "radar4kit"))
+  }
+  let(:trackings) {
+    create_list(:tracking, 99, :with_required_dependencies, :with_required_attributes,
+      created_at: DateTime.now)
+  }
+  let(:time) { trackings.first.created_at.in_time_zone("Berlin").strftime("%d.%m.%Y, %H:%M:%S") }
+
+  before do
+    tracking1
+    trackings
+  end
+
   describe "h1" do
     before do
       visit "/"
@@ -64,79 +82,79 @@ RSpec.describe "SPA" do
 
       it do
         first(".ant-table-column-title", text: "From").click
-        expect(page).to have_text "ELN"
+        expect(page).to have_text "chemotion_electronic_laboratory_notebook"
       end
 
       it do
         first(".ant-table-column-title", text: "To").click
-        expect(page).to have_text "nmrXiv"
+        expect(page).to have_text "chemotion_electronic_laboratory_notebook"
       end
 
       it do
         first(".ant-table-column-title", text: "Date/Time").click
-        expect(page).to have_text "01.01.1970 12:30.00"
+        expect(page).to have_text time
       end
 
       it do
         first(".ant-table-column-title", text: "Status").click
-        expect(page).to have_text "DRAFT"
+        expect(page).to have_text "draft"
       end
 
       it do
         first(".ant-table-column-title", text: "Data/Metadata").click
-        expect(page).to have_text "id: 0, data: metadata for some data"
+        expect(page).to have_text ""
       end
 
       it do
         first(".ant-table-column-title", text: "Tracker Number").click
-        expect(page).to have_text "T221001-ERC-00"
+        expect(page).to have_text "name1"
       end
 
       it do
         first(".ant-table-column-title", text: "Owner").click
-        expect(page).to have_text "Alvina Nolan"
+        expect(page).to have_text "name1"
       end
     end
 
     describe "Descending order" do
       it do
         first(".ant-table-column-title", text: "ID").click.click
-        expect(page).to have_text "10000"
+        expect(page).to have_text "100"
       end
 
       it do
         first(".ant-table-column-title", text: "From").click.click
-        expect(page).to have_text "REPO"
+        expect(page).to have_text "radar4kit"
       end
 
       it do
         first(".ant-table-column-title", text: "To").click.click
-        expect(page).to have_text "REPO"
+        expect(page).to have_text "radar4kit"
       end
 
       it do
         first(".ant-table-column-title", text: "Date/Time").click.click
-        expect(page).to have_text "01.01.1970 12:30.00"
+        expect(page).to have_text time
       end
 
       it do
         first(".ant-table-column-title", text: "Status").click.click
-        expect(page).to have_text "SUBMITTED"
+        expect(page).to have_text "draft"
       end
 
       it do
         first(".ant-table-column-title", text: "Data/Metadata").click.click
-        expect(page).to have_text "id: 9999, data: metadata for some data"
+        expect(page).to have_text ""
       end
 
       it do
         first(".ant-table-column-title", text: "Tracker Number").click.click
-        expect(page).to have_text "T221001-ERC-09999"
+        expect(page).to have_text "name100"
       end
 
       it do
         first(".ant-table-column-title", text: "Owner").click.click
-        expect(page).to have_text "Zelma Beatty"
+        expect(page).to have_text "name100"
       end
     end
   end
@@ -146,80 +164,80 @@ RSpec.describe "SPA" do
       visit "/"
     end
 
-    context "when search for 'ELN' in 'From' column" do
+    context "when search for 'chemotion_electronic_laboratory_notebook' in 'From' column" do
       before do
         first(".ant-table-filter-column", text: "From").find(".ant-table-filter-trigger").click
-        find(".ant-select-selection-overflow").click.fill_in(with: "ELN")
+        find(".ant-select-selection-overflow").click.fill_in(with: "chemotion_electronic_laboratory_notebook")
         first(".ant-select-item-option-content").click
         find(:xpath, "/html").click
       end
 
       it do
         within(find(:xpath, "//table/tbody/tr[1]/td[2]")) do
-          expect(page).to have_content "ELN"
+          expect(page).to have_content "chemotion_electronic_laboratory_notebook"
         end
       end
     end
 
-    context "when search for 'RADAR4Kit' in 'To' column" do
+    context "when search for 'radar4kit' in 'To' column" do
       before do
         first(".ant-table-filter-column", text: "To").find(".ant-table-filter-trigger").click
-        find(".ant-select-selection-overflow").click.fill_in(with: "RADAR4Kit")
+        find(".ant-select-selection-overflow").click.fill_in(with: "radar4kit")
         first(".ant-select-item-option-content").click
         find(:xpath, "/html").click
       end
 
       it do
         within(find(:xpath, "//table/tbody/tr[1]/td[3]")) do
-          expect(page).to have_content "RADAR4Kit"
+          expect(page).to have_content "radar4kit"
         end
       end
     end
 
-    context "when search for 'DRAFT' in 'Status' column" do
+    context "when search for 'draft' in 'Status' column" do
       before do
         first(".ant-table-filter-column", text: "Status").find(".ant-table-filter-trigger").click
-        find(".ant-select-selection-overflow").click.fill_in(with: "DRAFT")
+        find(".ant-select-selection-overflow").click.fill_in(with: "draft")
         first(".ant-select-item-option-content").click
         find(:xpath, "/html").click
       end
 
       it do
         within(find(:xpath, "//table/tbody/tr[1]/td[5]")) do
-          expect(page).to have_content "DRAFT"
+          expect(page).to have_content "draft"
         end
       end
     end
 
-    context "when search for 'ELN', 'RADAR4Kit' and 'DRAFT' together" do
+    context "when search for 'chemotion_electronic_laboratory_notebook', 'radar4kit' and 'draft' together" do
       before do
         first(".ant-table-filter-column", text: "From").find(".ant-table-filter-trigger").click
-        find(".ant-select-selection-overflow").click.fill_in(with: "ELN")
+        find(".ant-select-selection-overflow").click.fill_in(with: "chemotion_electronic_laboratory_notebook")
         first(".ant-select-item-option-content").click
         first(".ant-table-filter-column", text: "To").find(".ant-table-filter-trigger").click
-        find(".ant-select-selection-overflow").click.fill_in(with: "RADAR4Kit")
+        find(".ant-select-selection-overflow").click.fill_in(with: "radar4kit")
         first(".ant-select-item-option-content").click
         first(".ant-table-filter-column", text: "Status").find(".ant-table-filter-trigger").click
-        find(".ant-select-selection-overflow").click.fill_in(with: "DRAFT")
+        find(".ant-select-selection-overflow").click.fill_in(with: "draft")
         first(".ant-select-item-option-content").click
         find(:xpath, "/html").click
       end
 
       it do
         within(find(:xpath, "//table/tbody/tr[1]/td[2]")) do
-          expect(page).to have_content "ELN"
+          expect(page).to have_content "chemotion_electronic_laboratory_notebook"
         end
       end
 
       it do
         within(find(:xpath, "//table/tbody/tr[1]/td[3]")) do
-          expect(page).to have_content "RADAR4Kit"
+          expect(page).to have_content "radar4kit"
         end
       end
 
       it do
         within(find(:xpath, "//table/tbody/tr[1]/td[5]")) do
-          expect(page).to have_content "DRAFT"
+          expect(page).to have_content "draft"
         end
       end
     end
