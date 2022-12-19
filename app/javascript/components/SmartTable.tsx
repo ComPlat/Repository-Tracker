@@ -54,10 +54,6 @@ const SmartTable: React.FC = () => {
     setSize,
   ] = useState<SizeType>('small');
   const [
-    dataOwner,
-    setDataOwner,
-  ] = useState<string[]>([]);
-  const [
     fromSelection,
     setFromSelection,
   ] = useState<string[]>([]);
@@ -215,6 +211,7 @@ const SmartTable: React.FC = () => {
       key: 'tracker_number',
       sorter: (first: DataType, second: DataType) => {
         return first.tracking_item_name.localeCompare(second.tracking_item_name, 'en', {
+          numeric: true,
           sensitivity: 'base',
         });
       },
@@ -237,6 +234,7 @@ const SmartTable: React.FC = () => {
       },
       sorter: (first: DataType, second: DataType) => {
         return first.owner_name.localeCompare(second.owner_name, 'en', {
+          numeric: true,
           sensitivity: 'base',
         });
       },
