@@ -23,9 +23,12 @@ import React, {
 import {
   FilterObjects,
 } from '../helpers/FilterObjects';
+import type {
+  Tracking,
+} from '../helpers/getTrackingItems';
 import {
-  TestPersons,
-} from '../helpers/TestPersons';
+  getTrackingItems,
+} from '../helpers/getTrackingItems';
 import {
   AutoCompleteSearch,
 } from './AutoCompleteSearch';
@@ -35,32 +38,15 @@ import {
 
 // Types
 type DataType = {
-  data_metadata: string,
   date_time: string,
-  from: string,
+  from_trackable_system_name: string,
   id: number,
-  owner: string,
+  metadata: string,
+  owner_name: string,
   status: string,
-  to: string,
-  tracker_number: string,
+  to_trackable_system_name: string,
+  tracking_item_name: string,
 };
-
-const dataFrom: string[] = [
-  'ELN',
-  'RADAR4Kit',
-  'REPO',
-];
-const dataStatus: string[] = [
-  'DRAFT',
-  'PUBLISHED',
-  'SUBMITTED',
-];
-const dataTo: string[] = [
-  'RADAR4Kit',
-  'RADAR4Chem',
-  'REPO',
-  'nmrXiv',
-];
 
 const SmartTable: React.FC = () => {
   const [
@@ -87,17 +73,19 @@ const SmartTable: React.FC = () => {
     ownerSelection,
     setOwnerSelection,
   ] = useState<string[]>([]);
+  const [
+    trackingItems,
+    setTrackingItems,
+  ] = useState<Tracking[]>([]);
 
   useEffect(() => {
-    const setPersonNamesToState = async () => {
-      await TestPersons().then((person) => {
-        setDataOwner(person);
-      }).catch((error) => {
-        return error;
+    const setTrackingsToState = async () => {
+      await getTrackingItems().then(async (item) => {
+        setTrackingItems(await Promise.all(item));
       });
     };
 
-    void setPersonNamesToState();
+    void setTrackingsToState();
   }, []);
 
   const handleSizeChange = (event: RadioChangeEvent) => {
@@ -126,42 +114,50 @@ const SmartTable: React.FC = () => {
       title: 'ID',
     },
     {
-      dataIndex: 'from',
+      dataIndex: 'from_trackable_system_name',
       filterDropdown: () => {
-        return AutoCompleteSearch(dataFrom, (value) => {
+        return AutoCompleteSearch(trackingItems.map((item) => {
+          return item.from_trackable_system_name;
+        }), (value) => {
           setFromSelection(value);
         });
       },
       filteredValue: fromSelection.length === 0 ? null : ownerSelection && fromSelection,
       filterIcon: CustomFilterIcon(fromSelection.length !== 0),
-      filters: FilterObjects(dataFrom),
+      filters: FilterObjects(trackingItems.map((item) => {
+        return item.from_trackable_system_name;
+      })),
       key: 'from',
       onFilter: (value: boolean | number | string, record: DataType) => {
-        return record.from.startsWith(value as string);
+        return record.from_trackable_system_name.startsWith(value as string);
       },
       sorter: (first: DataType, second: DataType) => {
-        return first.from.localeCompare(second.from, 'en', {
+        return first.from_trackable_system_name.localeCompare(second.from_trackable_system_name, 'en', {
           sensitivity: 'base',
         });
       },
       title: 'From',
     },
     {
-      dataIndex: 'to',
+      dataIndex: 'to_trackable_system_name',
       filterDropdown: () => {
-        return AutoCompleteSearch(dataTo, (value) => {
+        return AutoCompleteSearch(trackingItems.map((item) => {
+          return item.to_trackable_system_name;
+        }), (value) => {
           setToSelection(value);
         });
       },
       filteredValue: toSelection.length === 0 ? null : ownerSelection && toSelection,
       filterIcon: CustomFilterIcon(toSelection.length !== 0),
-      filters: FilterObjects(dataTo),
+      filters: FilterObjects(trackingItems.map((item) => {
+        return item.to_trackable_system_name;
+      })),
       key: 'to',
       onFilter: (value: boolean | number | string, record: DataType) => {
-        return record.to.startsWith(value as string);
+        return record.to_trackable_system_name.startsWith(value as string);
       },
       sorter: (first: DataType, second: DataType) => {
-        return first.to.localeCompare(second.to, 'en', {
+        return first.to_trackable_system_name.localeCompare(second.to_trackable_system_name, 'en', {
           sensitivity: 'base',
         });
       },
@@ -180,13 +176,17 @@ const SmartTable: React.FC = () => {
     {
       dataIndex: 'status',
       filterDropdown: () => {
-        return AutoCompleteSearch(dataStatus, (value) => {
+        return AutoCompleteSearch(trackingItems.map((item) => {
+          return item.status;
+        }), (value) => {
           setStatusSelection(value);
         });
       },
       filteredValue: statusSelection.length === 0 ? null : ownerSelection && statusSelection,
       filterIcon: CustomFilterIcon(statusSelection.length !== 0),
-      filters: FilterObjects(dataStatus),
+      filters: FilterObjects(trackingItems.map((item) => {
+        return item.status;
+      })),
       key: 'status',
       onFilter: (value: boolean | number | string, record: DataType) => {
         return record.status.startsWith(value as string);
@@ -199,31 +199,33 @@ const SmartTable: React.FC = () => {
       title: 'Status',
     },
     {
-      dataIndex: 'data_metadata',
+      dataIndex: 'metadata',
       filteredValue: null,
       key: 'data_metadata',
       sorter: (first: DataType, second: DataType) => {
-        return first.data_metadata.localeCompare(second.data_metadata, 'en', {
+        return first.metadata.localeCompare(second.metadata, 'en', {
           sensitivity: 'base',
         });
       },
       title: 'Data/Metadata',
     },
     {
-      dataIndex: 'tracker_number',
+      dataIndex: 'tracking_item_name',
       filteredValue: null,
       key: 'tracker_number',
       sorter: (first: DataType, second: DataType) => {
-        return first.tracker_number.localeCompare(second.tracker_number, 'en', {
+        return first.tracking_item_name.localeCompare(second.tracking_item_name, 'en', {
           sensitivity: 'base',
         });
       },
       title: 'Tracker Number',
     },
     {
-      dataIndex: 'owner',
+      dataIndex: 'owner_name',
       filterDropdown: () => {
-        return AutoCompleteSearch(dataOwner, (value) => {
+        return AutoCompleteSearch(trackingItems.map((item) => {
+          return item.owner_name;
+        }), (value) => {
           setOwnerSelection(value);
         });
       },
@@ -231,30 +233,16 @@ const SmartTable: React.FC = () => {
       filterIcon: CustomFilterIcon(ownerSelection.length !== 0),
       key: 'owner',
       onFilter: (value: boolean | number | string, record: DataType) => {
-        return record.owner.toLowerCase().includes(String(value).toLowerCase());
+        return record.owner_name.toLowerCase().includes(String(value).toLowerCase());
       },
       sorter: (first: DataType, second: DataType) => {
-        return first.owner.localeCompare(second.owner, 'en', {
+        return first.owner_name.localeCompare(second.owner_name, 'en', {
           sensitivity: 'base',
         });
       },
       title: 'Owner',
     },
   ];
-
-  const data: DataType[] = [];
-  for (let index = 0; index < 10_000; index++) {
-    data.push({
-      data_metadata: `id: ${index}, data: metadata for some data`,
-      date_time: '01.01.1970 12:30.00',
-      from: dataFrom[Math.floor(Math.random() * dataFrom.length)] ?? '',
-      id: index + 1,
-      owner: dataOwner[Math.floor(Math.random() * dataOwner.length)] ?? '',
-      status: dataStatus[Math.floor(Math.random() * dataStatus.length)] ?? '',
-      to: dataTo[Math.floor(Math.random() * dataTo.length)] ?? '',
-      tracker_number: `T221001-ERC-0${index}`,
-    });
-  }
 
   const tableColumns = columns.map((item: ColumnGroupType<DataType> | ColumnType<DataType>) => {
     return {
@@ -280,7 +268,7 @@ const SmartTable: React.FC = () => {
           <Table
             {...tableProps}
             columns={tableColumns}
-            dataSource={data}
+            dataSource={trackingItems as unknown as DataType[]}
             pagination={{
               position: [
                 'bottomCenter',
