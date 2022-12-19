@@ -1,21 +1,26 @@
 RSpec.describe "SPA" do
   let(:tracking1) {
     create(:tracking, :with_required_dependencies, :with_required_attributes,
-      created_at: DateTime.now.in_time_zone("Berlin"),
       from_trackable_system: create(:trackable_system, :with_required_attributes,
         name: "chemotion_electronic_laboratory_notebook"),
       to_trackable_system: create(:trackable_system, :with_required_attributes,
         name: "radar4kit"))
   }
   let(:trackings) {
-    create_list(:tracking, 99, :with_required_dependencies, :with_required_attributes,
-      created_at: DateTime.now.in_time_zone("Berlin"))
+    create_list(:tracking, 99, :with_required_dependencies, :with_required_attributes)
   }
-  let(:time) { trackings.first.created_at.in_time_zone("Berlin").strftime("%d.%m.%Y, %H:%M:%S") }
+  let(:time) { trackings.last.date_time.strftime("%d.%m.%Y, %H:%M:%S") }
 
   before do
+    freeze_time
+
     tracking1
     trackings
+    time
+  end
+
+  after do
+    unfreeze_time
   end
 
   describe "h1" do
