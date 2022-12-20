@@ -1,6 +1,8 @@
 {
   "compilerOptions": {
-    "jsx": "react"
+    "jsx": "react",
+    "moduleResolution": "Node",
+    "target": "ES2022"
   },
   "extends": "@tsconfig/strictest/tsconfig.json"
 }

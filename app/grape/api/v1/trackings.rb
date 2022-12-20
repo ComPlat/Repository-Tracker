@@ -6,7 +6,7 @@ module API::V1
       desc "Return list of trackings"
       get do
         # TODO: mb20221202 return only the user associated trackings
-        present Tracking.all
+        present Tracking.all, with: API::Entities::Tracking
       end
 
       desc "Return a tracking"
