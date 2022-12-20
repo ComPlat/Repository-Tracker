@@ -1,9 +1,17 @@
 describe API::V1::Trackings do
   # TODO: Implement "GET /api/v1/tracking_items/:name/trackings"
+
   describe "GET /api/v1/trackings/" do
     let!(:trackings) { create_list(:tracking, 3, :with_required_attributes, :with_required_dependencies) }
 
-    before { get "/api/v1/trackings" }
+    let(:user) { trackings.first.tracking_item.user }
+
+    let(:application) { Doorkeeper::Application.create!(name: "name", resource_owner_id: user.id) }
+    let(:access_token) {
+      Doorkeeper::AccessToken.create!(resource_owner_id: user.id, application: application)
+    }
+
+    before { get "/api/v1/trackings", params: {access_token: access_token.token} }
 
     it { expect(response).to have_http_status :ok }
     it { expect(response.body).to eq trackings.to_json }

@@ -42,4 +42,32 @@ describe User do
     it { expect(user.tracking_items).to eq [] }
     it { expect(user.tracking_items).to eq [tracking_item] }
   end
+
+  describe "#access_grants" do
+    subject(:user) { create(:user, :with_required_attributes) }
+
+    let(:application) { Doorkeeper::Application.create!(name: "name", resource_owner_id: user.id) }
+    let(:access_grant) {
+      Doorkeeper::AccessGrant.create!(
+        resource_owner_id: user.id, redirect_uri: "redirect_uri", expires_in: DateTime.now + 1.day, application:
+      )
+    }
+
+    it { is_expected.to have_many(:access_grants) }
+    it { expect(user.access_grants).to eq [] }
+    it { expect(user.access_grants).to eq [access_grant] }
+  end
+
+  describe "#access_tokens" do
+    subject(:user) { create(:user, :with_required_attributes) }
+
+    let(:application) { Doorkeeper::Application.create!(name: "name", resource_owner_id: user.id) }
+    let(:access_token) {
+      Doorkeeper::AccessToken.create!(resource_owner_id: user.id, application: application)
+    }
+
+    it { is_expected.to have_many(:access_tokens) }
+    it { expect(user.access_tokens).to eq [] }
+    it { expect(user.access_tokens).to eq [access_token] }
+  end
 end
