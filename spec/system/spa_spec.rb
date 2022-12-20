@@ -9,7 +9,7 @@ RSpec.describe "SPA" do
   let(:trackings) {
     create_list(:tracking, 99, :with_required_dependencies, :with_required_attributes)
   }
-  let(:time) { (trackings.last.date_time + Time.now.gmt_offset).strftime("%d.%m.%Y, %H:%M:%S") }
+  let(:time) { (trackings.last.date_time + Time.zone.now.gmt_offset).strftime("%d.%m.%Y, %H:%M:%S") }
 
   before do
     freeze_time
