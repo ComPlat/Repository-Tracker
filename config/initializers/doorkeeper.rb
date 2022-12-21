@@ -18,6 +18,8 @@ Doorkeeper.configure do
   end
 
   grant_flows %w[password]
+  skip_authorization { true }
+  skip_client_authentication_for_password_grant { true }
 
   # If you didn't skip applications controller from Doorkeeper routes in your application routes.rb
   # file then you need to declare this block in order to restrict access to the web interface for
@@ -496,4 +498,6 @@ Doorkeeper.configure do
   # WWW-Authenticate Realm (default: "Doorkeeper").
   #
   # realm "Doorkeeper"
+
+  # allow_blank_redirect_uri true
 end
