@@ -1,15 +1,10 @@
-describe API::V1::Trackings do
+describe API::V1::Trackings, ".authenticated" do
   # TODO: Implement "GET /api/v1/tracking_items/:name/trackings"
 
   describe "GET /api/v1/trackings/" do
-    let!(:trackings) { create_list(:tracking, 3, :with_required_attributes, :with_required_dependencies) }
-
+    let(:trackings) { create_list(:tracking, 3, :with_required_attributes, :with_required_dependencies) }
     let(:user) { trackings.first.tracking_item.user }
-
-    let(:application) { Doorkeeper::Application.create!(name: "name", resource_owner_id: user.id) }
-    let(:access_token) {
-      Doorkeeper::AccessToken.create!(resource_owner_id: user.id, application: application)
-    }
+    let(:access_token) { create(:doorkeeper_access_token, :with_required_dependencies, resource_owner_id: user.id) }
 
     before { get "/api/v1/trackings", params: {access_token: access_token.token} }
 
@@ -33,7 +28,10 @@ describe API::V1::Trackings do
          "owner_name" => expected_tracking.tracking_item.user.name}
       }
 
-      before { get "/api/v1/trackings/#{expected_tracking.id}" }
+      let(:user) { trackings.first.tracking_item.user }
+      let(:access_token) { create(:doorkeeper_access_token, :with_required_dependencies, resource_owner_id: user.id) }
+
+      before { get "/api/v1/trackings/#{expected_tracking.id}", params: {access_token: access_token.token} }
 
       it { expect(response).to have_http_status :ok }
       it { expect(response.content_type).to eq "application/json" }
@@ -42,22 +40,23 @@ describe API::V1::Trackings do
     end
 
     context "when tracking does not exist" do
-      let(:expected_json_error) { {error: "Couldn't find Tracking with 'id'=0"}.to_json }
+      let(:access_token) { create(:doorkeeper_access_token, :with_required_dependencies) }
 
-      before { get "/api/v1/trackings/0" }
+      before { get "/api/v1/trackings/0", params: {access_token: access_token.token} }
 
       it { expect(response).to have_http_status :not_found }
-      it { expect(response.body).to eq expected_json_error }
+      it { expect(response.body).to eq({error: "Couldn't find Tracking with 'id'=0"}.to_json) }
       it { expect(response.content_type).to eq "application/json" }
     end
   end
 
   describe "POST /api/v1/trackings/" do
+    let(:access_token) { create(:doorkeeper_access_token, :with_required_dependencies) }
+
     context "when validation errors occurs" do
-      let(:tracking) { build(:tracking, :with_required_attributes, :with_required_dependencies) }
       let(:tracking_request) { build_request(:tracking_request, :create_invalid) }
 
-      before { post "/api/v1/trackings/", params: tracking_request }
+      before { post "/api/v1/trackings/", params: tracking_request.merge(access_token: access_token.token) }
 
       it { expect(response).to have_http_status :bad_request }
       it { expect(JSON.parse(response.body)).to eq "error" => "status is missing, metadata is missing, tracking_item_name is missing, from_trackable_system_name is missing, to_trackable_system_name is missing" }
@@ -77,7 +76,7 @@ describe API::V1::Trackings do
          "owner_name" => expected_tracking.tracking_item.user.name}
       }
 
-      before { post "/api/v1/trackings/", params: tracking_request }
+      before { post "/api/v1/trackings/", params: tracking_request.merge(access_token: access_token.token) }
 
       it { expect(response).to have_http_status :created }
       it { expect(response.content_type).to eq "application/json" }
