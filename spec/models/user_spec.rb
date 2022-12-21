@@ -46,11 +46,8 @@ describe User do
   describe "#access_grants" do
     subject(:user) { create(:user, :with_required_attributes) }
 
-    let(:application) { Doorkeeper::Application.create!(name: "name", resource_owner_id: user.id) }
     let(:access_grant) {
-      Doorkeeper::AccessGrant.create!(
-        resource_owner_id: user.id, redirect_uri: "redirect_uri", expires_in: DateTime.now + 1.day, application:
-      )
+      create(:doorkeeper_access_grant, :with_required_attributes, :with_required_dependencies, resource_owner_id: user.id)
     }
 
     it { is_expected.to have_many(:access_grants) }
@@ -61,10 +58,7 @@ describe User do
   describe "#access_tokens" do
     subject(:user) { create(:user, :with_required_attributes) }
 
-    let(:application) { Doorkeeper::Application.create!(name: "name", resource_owner_id: user.id) }
-    let(:access_token) {
-      Doorkeeper::AccessToken.create!(resource_owner_id: user.id, application: application)
-    }
+    let(:access_token) { create(:doorkeeper_access_token, :with_required_dependencies, resource_owner_id: user.id) }
 
     it { is_expected.to have_many(:access_tokens) }
     it { expect(user.access_tokens).to eq [] }
