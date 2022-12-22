@@ -43,18 +43,6 @@ describe User do
     it { expect(user.tracking_items).to eq [tracking_item] }
   end
 
-  describe "#access_grants" do
-    subject(:user) { create(:user, :with_required_attributes) }
-
-    let(:access_grant) {
-      create(:doorkeeper_access_grant, :with_required_attributes, :with_required_dependencies, resource_owner_id: user.id)
-    }
-
-    it { is_expected.to have_many(:access_grants) }
-    it { expect(user.access_grants).to eq [] }
-    it { expect(user.access_grants).to eq [access_grant] }
-  end
-
   describe "#access_tokens" do
     subject(:user) { create(:user, :with_required_attributes) }
 

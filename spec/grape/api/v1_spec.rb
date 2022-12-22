@@ -1,4 +1,6 @@
 describe "API::V1" do
+  include AuthHelper
+
   describe "GET /api/v1/:path" do
     context "when path does not exist and not authenticated" do
       before { get "/api/v1/not_existing_path" }
@@ -8,9 +10,13 @@ describe "API::V1" do
     end
 
     context "when path does not exist and authenticated" do
-      let(:access_token) { create(:doorkeeper_access_token, :with_required_dependencies) }
+      let(:application) { create(:doorkeeper_application, :with_required_attributes) }
 
-      before { get "/api/v1/not_existing_path", params: {access_token: access_token.token} }
+      before {
+        register
+        login
+        get "/api/v1/not_existing_path", params: {access_token: application.access_tokens.last&.token}
+      }
 
       it { expect(response).to have_http_status(:not_found) }
       it { expect(response.body).to eq '{"error":"Not found"}' }
