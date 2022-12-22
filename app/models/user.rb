@@ -6,10 +6,10 @@ class User < ApplicationRecord
   enum role: {user: "user", super: "super", admin: "admin"}
 
   has_many :tracking_items, inverse_of: :user, dependent: :restrict_with_exception
-  has_many :access_grants,
-    class_name: "Doorkeeper::AccessGrant",
-    foreign_key: :resource_owner_id,
-    dependent: :restrict_with_exception
+  # has_many :access_grants,
+  #   class_name: "Doorkeeper::AccessGrant",
+  #   foreign_key: :resource_owner_id,
+  #   dependent: :restrict_with_exception
   has_many :access_tokens,
     class_name: "Doorkeeper::AccessToken",
     foreign_key: :resource_owner_id,

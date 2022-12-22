@@ -1,43 +1,8 @@
 RSpec.describe "Workflow" do
+  include AuthHelper
+
   # TODO: Move this initial app setup. Seed?!
-  let(:application) { create(:doorkeeper_application, :with_required_attributes, :with_required_dependencies) }
-
-  def register
-    # TODO: Move this to factory.
-    @register ||= -> {
-      post "/users",
-        headers: {Accept: "application/json", "Content-Type": "application/json"},
-        params: {user:
-                   {name: "name", role: "user", email: "tobias.vetter@cleanercode.de", password: "verysecure", client_id: application.uid}}, as: :json
-      JSON.parse(response.body)["access_token"]
-    }.call
-  end
-
-  def login
-    post "/oauth/token",
-      headers: {Accept: "application/json", "Content-Type": "application/json"},
-      params: {
-        grant_type: "password",
-        email: "tobias.vetter@cleanercode.de",
-        password: "verysecure"
-        # redirect_uri: "https://www.example.com/",
-        # response_type: "token",
-        # scope: "",
-        # # email: "tobias.vetter@cleanercode.de",
-        # # password: "verysecure",
-        # # grant_type: "password",
-        # client_id: application.uid # TODO: How to communicate to front end?!
-        # # client_secret: application.secret # FIXME: How is front end supposed to do this?!
-      }, as: :json
-  end
-
-  def create_entry
-    @create_entry ||= -> {
-      post "/api/v1/trackings/", params: build_request(:tracking_request, :create).merge(access_token: register)
-
-      JSON.parse(response.body)["id"]
-    }.call
-  end
+  let(:application) { create(:doorkeeper_application, :with_required_attributes) }
 
   describe "1. Register" do
     before { register }
@@ -45,67 +10,83 @@ RSpec.describe "Workflow" do
     it { expect(response).to have_http_status(:ok) }
   end
 
-  describe "2. Empty Index" do
-    before { get "/api/v1/trackings", params: {access_token: register} }
+  describe "2. Register, and Login" do
+    before {
+      register
+      login
+    }
+
+    it { expect(response).to have_http_status(:ok) }
+  end
+
+  describe "3. Register, login and empty index" do
+    before {
+      register
+      login
+      get "/api/v1/trackings", params: {access_token: application.access_tokens.last&.token}
+    }
 
     it { expect(response).to have_http_status(:ok) }
     it { expect(response.parsed_body).to eq [] }
   end
 
-  describe "3. Create" do
-    before { create_entry }
+  describe "4. Register, login and create entry" do
+    before {
+      register
+      login
+      create_entry
+    }
 
     it { expect(response).to have_http_status(:created) }
   end
 
-  describe "4. Filled Index" do
+  describe "5. Register, login, create entry and filled index" do
     before {
+      register
+      login
       create_entry
-      get "/api/v1/trackings", params: {access_token: register}
+      get "/api/v1/trackings", params: {access_token: application.access_tokens.last&.token}
     }
 
     it { expect(response).to have_http_status(:ok) }
     it { expect(response.parsed_body.size).to eq 1 }
   end
 
-  describe "5. Show" do
+  describe "6. Register, login, create entry and show index" do
     before {
-      get "/api/v1/trackings/#{create_entry}", params: {access_token: register}
+      register
+      login
+      create_entry
+      get "/api/v1/trackings/#{create_entry}", params: {access_token: application.access_tokens.last&.token}
     }
 
     it { expect(response).to have_http_status(:ok) }
   end
 
-  describe "6. Expired Token" do
+  describe "7. Register, login, and expired token" do
     before {
       register
+      login
       at = Doorkeeper::AccessToken.last
       at.expires_in = 0
       at.save!
 
-      get "/api/v1/trackings/#{create_entry}", params: {access_token: register}
+      get "/api/v1/trackings/#{create_entry}", params: {access_token: application.access_tokens.last&.token}
     }
 
     it { expect(response).to have_http_status(:unauthorized) }
   end
 
-  describe "7. Refresh Token works" do
+  describe "8. Register, login and request new refresh token" do
     before {
       register
+      login
       at = Doorkeeper::AccessToken.last
       at.expires_in = 0
       at.save!
-
-      post "/oauth/token",
-        headers: {Accept: "application/json", "Content-Type": "application/json"},
-        params: {
-          grant_type: "password",
-          email: "tobias.vetter@cleanercode.de",
-          password: "verysecure"
-        }, as: :json
+      refresh_token # TODO: create the exact workflow for refreshing the expired and using the refreshed token
     }
 
     it { expect(response).to have_http_status(:ok) }
-    it { expect(response.parsed_body).to eq({}) }
   end
 end
