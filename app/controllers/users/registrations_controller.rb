@@ -11,7 +11,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # POST /resource
   def create
-    build_resource(sign_up_params.except(:client_id))
+    build_resource(sign_up_params)
 
     if resource.save
       render json: resource
@@ -87,7 +87,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # end
 
   def sign_up_params
-    devise_parameter_sanitizer.permit(:sign_up, keys: [:role, :name])
+    devise_parameter_sanitizer.permit(:sign_up, keys: [:email, :password, :role, :name])
     devise_parameter_sanitizer.sanitize(:sign_up)
   end
 end
