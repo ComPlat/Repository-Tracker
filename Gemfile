@@ -48,8 +48,10 @@ gem "grape-swagger-rails", "0.3.1"
 # Autoload dotenv in Rails [https://github.com/bkeepers/dotenv]
 gem "dotenv-rails", "2.8.1"
 
+# Use Devise to handle User registration and authentication
 gem "devise", "4.8.1"
 
+# Use Doorkeeper to protect Grape endpoints by using OAuth2
 gem "doorkeeper", "5.6.2"
 
 group :development, :test do
