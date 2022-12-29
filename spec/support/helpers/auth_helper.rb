@@ -14,7 +14,7 @@ module AuthHelper
         grant_type: "password",
         email: "tobias.vetter@cleanercode.de",
         password: "verysecure",
-        client_id: application.uid # TODO: How to communicate to front end?!
+        client_id: application.uid
       }, as: :json
   end
 
@@ -31,7 +31,7 @@ module AuthHelper
       params: {
         grant_type: "refresh_token",
         refresh_token: application.access_tokens.last.refresh_token,
-        client_id: application.uid # TODO: How to communicate to front end?!
+        client_id: application.uid
       }, as: :json
   end
 
