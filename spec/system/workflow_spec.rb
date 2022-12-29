@@ -80,10 +80,11 @@ RSpec.describe "Workflow" do
     before {
       register
       login
+      revoke
+      login
       at = Doorkeeper::AccessToken.last
-      at.expires_in = 0
+      at.token = refresh_token
       at.save!
-      refresh_token # TODO: create the exact workflow for refreshing the expired and using the refreshed token
     }
 
     it { expect(response).to have_http_status(:ok) }

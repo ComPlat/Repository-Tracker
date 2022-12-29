@@ -32,6 +32,7 @@ module AuthHelper
         refresh_token: application.access_tokens.last.refresh_token,
         client_id: application.uid
       }, as: :json
+    JSON.parse(response.body)["refresh_token"]
   end
 
   def create_entry
