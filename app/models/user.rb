@@ -7,10 +7,12 @@ class User < ApplicationRecord
 
   has_many :tracking_items, inverse_of: :user, dependent: :restrict_with_exception
 
+  # rubocop:disable Rails/InverseOf
   has_many :access_tokens,
     class_name: "Doorkeeper::AccessToken",
     foreign_key: :resource_owner_id,
     dependent: :restrict_with_exception
+  # rubocop:enable Rails/InverseOf
 
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable
 
