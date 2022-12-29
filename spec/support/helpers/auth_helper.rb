@@ -1,6 +1,5 @@
 module AuthHelper
   def register
-    # TODO: Move this to factory.
     @register ||= -> {
       post "/users",
         params: {user: {name: "name", role: "user", email: "tobias.vetter@cleanercode.de", password: "verysecure", client_id: application.uid}}, as: :json
