@@ -51,7 +51,7 @@ RSpec.describe "Workflow" do
     it { expect(response.parsed_body.size).to eq 1 }
   end
 
-  describe "6. Register, login, create entry and show index" do
+  describe "6. Register, login, create entry and show" do
     before {
       register
       login
