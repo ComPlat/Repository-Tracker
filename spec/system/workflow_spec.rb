@@ -1,7 +1,6 @@
 RSpec.describe "Workflow" do
   include AuthHelper
 
-  # TODO: Move this initial app setup. Seed?!
   let(:application) { create(:doorkeeper_application, :with_required_attributes) }
 
   describe "1. Register" do
