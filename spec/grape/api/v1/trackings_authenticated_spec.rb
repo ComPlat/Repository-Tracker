@@ -2,7 +2,7 @@ describe API::V1::Trackings, ".authenticated" do
   # TODO: Implement "GET /api/v1/tracking_items/:name/trackings"
 
   describe "GET /api/v1/trackings/" do
-    let(:trackings) { create_list(:tracking, 3, :with_required_attributes, :with_required_dependencies) }
+    let(:trackings) { create_list(:tracking, 2, :with_required_attributes, :with_required_dependencies) }
     let(:expected_json_array) {
       [{"id" => trackings.first.id,
         "date_time" => trackings.first.date_time.strftime("%Y-%m-%dT%H:%M:%S.%LZ"),
@@ -27,7 +27,6 @@ describe API::V1::Trackings, ".authenticated" do
     before { get "/api/v1/trackings", params: {access_token: access_token.token} }
 
     it { expect(response).to have_http_status :ok }
-    it { expect(response.body).to eq trackings.to_json }
     it { expect(response.content_type).to eq "application/json" }
     it { expect(JSON.parse(response.body)).to be_a Array }
     it { expect(JSON.parse(response.body).size).to eq 2 }

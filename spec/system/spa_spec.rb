@@ -12,6 +12,10 @@ RSpec.describe "SPA" do
   let(:time) { (trackings.last.date_time + Time.zone.now.gmt_offset).strftime("%d.%m.%Y, %H:%M:%S") }
 
   before do
+    # rubocop:disable Style/GlobalVars
+    $without_auth = true
+    # rubocop:enable Style/GlobalVars
+
     freeze_time
 
     tracking1
