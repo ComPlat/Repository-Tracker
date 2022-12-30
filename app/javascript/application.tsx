@@ -1,9 +1,13 @@
 import {
+  Space,
   Typography,
 } from 'antd';
 import React from 'react';
-import ReactDOM from 'react-dom';
+import {
+  createRoot,
+} from 'react-dom/client';
 import SmartTable from './components/SmartTable';
+import assertNonNullish from './helpers/assertNonNullish';
 
 const {
   Title,
@@ -11,11 +15,20 @@ const {
 
 const App = () => {
   return (
-    <div className='p-8'>
-      <Title>Repository-Tracker</Title>
-      <SmartTable />
-    </div>
+    <Space size='large'>
+      <div style={{
+        padding: '24px',
+      }}
+      >
+        <Title>Repository-Tracker</Title>
+        <SmartTable />
+      </div>
+    </Space>
   );
 };
 
-ReactDOM.render(<App />, document.querySelector('#spa'));
+const container = document.querySelector('#spa');
+assertNonNullish(container, 'Unable to find DOM element #spa');
+
+const root = createRoot(container);
+root.render(<App />);
