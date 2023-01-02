@@ -3,13 +3,14 @@ describe Users::RegistrationsController do
 
   describe "POST /users" do
     let(:application) { create(:doorkeeper_application, :with_required_attributes) }
+    let(:expected_user) { User.last }
     let(:expected_response) {
-      {"created_at" => User.last.created_at.iso8601(3),
-       "email" => User.last.email,
-       "id" => User.last.id,
-       "name" => User.last.name,
-       "role" => User.last.role,
-       "updated_at" => User.last.updated_at.iso8601(3)}
+      {"created_at" => expected_user.created_at.iso8601(3),
+       "email" => expected_user.email,
+       "id" => expected_user.id,
+       "name" => expected_user.name,
+       "role" => expected_user.role,
+       "updated_at" => expected_user.updated_at.iso8601(3)}
     }
 
     before {
