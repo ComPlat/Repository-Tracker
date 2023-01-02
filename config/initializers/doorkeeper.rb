@@ -501,4 +501,6 @@ Doorkeeper.configure do
   end
 
   use_refresh_token
+
+  require "doorkeeper/grape/helpers"
 end

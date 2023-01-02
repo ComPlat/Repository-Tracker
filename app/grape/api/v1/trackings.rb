@@ -1,5 +1,3 @@
-require "doorkeeper/grape/helpers"
-
 module API::V1
   class Trackings < Grape::API
     version "v1", using: :path
