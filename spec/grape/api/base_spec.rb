@@ -45,14 +45,16 @@ describe API::Base do
     describe "GET /api/v1/test" do
       before { get "/api/v1/test" }
 
-      it { expect(response.headers.length).to eq 7 }
-      it { expect(response.headers["Content-Type"]).to eq "application/json" }
+      it { expect(response.headers.length).to eq 9 }
+      it { expect(response.headers["Content-Type"]).to eq "application/json; charset=utf-8" }
       it { expect(response.headers["Access-Control-Allow-Origin"]).to eq "*" }
       it { expect(response.headers["Access-Control-Request-Method"]).to eq "*" }
-      it { expect(response.headers["Cache-Control"]).to eq "no-cache" }
+      it { expect(response.headers["Cache-Control"]).to eq "no-store" } # HINT: Because authentication.
       it { expect(response.headers["X-Request-Id"]).to be_a String }
       it { expect(response.headers["X-Runtime"]).to be_a String }
       it { expect(response.headers["Content-Length"]).to be_a String }
+      it { expect(response.headers["Pragma"]).to eq "no-cache" }
+      it { expect(response.headers["WWW-Authenticate"]).to eq 'Bearer realm="Doorkeeper", error="invalid_token", error_description="The access token is invalid"' }
     end
   end
 

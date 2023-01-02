@@ -2,6 +2,12 @@ module API::V1
   class Trackings < Grape::API
     version "v1", using: :path
 
+    helpers Doorkeeper::Grape::Helpers
+
+    # rubocop:disable Style/GlobalVars
+    before { doorkeeper_authorize! unless $without_auth }
+    # rubocop:enable Style/GlobalVars
+
     namespace :trackings do
       desc "Return list of trackings"
       get do

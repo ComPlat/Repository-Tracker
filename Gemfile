@@ -48,6 +48,12 @@ gem "grape-swagger-rails", "0.3.1"
 # Autoload dotenv in Rails [https://github.com/bkeepers/dotenv]
 gem "dotenv-rails", "2.8.1"
 
+# Use Devise to handle User registration and authentication
+gem "devise", "4.8.1"
+
+# Use Doorkeeper to protect Grape endpoints by using OAuth2
+gem "doorkeeper", "5.6.2"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", "1.6.3", platforms: %i[mri mingw x64_mingw] # HINT: Version 1.7.0 needs irb of at least 1.5.0

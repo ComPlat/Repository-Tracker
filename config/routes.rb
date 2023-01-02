@@ -3,6 +3,14 @@ Rails.application.routes.draw do
 
   Rails.application.routes.draw do
     root "spa#index"
+
+    devise_for :users, controllers: {registrations: "users/registrations"}
+
+    use_doorkeeper do
+      skip_controllers :authorizations, :applications,
+        :authorized_applications
+    end
+
     mount API::Base => "/api"
     mount GrapeSwaggerRails::Engine => "/swagger"
   end

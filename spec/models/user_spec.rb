@@ -33,13 +33,47 @@ describe User do
     it { is_expected.to have_db_column(:updated_at).of_type(:datetime) }
   end
 
+  describe "#email" do
+    it { is_expected.to have_db_column(:email).of_type(:text) }
+  end
+
+  describe "#encrypted_password" do
+    it { is_expected.to have_db_column(:encrypted_password).of_type(:text) }
+  end
+
+  describe "#reset_password_token" do
+    it { is_expected.to have_db_column(:reset_password_token).of_type(:text) }
+  end
+
+  describe "#reset_password_sent_at" do
+    it { is_expected.to have_db_column(:reset_password_sent_at).of_type(:datetime) }
+  end
+
+  describe "#remember_created_at" do
+    it { is_expected.to have_db_column(:remember_created_at).of_type(:datetime) }
+  end
+
   describe "#tracking_items" do
     subject(:user) { create(:user, :with_required_attributes) }
 
     let(:tracking_item) { create(:tracking_item, :with_required_attributes, user:) }
 
     it { is_expected.to have_many(:tracking_items).inverse_of(:user) }
+    it { is_expected.to have_many(:tracking_items).dependent(:restrict_with_exception) }
     it { expect(user.tracking_items).to eq [] }
     it { expect(user.tracking_items).to eq [tracking_item] }
+  end
+
+  describe "#access_tokens" do
+    subject(:user) { create(:user, :with_required_attributes) }
+
+    let(:access_token) { create(:doorkeeper_access_token, :with_required_dependencies, resource_owner_id: user.id) }
+
+    it { is_expected.to have_many(:access_tokens) }
+    it { is_expected.to have_many(:access_tokens).class_name("Doorkeeper::AccessToken") }
+    it { is_expected.to have_many(:access_tokens).with_foreign_key(:resource_owner_id) }
+    it { is_expected.to have_many(:access_tokens).dependent(:restrict_with_exception) }
+    it { expect(user.access_tokens).to eq [] }
+    it { expect(user.access_tokens).to eq [access_token] }
   end
 end

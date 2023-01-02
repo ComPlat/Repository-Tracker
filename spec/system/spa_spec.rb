@@ -9,10 +9,15 @@ RSpec.describe "SPA" do
   let(:trackings) {
     create_list(:tracking, 99, :with_required_dependencies, :with_required_attributes)
   }
-  let(:time) { (trackings.last.date_time + Time.zone.now.gmt_offset).strftime("%d.%m.%Y, %H:%M:%S") }
+  # HINT: Database has UTC timestamp, we format it to format used in frontend and zone used on machine (like frontend).
+  let(:time) { trackings.last&.date_time&.in_time_zone(Time.now.getlocal.zone)&.strftime("%d.%m.%Y, %H:%M:%S") }
 
   before do
     freeze_time
+
+    # rubocop:disable Style/GlobalVars
+    $without_auth = true
+    # rubocop:enable Style/GlobalVars
 
     tracking1
     trackings
@@ -20,6 +25,10 @@ RSpec.describe "SPA" do
   end
 
   after do
+    # rubocop:disable Style/GlobalVars
+    $without_auth = nil
+    # rubocop:enable Style/GlobalVars
+
     unfreeze_time
   end
 
