@@ -18,6 +18,6 @@ describe Users::RegistrationsController do
     }
 
     it { expect(response).to have_http_status(:ok) }
-    it { expect(JSON.parse(response.body)).to match expected_response }
+    it { expect(response.parsed_body).to match expected_response }
   end
 end
