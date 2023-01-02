@@ -3,6 +3,14 @@ const convertIsoDateStringToDate = (isoDate: string) => {
 };
 
 export const DateTime = (isoDate: string) => {
-  return convertIsoDateStringToDate(isoDate).toLocaleString('de-DE');
+  return convertIsoDateStringToDate(isoDate).toLocaleString('de-DE', {
+    day: '2-digit',
+    hour: '2-digit',
+    hour12: false,
+    minute: '2-digit',
+    month: '2-digit',
+    second: '2-digit',
+    year: 'numeric',
+  });
 };
 
