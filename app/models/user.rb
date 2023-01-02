@@ -7,6 +7,7 @@ class User < ApplicationRecord
 
   has_many :tracking_items, inverse_of: :user, dependent: :restrict_with_exception
 
+  # HINT: Model access_token is constructed by Doorkeeper and therefore, it does NOT have an user dependency.
   # rubocop:disable Rails/InverseOf
   has_many :access_tokens,
     class_name: "Doorkeeper::AccessToken",
