@@ -7,5 +7,5 @@
 #   Character.create(name: "Luke", movie: movies.first)
 
 if Doorkeeper::Application.count.zero?
-  Doorkeeper::Application.create!(name: "React Client", redirect_uri: "")
+  Doorkeeper::Application.create!(name: "React SPA API Client", redirect_uri: "")
 end
