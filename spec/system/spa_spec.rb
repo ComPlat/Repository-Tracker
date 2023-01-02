@@ -24,6 +24,10 @@ RSpec.describe "SPA" do
   end
 
   after do
+    # rubocop:disable Style/GlobalVars
+    $without_auth = nil
+    # rubocop:enable Style/GlobalVars
+
     unfreeze_time
   end
 

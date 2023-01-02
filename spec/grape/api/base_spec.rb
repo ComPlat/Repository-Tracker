@@ -1,10 +1,4 @@
 describe API::Base do
-  before do
-    # rubocop:disable Style/GlobalVars
-    $without_auth = false
-    # rubocop:enable Style/GlobalVars
-  end
-
   describe ".new" do
     subject { described_class.new }
 
