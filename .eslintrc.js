@@ -51,6 +51,7 @@ module.exports = {
                 allowedFor: [
                   'Select',
                   'SearchOutlined',
+                  'Header',
                 ],
                 propName: 'style',
               },

@@ -17,13 +17,14 @@ export type Tracking = {
   tracking_item_name: string,
 };
 
-const url = '/api/v1/trackings';
-
 const getTrackings = async () => {
-  return await fetch(url).then(async (response: Response) => {
+  return await fetch('/api/v1/trackings', {
+    headers: {
+      Authorization: `Bearer ${JSON.parse(localStorage.getItem('user') as string).token.access_token}`,
+    },
+    method: 'GET',
+  }).then(async (response) => {
     return await response.json();
-  }).catch((error) => {
-    return error;
   });
 };
 
@@ -39,7 +40,5 @@ export const getTrackingItems = async () => {
     return trackings.map(async (tracking) => {
       return trackingItemAsObject(tracking);
     });
-  }).catch((error) => {
-    return error;
   });
 };

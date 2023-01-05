@@ -15,9 +15,13 @@ import type {
   TableProps,
 } from 'antd/es/table';
 import React, {
+  useContext,
   useEffect,
   useState,
 } from 'react';
+import {
+  UserContext,
+} from '../contexts/UserContext';
 import {
   FilterObjects,
 } from '../helpers/FilterObjects';
@@ -76,15 +80,26 @@ const SmartTable: React.FC = () => {
     setTrackingItems,
   ] = useState<Tracking[]>([]);
 
+  const {
+    user,
+  } = useContext(UserContext);
+
   useEffect(() => {
     const setTrackingsToState = async () => {
-      await getTrackingItems().then(async (item) => {
-        setTrackingItems(await Promise.all(item));
-      });
+      if (user === null) {
+        setTrackingItems([]);
+      } else {
+        await getTrackingItems().then(async (item) => {
+          setTrackingItems(await Promise.all(item));
+        });
+      }
     };
 
     void setTrackingsToState();
-  }, []);
+  }, [
+    user,
+    trackingItems,
+  ]);
 
   const handleSizeChange = (event: RadioChangeEvent) => {
     setSize(event.target.value);
