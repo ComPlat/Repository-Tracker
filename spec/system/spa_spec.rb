@@ -15,20 +15,12 @@ RSpec.describe "SPA" do
   before do
     freeze_time
 
-    # rubocop:disable Style/GlobalVars
-    $without_auth = true
-    # rubocop:enable Style/GlobalVars
-
     tracking1
     trackings
     time
   end
 
   after do
-    # rubocop:disable Style/GlobalVars
-    $without_auth = nil
-    # rubocop:enable Style/GlobalVars
-
     unfreeze_time
   end
 
