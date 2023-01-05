@@ -2,7 +2,7 @@ import {
   createContext,
 } from 'react';
 
-export type UserContextType = {
+export type UserType = {
   email: string,
   token: {
     access_token: string,
@@ -13,4 +13,4 @@ export type UserContextType = {
   },
 };
 
-export const UserContext = createContext<UserContextType | null>(null);
+export const UserContext = createContext<UserType | null>(null);

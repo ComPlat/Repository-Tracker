@@ -11,7 +11,7 @@ import React, {
   useContext,
 } from 'react';
 import type {
-  UserContextType,
+  UserType,
 } from '../contexts/UserContext';
 import {
   UserContext,
@@ -75,7 +75,7 @@ export const LoginScreen = () => {
 
   const Login = async (email: string, password: string) => {
     const token = await Token(email, password);
-    const userData: UserContextType = {
+    const userData: UserType = {
       email,
       token,
     };
