@@ -133,8 +133,7 @@ export const LoginScreen = () => {
           justifyContent: 'space-between',
         }}
         >
-          {user === null ? <LoginForm /> :
-          <Title level={5}>{JSON.parse(localStorage.getItem('user') as string).email}</Title>}
+          {user === null ? <LoginForm /> : <Title level={5}>{JSON.parse(localStorage.getItem('user') as string).email}</Title>}
           <Form.Item>
             {user === null ? <LoginButton /> : <LogoutButton onClick={Logout} />}
           </Form.Item>
