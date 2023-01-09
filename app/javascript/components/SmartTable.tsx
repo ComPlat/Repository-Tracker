@@ -19,9 +19,6 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import type {
-  UserType,
-} from '../contexts/UserContext';
 import {
   UserContext,
 } from '../contexts/UserContext';
@@ -85,7 +82,7 @@ const SmartTable: React.FC = () => {
 
   const {
     user,
-  }: UserType | null = useContext(UserContext);
+  } = useContext(UserContext);
 
   useEffect(() => {
     const setTrackingsToState = async () => {

@@ -37,8 +37,12 @@ const trackingItemAsObject = (tracking: Tracking): Tracking => {
 
 export const getTrackingItems = async () => {
   return await getTrackings().then(async (trackings: Tracking[]) => {
-    return trackings.map(async (tracking) => {
-      return trackingItemAsObject(tracking);
-    });
+    if (trackings.length === 0) {
+      return [];
+    } else {
+      return trackings.map(async (tracking) => {
+        return trackingItemAsObject(tracking);
+      });
+    }
   });
 };

@@ -5,7 +5,11 @@ import {
 import {
   Form,
   Input,
+  notification,
 } from 'antd';
+import type {
+  NotificationPlacement,
+} from 'antd/es/notification/interface';
 import Title from 'antd/es/typography/Title';
 import React, {
   useContext,
@@ -68,10 +72,23 @@ const LoginForm = () => {
 };
 
 export const LoginScreen = () => {
+  const [
+    api,
+    contextHolder,
+  ] = notification.useNotification();
+
   const {
     user,
     setUser,
   } = useContext(UserContext);
+
+  const Notification = (placement: NotificationPlacement, message: string, description: string) => {
+    api.info({
+      description,
+      message,
+      placement,
+    });
+  };
 
   const Login = async (email: string, password: string) => {
     const token = await Token(email, password);
@@ -79,40 +96,50 @@ export const LoginScreen = () => {
       email,
       token,
     };
-    localStorage.setItem('user', JSON.stringify(userData));
-    setUser(userData);
+
+    if (token.error === undefined) {
+      localStorage.setItem('user', JSON.stringify(userData));
+      setUser(userData);
+      Notification('bottomRight', 'Login successful', 'You have now access to the data.');
+    } else {
+      Notification('bottomRight', 'Login failed', 'The account data does not exist.');
+    }
   };
 
   const Logout = () => {
     if (user !== null) {
       localStorage.removeItem('user');
       setUser(null);
+      Notification('bottomRight', 'Logged out', 'You have successfully logged out.');
     }
   };
 
   return (
-    <Form
-      className='login-form'
-      initialValues={{
-        remember: true,
-      }}
-      name='normal_login'
-      onFinish={async (value) => {
-        await Login(value.email, value.password);
-      }}
-    >
-      <div style={{
-        display: 'flex',
-        gap: '1rem',
-        justifyContent: 'space-between',
-      }}
+    <>
+      {contextHolder}
+      <Form
+        className='login-form'
+        initialValues={{
+          remember: true,
+        }}
+        name='normal_login'
+        onFinish={async (value) => {
+          await Login(value.email, value.password);
+        }}
       >
-        {user === null ? <LoginForm /> :
-        <Title level={5}>{JSON.parse(localStorage.getItem('user') as string).email}</Title>}
-        <Form.Item>
-          {user === null ? <LoginButton /> : <LogoutButton onClick={Logout} />}
-        </Form.Item>
-      </div>
-    </Form>
+        <div style={{
+          display: 'flex',
+          gap: '1rem',
+          justifyContent: 'space-between',
+        }}
+        >
+          {user === null ? <LoginForm /> :
+          <Title level={5}>{JSON.parse(localStorage.getItem('user') as string).email}</Title>}
+          <Form.Item>
+            {user === null ? <LoginButton /> : <LogoutButton onClick={Logout} />}
+          </Form.Item>
+        </div>
+      </Form>
+    </>
   );
 };
