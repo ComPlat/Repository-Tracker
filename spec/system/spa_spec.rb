@@ -9,12 +9,15 @@ RSpec.describe "SPA" do
   let(:trackings) {
     create_list(:tracking, 99, :with_required_dependencies, :with_required_attributes)
   }
+  let(:user) { create(:user, :with_required_attributes) }
+  let(:access_token) { create(:doorkeeper_access_token, :with_required_dependencies, resource_owner_id: user.id) }
   # HINT: Database has UTC timestamp, we format it to format used in frontend and zone used on machine (like frontend).
   let(:time) { trackings.last&.date_time&.in_time_zone(Time.now.getlocal.zone)&.strftime("%d.%m.%Y, %H:%M:%S") }
 
   before do
     freeze_time
 
+    access_token
     tracking1
     trackings
     time
@@ -41,10 +44,6 @@ RSpec.describe "SPA" do
 
     it do
       expect(page).to have_text "ID"
-    end
-
-    it do
-      expect(page).to have_text "1"
     end
 
     it do
@@ -79,6 +78,13 @@ RSpec.describe "SPA" do
   describe "Buttons to sort the items in a certain order" do
     before do
       visit "/"
+      find(:xpath, "/html/body/div/div/div[1]/form/div/div[1]/div[1]/div/div/div/div").click.fill_in(with: user.email)
+      find(:xpath, "/html/body/div/div/div[1]/form/div/div[1]/div[2]/div/div/div/div").click.fill_in(with: user.password)
+      find(:xpath, "/html/body/div/div/div[1]/form/div/div[2]/div/div/div/div").click
+    end
+
+    describe "Log" do
+      it { expect(page.driver.browser.logs.get(:browser)).to eq [] }
     end
 
     describe "Ascending order" do
@@ -169,6 +175,9 @@ RSpec.describe "SPA" do
   describe "Column search" do
     before do
       visit "/"
+      find(:xpath, "/html/body/div/div/div[1]/form/div/div[1]/div[1]/div/div/div/div").click.fill_in(with: user.email)
+      find(:xpath, "/html/body/div/div/div[1]/form/div/div[1]/div[2]/div/div/div/div").click.fill_in(with: user.password)
+      find(:xpath, "/html/body/div/div/div[1]/form/div/div[2]/div/div/div/div").click
     end
 
     context "when search for 'chemotion_electronic_laboratory_notebook' in 'From' column" do
@@ -277,7 +286,6 @@ RSpec.describe "SPA" do
       let(:owner_name) { first(".ant-select-item-option-content").text }
 
       before do
-        visit "/"
         first(".ant-table-filter-column", text: "Owner").find(".ant-table-filter-trigger").click
         find(".ant-select-selection-overflow").click
         owner_name
@@ -316,6 +324,9 @@ RSpec.describe "SPA" do
   describe "Pagination" do
     before do
       visit "/"
+      find(:xpath, "/html/body/div/div/div[1]/form/div/div[1]/div[1]/div/div/div/div").click.fill_in(with: user.email)
+      find(:xpath, "/html/body/div/div/div[1]/form/div/div[1]/div[2]/div/div/div/div").click.fill_in(with: user.password)
+      find(:xpath, "/html/body/div/div/div[1]/form/div/div[2]/div/div/div/div").click
     end
 
     describe "Pagination items" do

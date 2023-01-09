@@ -1,3 +1,10 @@
 class SpaController < ApplicationController
-  def index = render "index"
+  def index
+    @uid = uid
+    render "index"
+  end
+
+  private
+
+  def uid = Doorkeeper::Application.first.uid
 end

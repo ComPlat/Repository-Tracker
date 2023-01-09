@@ -14,9 +14,11 @@ import {
 } from './components/LoginScreen';
 import SmartTable from './components/SmartTable';
 import {
+  container,
+} from './container';
+import {
   UserContext,
 } from './contexts/UserContext';
-import assertNonNullish from './helpers/assertNonNullish';
 
 const {
   Title,
@@ -71,9 +73,6 @@ const App = () => {
     </UserContext.Provider>
   );
 };
-
-const container = document.querySelector('#spa');
-assertNonNullish(container, 'Unable to find DOM element #spa');
 
 const root = createRoot(container);
 root.render(<App />);
