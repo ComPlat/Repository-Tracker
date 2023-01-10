@@ -1,14 +1,12 @@
 RSpec.describe "SPA" do
-  let(:tracking1) {
+  let(:trackings) do
     create(:tracking, :with_required_dependencies, :with_required_attributes,
       from_trackable_system: create(:trackable_system, :with_required_attributes,
         name: "chemotion_electronic_laboratory_notebook"),
       to_trackable_system: create(:trackable_system, :with_required_attributes,
         name: "radar4kit"))
-  }
-  let(:trackings) {
     create_list(:tracking, 99, :with_required_dependencies, :with_required_attributes)
-  }
+  end
   let(:user) { create(:user, :with_required_attributes) }
   let(:access_token) { create(:doorkeeper_access_token, :with_required_dependencies, resource_owner_id: user.id) }
   # HINT: Database has UTC timestamp, we format it to format used in frontend and zone used on machine (like frontend).
@@ -18,7 +16,6 @@ RSpec.describe "SPA" do
     freeze_time
 
     access_token
-    tracking1
     trackings
     time
   end
@@ -75,12 +72,26 @@ RSpec.describe "SPA" do
     end
   end
 
+  describe "Failed login" do
+    before do
+      visit "/"
+      find(:xpath, "/html/body/div/div/div[1]/form/div/div[1]/div[1]/div/div/div/div").click.fill_in(with: "notauser@example.com")
+      find(:xpath, "/html/body/div/div/div[1]/form/div/div[1]/div[2]/div/div/div/div").click.fill_in(with: "notapassword")
+      find(:xpath, "/html/body/div/div/div[1]/form/div/div[2]/div/div/div/div").click
+      sleep 1
+    end
+
+    it { expect(page).to have_text "Login failed" }
+    it { expect(page).to have_text "The account data does not exist." }
+  end
+
   describe "Buttons to sort the items in a certain order" do
     before do
       visit "/"
       find(:xpath, "/html/body/div/div/div[1]/form/div/div[1]/div[1]/div/div/div/div").click.fill_in(with: user.email)
       find(:xpath, "/html/body/div/div/div[1]/form/div/div[1]/div[2]/div/div/div/div").click.fill_in(with: user.password)
       find(:xpath, "/html/body/div/div/div[1]/form/div/div[2]/div/div/div/div").click
+      sleep 1
     end
 
     describe "Log" do
@@ -178,6 +189,11 @@ RSpec.describe "SPA" do
       find(:xpath, "/html/body/div/div/div[1]/form/div/div[1]/div[1]/div/div/div/div").click.fill_in(with: user.email)
       find(:xpath, "/html/body/div/div/div[1]/form/div/div[1]/div[2]/div/div/div/div").click.fill_in(with: user.password)
       find(:xpath, "/html/body/div/div/div[1]/form/div/div[2]/div/div/div/div").click
+      sleep 1
+    end
+
+    describe "Log" do
+      it { expect(page.driver.browser.logs.get(:browser)).to eq [] }
     end
 
     context "when search for 'chemotion_electronic_laboratory_notebook' in 'From' column" do
@@ -327,6 +343,11 @@ RSpec.describe "SPA" do
       find(:xpath, "/html/body/div/div/div[1]/form/div/div[1]/div[1]/div/div/div/div").click.fill_in(with: user.email)
       find(:xpath, "/html/body/div/div/div[1]/form/div/div[1]/div[2]/div/div/div/div").click.fill_in(with: user.password)
       find(:xpath, "/html/body/div/div/div[1]/form/div/div[2]/div/div/div/div").click
+      sleep 1
+    end
+
+    describe "Log" do
+      it { expect(page.driver.browser.logs.get(:browser)).to eq [] }
     end
 
     describe "Pagination items" do
