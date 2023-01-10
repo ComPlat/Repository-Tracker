@@ -21,3 +21,18 @@ export const Token = async (email: string, password: string) => {
   localStorage.setItem('token', JSON.stringify(token));
   return token;
 };
+
+export const RevokeToken = async (token: string) => {
+  const response = await fetch('/oauth/revoke', {
+    body: JSON.stringify({
+      client_id: clientId,
+      token,
+    }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    method: 'POST',
+  });
+
+  return await response.json();
+};

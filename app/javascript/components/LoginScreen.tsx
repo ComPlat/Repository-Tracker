@@ -21,6 +21,7 @@ import {
   UserContext,
 } from '../contexts/UserContext';
 import {
+  RevokeToken,
   Token,
 } from '../helpers/Authentication';
 import {
@@ -106,8 +107,11 @@ export const LoginScreen = () => {
     }
   };
 
-  const Logout = () => {
+  const Logout = async () => {
+    const token = JSON.parse(localStorage.getItem('token') as string);
+
     if (user !== null) {
+      await RevokeToken(token.access_token);
       localStorage.removeItem('user');
       setUser(null);
       Notification('bottomRight', 'Logged out', 'You have successfully logged out.');
