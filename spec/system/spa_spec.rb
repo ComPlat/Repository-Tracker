@@ -1,12 +1,10 @@
 RSpec.describe "SPA" do
-  let(:trackings1) {
+  let(:trackings) do
     create(:tracking, :with_required_dependencies, :with_required_attributes,
       from_trackable_system: create(:trackable_system, :with_required_attributes,
         name: "chemotion_electronic_laboratory_notebook"),
       to_trackable_system: create(:trackable_system, :with_required_attributes,
         name: "radar4kit"))
-  }
-  let(:trackings) do
     create_list(:tracking, 99, :with_required_dependencies, :with_required_attributes)
   end
   let(:user) { create(:user, :with_required_attributes) }
@@ -18,7 +16,6 @@ RSpec.describe "SPA" do
     freeze_time
 
     access_token
-    trackings1
     trackings
     time
   end
