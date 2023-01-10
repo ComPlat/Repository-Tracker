@@ -100,7 +100,6 @@ const SmartTable: React.FC = () => {
     void setTrackingsToState();
   }, [
     user,
-    trackingItems,
   ]);
 
   const handleSizeChange = (event: RadioChangeEvent) => {
