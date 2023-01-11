@@ -91,8 +91,6 @@ const SmartTable: React.FC = () => {
       } else {
         await TrackingItems().then(async (item) => {
           setTrackingItems(await Promise.all(item));
-        }).catch((error) => {
-          return error;
         });
       }
     };

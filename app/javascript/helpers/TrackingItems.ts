@@ -30,8 +30,6 @@ const getTrackings = async () => {
     method: 'GET',
   }).then(async (response) => {
     return await response.json();
-  }).catch((error) => {
-    return error;
   });
 };
 
