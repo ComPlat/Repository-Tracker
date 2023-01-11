@@ -14,14 +14,14 @@ normal_user = User.create!(email: "user@example.com",
   password: "password",
   name: "User1",
   role: User.roles[:user])
-admin_user = User.create!(email: "admin@example.com",
-  password: "password",
-  name: "Admin1",
-  role: User.roles[:admin])
 super_user = User.create!(email: "super@example.com",
   password: "password",
   name: "Super1",
   role: User.roles[:super])
+admin_user = User.create!(email: "admin@example.com",
+  password: "password",
+  name: "Admin1",
+  role: User.roles[:admin])
 
 ts_radar4kit = TrackableSystem.create!(name: :radar4kit)
 ts_radar4chem = TrackableSystem.create!(name: :radar4chem)
