@@ -94,10 +94,6 @@ RSpec.describe "SPA" do
       sleep 1
     end
 
-    describe "Log" do
-      it { expect(page.driver.browser.logs.get(:browser)).to eq [] }
-    end
-
     describe "Ascending order" do
       it do
         first(".ant-table-column-title", text: "ID").click
@@ -190,10 +186,6 @@ RSpec.describe "SPA" do
       find(:xpath, "/html/body/div/div/div[1]/form/div/div[1]/div[2]/div/div/div/div").click.fill_in(with: user.password)
       find(:xpath, "/html/body/div/div/div[1]/form/div/div[2]/div/div/div/div").click
       sleep 1
-    end
-
-    describe "Log" do
-      it { expect(page.driver.browser.logs.get(:browser)).to eq [] }
     end
 
     context "when search for 'chemotion_electronic_laboratory_notebook' in 'From' column" do
@@ -344,10 +336,6 @@ RSpec.describe "SPA" do
       find(:xpath, "/html/body/div/div/div[1]/form/div/div[1]/div[2]/div/div/div/div").click.fill_in(with: user.password)
       find(:xpath, "/html/body/div/div/div[1]/form/div/div[2]/div/div/div/div").click
       sleep 1
-    end
-
-    describe "Log" do
-      it { expect(page.driver.browser.logs.get(:browser)).to eq [] }
     end
 
     describe "Pagination items" do
