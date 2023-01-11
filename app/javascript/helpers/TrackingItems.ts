@@ -42,14 +42,10 @@ const trackingItemAsObject = (tracking: Tracking): Tracking => {
   });
 };
 
-export const getTrackingItems = async () => {
+export const TrackingItems = async () => {
   return await getTrackings().then(async (trackings: Tracking[]) => {
-    if (trackings.length === 0) {
-      return [];
-    } else {
-      return trackings.map(async (tracking) => {
-        return trackingItemAsObject(tracking);
-      });
-    }
+    return trackings.map(async (tracking) => {
+      return trackingItemAsObject(tracking);
+    });
   });
 };

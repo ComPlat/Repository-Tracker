@@ -27,10 +27,10 @@ import {
 } from '../helpers/FilterObjects';
 import type {
   Tracking,
-} from '../helpers/getTrackingItems';
+} from '../helpers/TrackingItems';
 import {
-  getTrackingItems,
-} from '../helpers/getTrackingItems';
+  TrackingItems,
+} from '../helpers/TrackingItems';
 import {
   AutoCompleteSearch,
 } from './AutoCompleteSearch';
@@ -89,7 +89,7 @@ const SmartTable: React.FC = () => {
       if (user === null) {
         setTrackingItems([]);
       } else {
-        await getTrackingItems().then(async (item) => {
+        await TrackingItems().then(async (item) => {
           setTrackingItems(await Promise.all(item));
         }).catch((error) => {
           return error;

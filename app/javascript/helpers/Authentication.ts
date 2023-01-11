@@ -1,6 +1,9 @@
 import {
   clientId,
 } from '../container';
+import {
+  storeTokenInLocalStorage,
+} from './LocalStorageHelper';
 
 export const Token = async (email: string, password: string) => {
   const response = await fetch('/oauth/token', {
@@ -15,11 +18,9 @@ export const Token = async (email: string, password: string) => {
     },
     method: 'POST',
   });
-
   const token = await response.json();
   storeTokenInLocalStorage(token);
 
-  localStorage.setItem('token', JSON.stringify(token));
   return token;
 };
 
