@@ -25,6 +25,11 @@ import {
   Token,
 } from '../helpers/Authentication';
 import {
+  getTokenFromLocalStorage,
+  removeUserFromLocalStorage,
+  storeUserInLocalStorage,
+} from '../helpers/LocalStorageHelper';
+import {
   LoginButton,
 } from './login-screen/LoginButton';
 import {
@@ -99,7 +104,7 @@ export const LoginScreen = () => {
     };
 
     if (token.error === undefined) {
-      localStorage.setItem('user', JSON.stringify(userData));
+      storeUserInLocalStorage(userData);
       setUser(userData);
       Notification('bottomRight', 'Login successful', 'You have now access to the data.');
     } else {
@@ -108,11 +113,11 @@ export const LoginScreen = () => {
   };
 
   const Logout = async () => {
-    const token = JSON.parse(localStorage.getItem('token') as string);
+    const token = getTokenFromLocalStorage();
 
     if (user !== null) {
       await RevokeToken(token.access_token);
-      localStorage.removeItem('user');
+      removeUserFromLocalStorage('user');
       setUser(null);
       Notification('bottomRight', 'Logged out', 'You have successfully logged out.');
     }
@@ -137,7 +142,7 @@ export const LoginScreen = () => {
           justifyContent: 'space-between',
         }}
         >
-          {user === null ? <LoginForm /> : <Title level={5}>{JSON.parse(localStorage.getItem('user') as string).email}</Title>}
+          {user === null ? <LoginForm /> : <Title level={5}>{user.email}</Title>}
           <Form.Item>
             {user === null ? <LoginButton /> : <LogoutButton onClick={Logout} />}
           </Form.Item>

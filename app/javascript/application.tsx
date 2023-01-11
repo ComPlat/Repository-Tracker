@@ -19,6 +19,10 @@ import {
 import {
   UserContext,
 } from './contexts/UserContext';
+import {
+  getUserFromLocalStorage,
+  storeUserInLocalStorage,
+} from './helpers/LocalStorageHelper';
 
 const {
   Title,
@@ -29,7 +33,7 @@ const App = () => {
     user,
     setUser,
   ] = useState(
-    JSON.parse(localStorage.getItem('user') as string),
+    getUserFromLocalStorage(),
   );
 
   const providerValue = useMemo(() => {
@@ -43,7 +47,7 @@ const App = () => {
   ]);
 
   useEffect(() => {
-    localStorage.setItem('user', JSON.stringify(user));
+    storeUserInLocalStorage(user);
   }, [
     user,
   ]);
