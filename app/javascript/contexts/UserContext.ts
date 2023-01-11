@@ -9,28 +9,22 @@ import {
 export type UserType = {
   email: string | null,
   token: {
-    access_token: string | null,
-    created_at: number | null,
-    expires_in: number | null,
-    refresh_token: string | null,
-    token_type: string | null,
-  },
+    access_token: string,
+    created_at: number,
+    expires_in: number,
+    refresh_token: string,
+    token_type: string,
+  } | null,
 };
 
 export type UserContextType = {
   setUser: Dispatch<SetStateAction<UserType | null>>,
-  user: UserType | null,
+  user: UserType,
 };
 
 const defaultUser: UserType = {
   email: null,
-  token: {
-    access_token: null,
-    created_at: null,
-    expires_in: null,
-    refresh_token: null,
-    token_type: null,
-  },
+  token: null,
 };
 
 export const UserContext = createContext<UserContextType>({
