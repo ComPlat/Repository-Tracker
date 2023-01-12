@@ -40,35 +40,35 @@ RSpec.describe "SPA" do
     end
 
     it do
-      expect(page).to have_text "ID"
+      expect(page).to have_content "ID"
     end
 
     it do
-      expect(page).to have_text "From"
+      expect(page).to have_content "From"
     end
 
     it do
-      expect(page).to have_text "To"
+      expect(page).to have_content "To"
     end
 
     it do
-      expect(page).to have_text "Date/Time"
+      expect(page).to have_content "Date/Time"
     end
 
     it do
-      expect(page).to have_text "Status"
+      expect(page).to have_content "Status"
     end
 
     it do
-      expect(page).to have_text "Data/Metadata"
+      expect(page).to have_content "Data/Metadata"
     end
 
     it do
-      expect(page).to have_text "Tracker Number"
+      expect(page).to have_content "Tracker Number"
     end
 
     it do
-      expect(page).to have_text "Owner"
+      expect(page).to have_content "Owner"
     end
   end
 
@@ -80,8 +80,8 @@ RSpec.describe "SPA" do
       find(:xpath, "/html/body/div/div/div[1]/form/div/div[2]/div/div/div/div").click
     end
 
-    it { expect(page).to have_text("Login failed", wait: 5) }
-    it { expect(page).to have_text("The account data does not exist.", wait: 5) }
+    it { expect(page).to have_content("Login failed", wait: 5) }
+    it { expect(page).to have_content("The account data does not exist.", wait: 5) }
   end
 
   describe "Buttons to sort the items in a certain order" do
@@ -95,84 +95,84 @@ RSpec.describe "SPA" do
     describe "Ascending order" do
       it do
         first(".ant-table-column-title", text: "ID").click
-        expect(page).to have_text(trackings.first&.id, wait: 5)
+        expect(page).to have_content(trackings.first&.id, wait: 5)
       end
 
       it do
         first(".ant-table-column-title", text: "From").click
-        expect(page).to have_text(trackings.first&.from_trackable_system&.name, wait: 5)
+        expect(page).to have_content(trackings.first&.from_trackable_system&.name, wait: 5)
       end
 
       it do
         first(".ant-table-column-title", text: "To").click
-        expect(page).to have_text(trackings.first&.to_trackable_system&.name, wait: 5)
+        expect(page).to have_content(trackings.first&.to_trackable_system&.name, wait: 5)
       end
 
       it do
         first(".ant-table-column-title", text: "Date/Time").click
-        expect(page).to have_text(time, wait: 5)
+        expect(page).to have_content(time, wait: 5)
       end
 
       it do
         first(".ant-table-column-title", text: "Status").click
-        expect(page).to have_text(trackings.first&.status, wait: 5)
+        expect(page).to have_content(trackings.first&.status, wait: 5)
       end
 
       it do
         first(".ant-table-column-title", text: "Data/Metadata").click
-        expect(page).to have_text(trackings.first&.metadata&.to_json, wait: 5)
+        expect(page).to have_content(trackings.first&.metadata&.to_json, wait: 5)
       end
 
       it do
         first(".ant-table-column-title", text: "Tracker Number").click
-        expect(page).to have_text(trackings.first&.tracking_item&.name, wait: 5)
+        expect(page).to have_content(trackings.first&.tracking_item&.name, wait: 5)
       end
 
       it do
         first(".ant-table-column-title", text: "Owner").click
-        expect(page).to have_text(trackings.first&.tracking_item&.user&.name, wait: 5)
+        expect(page).to have_content(trackings.first&.tracking_item&.user&.name, wait: 5)
       end
     end
 
     describe "Descending order" do
       it do
         first(".ant-table-column-title", text: "ID").click.click
-        expect(page).to have_text(trackings.last&.id, wait: 5)
+        expect(page).to have_content(trackings.last&.id, wait: 5)
       end
 
       it do
         first(".ant-table-column-title", text: "From").click.click
-        expect(page).to have_text(trackings.last&.from_trackable_system&.name, wait: 5)
+        expect(page).to have_content(trackings.last&.from_trackable_system&.name, wait: 5)
       end
 
       it do
         first(".ant-table-column-title", text: "To").click.click
-        expect(page).to have_text(trackings.last&.to_trackable_system&.name, wait: 5)
+        expect(page).to have_content(trackings.last&.to_trackable_system&.name, wait: 5)
       end
 
       it do
         first(".ant-table-column-title", text: "Date/Time").click.click
-        expect(page).to have_text(time, wait: 5)
+        expect(page).to have_content(time, wait: 5)
       end
 
       it do
         first(".ant-table-column-title", text: "Status").click.click
-        expect(page).to have_text(trackings.last&.status, wait: 5)
+        expect(page).to have_content(trackings.last&.status, wait: 5)
       end
 
       it do
         first(".ant-table-column-title", text: "Data/Metadata").click.click
-        expect(page).to have_text(trackings.last&.metadata&.to_json, wait: 5)
+        expect(page).to have_content(trackings.last&.metadata&.to_json, wait: 5)
       end
 
       it do
         first(".ant-table-column-title", text: "Tracker Number").click.click
-        expect(page).to have_text(trackings.last&.tracking_item&.name, wait: 5)
+        expect(page).to have_content(trackings.last&.tracking_item&.name, wait: 5)
       end
 
       it do
         first(".ant-table-column-title", text: "Owner").click.click
-        expect(page).to have_text(trackings.last&.tracking_item&.user&.name, wait: 5)
+        expect(page).to have_content(trackings.last&.tracking_item&.user&.name, wait: 5)
       end
     end
   end
@@ -338,27 +338,27 @@ RSpec.describe "SPA" do
       it do
         find(".ant-pagination-item-2").click
 
-        expect(page).to have_text(trackings[10].id, wait: 5)
+        expect(page).to have_content(trackings[10].id, wait: 5)
       end
 
       it do
         find(".ant-pagination-item-ellipsis").click
         find(".ant-pagination-item-8").click
 
-        expect(page).to have_text(trackings[70].id, wait: 5)
+        expect(page).to have_content(trackings[70].id, wait: 5)
       end
 
       it do
         find(".ant-pagination-next").click
 
-        expect(page).to have_text(trackings[10].id, wait: 5)
+        expect(page).to have_content(trackings[10].id, wait: 5)
       end
 
       it do
         find(".ant-pagination-item-2").click
         find(".ant-pagination-prev").click
 
-        expect(page).to have_text(trackings.first&.id, wait: 5)
+        expect(page).to have_content(trackings.first&.id, wait: 5)
       end
     end
 
@@ -371,21 +371,21 @@ RSpec.describe "SPA" do
         find(".ant-select-item-option-content", text: "20 / page").click
         scroll_to(:bottom)
 
-        expect(page).to have_text(trackings[19].id, wait: 5)
+        expect(page).to have_content(trackings[19].id, wait: 5)
       end
 
       it do
         find(".ant-select-item-option-content", text: "50 / page").click
         scroll_to(:bottom)
 
-        expect(page).to have_text(trackings[49].id, wait: 5)
+        expect(page).to have_content(trackings[49].id, wait: 5)
       end
 
       it do
         find(".ant-select-item-option-content", text: "100 / page").click
         scroll_to(:bottom)
 
-        expect(page).to have_text(trackings[99].id, wait: 5)
+        expect(page).to have_content(trackings[99].id, wait: 5)
       end
     end
   end
