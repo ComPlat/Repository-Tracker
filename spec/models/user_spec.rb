@@ -54,7 +54,7 @@ describe User do
   end
 
   describe "#trackable_systems" do
-    subject(:user) { create(:user, :with_required_attributes) }
+    subject(:user) { create(:user, :with_required_attributes, role: :trackable_system_admin) }
 
     let(:trackable_system) { create(:trackable_system, :with_required_attributes, user:) }
 
