@@ -49,9 +49,11 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_22_102807) do
 
   create_table "trackable_systems", force: :cascade do |t|
     t.enum "name", null: false, enum_type: "trackable_systems_name"
+    t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_trackable_systems_on_name", unique: true
+    t.index ["user_id"], name: "index_trackable_systems_on_user_id"
   end
 
   create_table "tracking_items", force: :cascade do |t|
@@ -93,6 +95,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_22_102807) do
 
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "users", column: "resource_owner_id"
+  add_foreign_key "trackable_systems", "users"
   add_foreign_key "tracking_items", "users"
   add_foreign_key "trackings", "trackable_systems", column: "from_trackable_system_id"
   add_foreign_key "trackings", "trackable_systems", column: "to_trackable_system_id"

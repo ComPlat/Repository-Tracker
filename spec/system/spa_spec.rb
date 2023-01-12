@@ -1,9 +1,9 @@
 RSpec.describe "SPA" do
   let(:tracking1) {
     create(:tracking, :with_required_dependencies, :with_required_attributes,
-      from_trackable_system: create(:trackable_system, :with_required_attributes,
+      from_trackable_system: create(:trackable_system, :with_required_attributes, :with_required_dependencies,
         name: "chemotion_electronic_laboratory_notebook"),
-      to_trackable_system: create(:trackable_system, :with_required_attributes,
+      to_trackable_system: create(:trackable_system, :with_required_attributes, :with_required_dependencies,
         name: "radar4kit"))
   }
   let(:trackings) {

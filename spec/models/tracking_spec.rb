@@ -71,7 +71,7 @@ describe Tracking do
   end
 
   describe "#from_trackable_system" do
-    let(:from_trackable_system) { create(:trackable_system, :with_required_attributes) }
+    let(:from_trackable_system) { create(:trackable_system, :with_required_attributes, :with_required_dependencies) }
 
     it { is_expected.to have_db_index(:from_trackable_system_id) }
     it { is_expected.to have_db_column(:from_trackable_system_id).of_type(:integer) }
@@ -85,7 +85,7 @@ describe Tracking do
   end
 
   describe "#to_trackable_system" do
-    let(:to_trackable_system) { create(:trackable_system, :with_required_attributes) }
+    let(:to_trackable_system) { create(:trackable_system, :with_required_attributes, :with_required_dependencies) }
 
     it { is_expected.to have_db_index(:to_trackable_system_id) }
     it { is_expected.to have_db_column(:to_trackable_system_id).of_type(:integer) }

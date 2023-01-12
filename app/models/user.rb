@@ -5,6 +5,7 @@ class User < ApplicationRecord
 
   enum role: {user: "user", super: "super", admin: "admin"}
 
+  has_many :trackable_systems, inverse_of: :user, dependent: :restrict_with_exception
   has_many :tracking_items, inverse_of: :user, dependent: :restrict_with_exception
 
   # HINT: Model access_token is constructed by Doorkeeper and therefore, it does NOT have an user dependency.
