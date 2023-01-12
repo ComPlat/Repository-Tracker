@@ -78,11 +78,10 @@ RSpec.describe "SPA" do
       find(:xpath, "/html/body/div/div/div[1]/form/div/div[1]/div[1]/div/div/div/div").click.fill_in(with: "notauser@example.com")
       find(:xpath, "/html/body/div/div/div[1]/form/div/div[1]/div[2]/div/div/div/div").click.fill_in(with: "notapassword")
       find(:xpath, "/html/body/div/div/div[1]/form/div/div[2]/div/div/div/div").click
-      sleep 5
     end
 
-    it { expect(page).to have_text "Login failed" }
-    it { expect(page).to have_text "The account data does not exist." }
+    it { expect(page).to have_text("Login failed", wait: 5) }
+    it { expect(page).to have_text("The account data does not exist.", wait: 5) }
   end
 
   describe "Buttons to sort the items in a certain order" do
@@ -91,90 +90,89 @@ RSpec.describe "SPA" do
       find(:xpath, "/html/body/div/div/div[1]/form/div/div[1]/div[1]/div/div/div/div").click.fill_in(with: user.email)
       find(:xpath, "/html/body/div/div/div[1]/form/div/div[1]/div[2]/div/div/div/div").click.fill_in(with: user.password)
       find(:xpath, "/html/body/div/div/div[1]/form/div/div[2]/div/div/div/div").click
-      sleep 5
     end
 
     describe "Ascending order" do
       it do
         first(".ant-table-column-title", text: "ID").click
-        expect(page).to have_text trackings.first&.id
+        expect(page).to have_text(trackings.first&.id, wait: 5)
       end
 
       it do
         first(".ant-table-column-title", text: "From").click
-        expect(page).to have_text trackings.first&.from_trackable_system&.name
+        expect(page).to have_text(trackings.first&.from_trackable_system&.name, wait: 5)
       end
 
       it do
         first(".ant-table-column-title", text: "To").click
-        expect(page).to have_text trackings.first&.to_trackable_system&.name
+        expect(page).to have_text(trackings.first&.to_trackable_system&.name, wait: 5)
       end
 
       it do
         first(".ant-table-column-title", text: "Date/Time").click
-        expect(page).to have_text time
+        expect(page).to have_text(time, wait: 5)
       end
 
       it do
         first(".ant-table-column-title", text: "Status").click
-        expect(page).to have_text trackings.first&.status
+        expect(page).to have_text(trackings.first&.status, wait: 5)
       end
 
       it do
         first(".ant-table-column-title", text: "Data/Metadata").click
-        expect(page).to have_text trackings.first&.metadata&.to_json
+        expect(page).to have_text(trackings.first&.metadata&.to_json, wait: 5)
       end
 
       it do
         first(".ant-table-column-title", text: "Tracker Number").click
-        expect(page).to have_text trackings.first&.tracking_item&.name
+        expect(page).to have_text(trackings.first&.tracking_item&.name, wait: 5)
       end
 
       it do
         first(".ant-table-column-title", text: "Owner").click
-        expect(page).to have_text trackings.first&.tracking_item&.user&.name
+        expect(page).to have_text(trackings.first&.tracking_item&.user&.name, wait: 5)
       end
     end
 
     describe "Descending order" do
       it do
         first(".ant-table-column-title", text: "ID").click.click
-        expect(page).to have_text trackings.last&.id
+        expect(page).to have_text(trackings.last&.id, wait: 5)
       end
 
       it do
         first(".ant-table-column-title", text: "From").click.click
-        expect(page).to have_text trackings.last&.from_trackable_system&.name
+        expect(page).to have_text(trackings.last&.from_trackable_system&.name, wait: 5)
       end
 
       it do
         first(".ant-table-column-title", text: "To").click.click
-        expect(page).to have_text trackings.last&.to_trackable_system&.name
+        expect(page).to have_text(trackings.last&.to_trackable_system&.name, wait: 5)
       end
 
       it do
         first(".ant-table-column-title", text: "Date/Time").click.click
-        expect(page).to have_text time
+        expect(page).to have_text(time, wait: 5)
       end
 
       it do
         first(".ant-table-column-title", text: "Status").click.click
-        expect(page).to have_text trackings.last&.status
+        expect(page).to have_text(trackings.last&.status, wait: 5)
       end
 
       it do
         first(".ant-table-column-title", text: "Data/Metadata").click.click
-        expect(page).to have_text trackings.last&.metadata&.to_json
+        expect(page).to have_text(trackings.last&.metadata&.to_json, wait: 5)
       end
 
       it do
         first(".ant-table-column-title", text: "Tracker Number").click.click
-        expect(page).to have_text trackings.last&.tracking_item&.name
+        expect(page).to have_text(trackings.last&.tracking_item&.name, wait: 5)
       end
 
       it do
         first(".ant-table-column-title", text: "Owner").click.click
-        expect(page).to have_text trackings.last&.tracking_item&.user&.name
+        expect(page).to have_text(trackings.last&.tracking_item&.user&.name, wait: 5)
       end
     end
   end
@@ -185,7 +183,6 @@ RSpec.describe "SPA" do
       find(:xpath, "/html/body/div/div/div[1]/form/div/div[1]/div[1]/div/div/div/div").click.fill_in(with: user.email)
       find(:xpath, "/html/body/div/div/div[1]/form/div/div[1]/div[2]/div/div/div/div").click.fill_in(with: user.password)
       find(:xpath, "/html/body/div/div/div[1]/form/div/div[2]/div/div/div/div").click
-      sleep 5
     end
 
     context "when search for 'chemotion_electronic_laboratory_notebook' in 'From' column" do
@@ -198,7 +195,7 @@ RSpec.describe "SPA" do
 
       it do
         within(find(:xpath, "//table/tbody/tr[1]/td[2]")) do
-          expect(page).to have_content "chemotion_electronic_laboratory_notebook"
+          expect(page).to have_content("chemotion_electronic_laboratory_notebook", wait: 5)
         end
       end
     end
@@ -213,7 +210,7 @@ RSpec.describe "SPA" do
 
       it do
         within(find(:xpath, "//table/tbody/tr[1]/td[3]")) do
-          expect(page).to have_content "radar4kit"
+          expect(page).to have_content("radar4kit", wait: 5)
         end
       end
     end
@@ -228,7 +225,7 @@ RSpec.describe "SPA" do
 
       it do
         within(find(:xpath, "//table/tbody/tr[1]/td[5]")) do
-          expect(page).to have_content "draft"
+          expect(page).to have_content("draft", wait: 5)
         end
       end
     end
@@ -243,7 +240,7 @@ RSpec.describe "SPA" do
 
       it do
         within(find(:xpath, "//table/tbody/tr[1]/td[7]")) do
-          expect(page).to have_content "name1"
+          expect(page).to have_content("name1", wait: 5)
         end
       end
     end
@@ -267,25 +264,25 @@ RSpec.describe "SPA" do
 
       it do
         within(find(:xpath, "//table/tbody/tr[1]/td[2]")) do
-          expect(page).to have_content "chemotion_electronic_laboratory_notebook"
+          expect(page).to have_content("chemotion_electronic_laboratory_notebook", wait: 5)
         end
       end
 
       it do
         within(find(:xpath, "//table/tbody/tr[1]/td[3]")) do
-          expect(page).to have_content "radar4kit"
+          expect(page).to have_content("radar4kit", wait: 5)
         end
       end
 
       it do
         within(find(:xpath, "//table/tbody/tr[1]/td[5]")) do
-          expect(page).to have_content "draft"
+          expect(page).to have_content("draft", wait: 5)
         end
       end
 
       it do
         within(find(:xpath, "//table/tbody/tr[1]/td[7]")) do
-          expect(page).to have_content "name1"
+          expect(page).to have_content("name1", wait: 5)
         end
       end
     end
@@ -303,7 +300,7 @@ RSpec.describe "SPA" do
 
       it do
         within(find(:xpath, "//table/tbody/tr[1]/td[8]")) do
-          expect(page).to have_content owner_name
+          expect(page).to have_content(owner_name, wait: 5)
         end
       end
     end
@@ -318,14 +315,14 @@ RSpec.describe "SPA" do
       find(".ant-table-small")
       find(".ant-radio-group", text: "Middle").click
 
-      expect(page).to have_selector(".ant-table-middle")
+      expect(page).to have_selector(".ant-table-middle", wait: 5)
     end
 
     it do
       find(".ant-table-small")
       find(".ant-radio-group", text: "Large").click
 
-      expect(page).to have_none_of_selectors(".ant-table-small")
+      expect(page).to have_none_of_selectors(".ant-table-small", wait: 5)
     end
   end
 
@@ -335,34 +332,33 @@ RSpec.describe "SPA" do
       find(:xpath, "/html/body/div/div/div[1]/form/div/div[1]/div[1]/div/div/div/div").click.fill_in(with: user.email)
       find(:xpath, "/html/body/div/div/div[1]/form/div/div[1]/div[2]/div/div/div/div").click.fill_in(with: user.password)
       find(:xpath, "/html/body/div/div/div[1]/form/div/div[2]/div/div/div/div").click
-      sleep 5
     end
 
     describe "Pagination items" do
       it do
         find(".ant-pagination-item-2").click
 
-        expect(page).to have_text trackings[10].id
+        expect(page).to have_text(trackings[10].id, wait: 5)
       end
 
       it do
         find(".ant-pagination-item-ellipsis").click
         find(".ant-pagination-item-8").click
 
-        expect(page).to have_text trackings[70].id
+        expect(page).to have_text(trackings[70].id, wait: 5)
       end
 
       it do
         find(".ant-pagination-next").click
 
-        expect(page).to have_text trackings[10].id
+        expect(page).to have_text(trackings[10].id, wait: 5)
       end
 
       it do
         find(".ant-pagination-item-2").click
         find(".ant-pagination-prev").click
 
-        expect(page).to have_text trackings.first&.id
+        expect(page).to have_text(trackings.first&.id, wait: 5)
       end
     end
 
@@ -375,21 +371,21 @@ RSpec.describe "SPA" do
         find(".ant-select-item-option-content", text: "20 / page").click
         scroll_to(:bottom)
 
-        expect(page).to have_text trackings[19].id
+        expect(page).to have_text(trackings[19].id, wait: 5)
       end
 
       it do
         find(".ant-select-item-option-content", text: "50 / page").click
         scroll_to(:bottom)
 
-        expect(page).to have_text trackings[49].id
+        expect(page).to have_text(trackings[49].id, wait: 5)
       end
 
       it do
         find(".ant-select-item-option-content", text: "100 / page").click
         scroll_to(:bottom)
 
-        expect(page).to have_text trackings[99].id
+        expect(page).to have_text(trackings[99].id, wait: 5)
       end
     end
   end
