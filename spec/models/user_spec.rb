@@ -53,6 +53,17 @@ describe User do
     it { is_expected.to have_db_column(:remember_created_at).of_type(:datetime) }
   end
 
+  describe "#trackable_systems" do
+    subject(:user) { create(:user, :with_required_attributes) }
+
+    let(:trackable_system) { create(:trackable_system, :with_required_attributes, user:) }
+
+    it { is_expected.to have_many(:trackable_systems).inverse_of(:user) }
+    it { is_expected.to have_many(:trackable_systems).dependent(:restrict_with_exception) }
+    it { expect(user.trackable_systems).to eq [] }
+    it { expect(user.trackable_systems).to eq [trackable_system] }
+  end
+
   describe "#tracking_items" do
     subject(:user) { create(:user, :with_required_attributes) }
 
