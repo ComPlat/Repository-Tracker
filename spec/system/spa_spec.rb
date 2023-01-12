@@ -90,6 +90,7 @@ RSpec.describe "SPA" do
       find(:xpath, "/html/body/div/div/div[1]/form/div/div[1]/div[1]/div/div/div/div").click.fill_in(with: user.email)
       find(:xpath, "/html/body/div/div/div[1]/form/div/div[1]/div[2]/div/div/div/div").click.fill_in(with: user.password)
       find(:xpath, "/html/body/div/div/div[1]/form/div/div[2]/div/div/div/div").click
+      find(".ant-notification-notice-close").click
     end
 
     describe "Ascending order" do
@@ -183,6 +184,7 @@ RSpec.describe "SPA" do
       find(:xpath, "/html/body/div/div/div[1]/form/div/div[1]/div[1]/div/div/div/div").click.fill_in(with: user.email)
       find(:xpath, "/html/body/div/div/div[1]/form/div/div[1]/div[2]/div/div/div/div").click.fill_in(with: user.password)
       find(:xpath, "/html/body/div/div/div[1]/form/div/div[2]/div/div/div/div").click
+      find(".ant-notification-notice-close").click
     end
 
     context "when search for 'chemotion_electronic_laboratory_notebook' in 'From' column" do
@@ -332,6 +334,7 @@ RSpec.describe "SPA" do
       find(:xpath, "/html/body/div/div/div[1]/form/div/div[1]/div[1]/div/div/div/div").click.fill_in(with: user.email)
       find(:xpath, "/html/body/div/div/div[1]/form/div/div[1]/div[2]/div/div/div/div").click.fill_in(with: user.password)
       find(:xpath, "/html/body/div/div/div[1]/form/div/div[2]/div/div/div/div").click
+      find(".ant-notification-notice-close").click
     end
 
     describe "Pagination items" do
