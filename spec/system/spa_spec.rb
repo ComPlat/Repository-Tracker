@@ -1,11 +1,11 @@
 RSpec.describe "SPA" do
   let(:trackings) do
-    create(:tracking, :with_required_dependencies, :with_required_attributes,
+    [create(:tracking, :with_required_dependencies, :with_required_attributes,
       from_trackable_system: create(:trackable_system, :with_required_attributes,
         name: "chemotion_electronic_laboratory_notebook"),
       to_trackable_system: create(:trackable_system, :with_required_attributes,
-        name: "radar4kit"))
-    create_list(:tracking, 99, :with_required_dependencies, :with_required_attributes)
+        name: "radar4kit"))] +
+      create_list(:tracking, 99, :with_required_dependencies, :with_required_attributes)
   end
   let(:user) { create(:user, :with_required_attributes) }
   let(:access_token) { create(:doorkeeper_access_token, :with_required_dependencies, resource_owner_id: user.id) }
@@ -97,17 +97,17 @@ RSpec.describe "SPA" do
     describe "Ascending order" do
       it do
         first(".ant-table-column-title", text: "ID").click
-        expect(page).to have_text "1"
+        expect(page).to have_text trackings.first&.id
       end
 
       it do
         first(".ant-table-column-title", text: "From").click
-        expect(page).to have_text "chemotion_electronic_laboratory_notebook"
+        expect(page).to have_text trackings.first&.from_trackable_system&.name
       end
 
       it do
         first(".ant-table-column-title", text: "To").click
-        expect(page).to have_text "chemotion_electronic_laboratory_notebook"
+        expect(page).to have_text trackings.first&.to_trackable_system&.name
       end
 
       it do
@@ -117,39 +117,39 @@ RSpec.describe "SPA" do
 
       it do
         first(".ant-table-column-title", text: "Status").click
-        expect(page).to have_text "draft"
+        expect(page).to have_text trackings.first&.status
       end
 
       it do
         first(".ant-table-column-title", text: "Data/Metadata").click
-        expect(page).to have_text "{\"key\":\"value1\"}"
+        expect(page).to have_text trackings.first&.metadata&.to_json
       end
 
       it do
         first(".ant-table-column-title", text: "Tracker Number").click
-        expect(page).to have_text "name1"
+        expect(page).to have_text trackings.first&.tracking_item&.name
       end
 
       it do
         first(".ant-table-column-title", text: "Owner").click
-        expect(page).to have_text "name1"
+        expect(page).to have_text trackings.first&.tracking_item&.user&.name
       end
     end
 
     describe "Descending order" do
       it do
         first(".ant-table-column-title", text: "ID").click.click
-        expect(page).to have_text "100"
+        expect(page).to have_text trackings.last&.id
       end
 
       it do
         first(".ant-table-column-title", text: "From").click.click
-        expect(page).to have_text "radar4kit"
+        expect(page).to have_text trackings.last&.from_trackable_system&.name
       end
 
       it do
         first(".ant-table-column-title", text: "To").click.click
-        expect(page).to have_text "radar4kit"
+        expect(page).to have_text trackings.last&.to_trackable_system&.name
       end
 
       it do
@@ -159,22 +159,22 @@ RSpec.describe "SPA" do
 
       it do
         first(".ant-table-column-title", text: "Status").click.click
-        expect(page).to have_text "draft"
+        expect(page).to have_text trackings.last&.status
       end
 
       it do
         first(".ant-table-column-title", text: "Data/Metadata").click.click
-        expect(page).to have_text "{\"key\":\"value100\"}"
+        expect(page).to have_text trackings.last&.metadata&.to_json
       end
 
       it do
         first(".ant-table-column-title", text: "Tracker Number").click.click
-        expect(page).to have_text "name100"
+        expect(page).to have_text trackings.last&.tracking_item&.name
       end
 
       it do
         first(".ant-table-column-title", text: "Owner").click.click
-        expect(page).to have_text "name100"
+        expect(page).to have_text trackings.last&.tracking_item&.user&.name
       end
     end
   end
@@ -342,27 +342,27 @@ RSpec.describe "SPA" do
       it do
         find(".ant-pagination-item-2").click
 
-        expect(page).to have_text "11"
+        expect(page).to have_text trackings[10].id
       end
 
       it do
         find(".ant-pagination-item-ellipsis").click
         find(".ant-pagination-item-8").click
 
-        expect(page).to have_text "71"
+        expect(page).to have_text trackings[70].id
       end
 
       it do
         find(".ant-pagination-next").click
 
-        expect(page).to have_text "11"
+        expect(page).to have_text trackings[10].id
       end
 
       it do
         find(".ant-pagination-item-2").click
         find(".ant-pagination-prev").click
 
-        expect(page).to have_text "1"
+        expect(page).to have_text trackings.first&.id
       end
     end
 
@@ -373,20 +373,23 @@ RSpec.describe "SPA" do
 
       it do
         find(".ant-select-item-option-content", text: "20 / page").click
+        scroll_to(:bottom)
 
-        expect(page).to have_text "20"
+        expect(page).to have_text trackings[19].id
       end
 
       it do
         find(".ant-select-item-option-content", text: "50 / page").click
+        scroll_to(:bottom)
 
-        expect(page).to have_text "50"
+        expect(page).to have_text trackings[49].id
       end
 
       it do
         find(".ant-select-item-option-content", text: "100 / page").click
+        scroll_to(:bottom)
 
-        expect(page).to have_text "100"
+        expect(page).to have_text trackings[99].id
       end
     end
   end
