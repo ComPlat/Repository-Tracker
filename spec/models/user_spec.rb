@@ -16,7 +16,7 @@ describe User do
   end
 
   describe "#role" do
-    let(:values) { {user: "user", super: "super", admin: "admin"} }
+    let(:values) { {user: "user", super: "super", admin: "admin", trackable_system_admin: "trackable_system_admin"} }
 
     it { is_expected.to validate_presence_of(:role) }
     it { is_expected.to have_db_column(:role).of_type(:enum) }

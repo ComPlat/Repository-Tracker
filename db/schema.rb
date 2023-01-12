@@ -18,7 +18,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_22_102807) do
   # Note that some types may not work with other database engines. Be careful if changing database.
   create_enum "trackable_systems_name", ["radar4kit", "radar4chem", "chemotion_repository", "chemotion_electronic_laboratory_notebook", "nmrxiv"]
   create_enum "trackings_status", ["draft", "published", "submitted", "reviewing", "pending", "accepted", "reviewed", "rejected", "deleted"]
-  create_enum "users_role", ["user", "super", "admin"]
+  create_enum "users_role", ["user", "super", "admin", "trackable_system_admin"]
 
   create_table "oauth_access_tokens", force: :cascade do |t|
     t.bigint "resource_owner_id", null: false
