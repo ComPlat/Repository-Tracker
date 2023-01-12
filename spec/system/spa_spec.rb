@@ -78,7 +78,7 @@ RSpec.describe "SPA" do
       find(:xpath, "/html/body/div/div/div[1]/form/div/div[1]/div[1]/div/div/div/div").click.fill_in(with: "notauser@example.com")
       find(:xpath, "/html/body/div/div/div[1]/form/div/div[1]/div[2]/div/div/div/div").click.fill_in(with: "notapassword")
       find(:xpath, "/html/body/div/div/div[1]/form/div/div[2]/div/div/div/div").click
-      sleep 1
+      sleep 5
     end
 
     it { expect(page).to have_text "Login failed" }
@@ -91,7 +91,7 @@ RSpec.describe "SPA" do
       find(:xpath, "/html/body/div/div/div[1]/form/div/div[1]/div[1]/div/div/div/div").click.fill_in(with: user.email)
       find(:xpath, "/html/body/div/div/div[1]/form/div/div[1]/div[2]/div/div/div/div").click.fill_in(with: user.password)
       find(:xpath, "/html/body/div/div/div[1]/form/div/div[2]/div/div/div/div").click
-      sleep 1
+      sleep 5
     end
 
     describe "Ascending order" do
@@ -185,7 +185,7 @@ RSpec.describe "SPA" do
       find(:xpath, "/html/body/div/div/div[1]/form/div/div[1]/div[1]/div/div/div/div").click.fill_in(with: user.email)
       find(:xpath, "/html/body/div/div/div[1]/form/div/div[1]/div[2]/div/div/div/div").click.fill_in(with: user.password)
       find(:xpath, "/html/body/div/div/div[1]/form/div/div[2]/div/div/div/div").click
-      sleep 1
+      sleep 5
     end
 
     context "when search for 'chemotion_electronic_laboratory_notebook' in 'From' column" do
@@ -335,7 +335,7 @@ RSpec.describe "SPA" do
       find(:xpath, "/html/body/div/div/div[1]/form/div/div[1]/div[1]/div/div/div/div").click.fill_in(with: user.email)
       find(:xpath, "/html/body/div/div/div[1]/form/div/div[1]/div[2]/div/div/div/div").click.fill_in(with: user.password)
       find(:xpath, "/html/body/div/div/div[1]/form/div/div[2]/div/div/div/div").click
-      sleep 1
+      sleep 5
     end
 
     describe "Pagination items" do
