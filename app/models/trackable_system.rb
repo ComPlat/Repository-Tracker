@@ -7,6 +7,7 @@ class TrackableSystem < ApplicationRecord
               chemotion_electronic_laboratory_notebook: "chemotion_electronic_laboratory_notebook",
               nmrxiv: "nmrxiv"}
 
-  has_many :from_trackings, class_name: "Tracking", inverse_of: :from_trackable_system, dependent: :restrict_with_exception
-  has_many :to_trackings, class_name: "Tracking", inverse_of: :to_trackable_system, dependent: :restrict_with_exception
+  # belongs_to :user, inverse_of: :trackable_systems
+  has_many :from_trackings, class_name: "Tracking", inverse_of: :from_trackable_system, foreign_key: :from_trackable_system_id, dependent: :restrict_with_exception
+  has_many :to_trackings, class_name: "Tracking", inverse_of: :to_trackable_system, foreign_key: :to_trackable_system_id, dependent: :restrict_with_exception
 end

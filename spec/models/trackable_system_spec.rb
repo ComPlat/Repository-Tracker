@@ -44,4 +44,24 @@ describe TrackableSystem do
   describe "#updated_at" do
     it { is_expected.to have_db_column(:updated_at).of_type(:datetime) }
   end
+
+  describe "#from_trackings" do
+    subject(:trackable_system) { create(:trackable_system, :with_required_attributes) }
+
+    let(:tracking) { create(:tracking, :with_required_attributes, :with_required_dependencies, from_trackable_system: trackable_system) }
+
+    it { is_expected.to have_many(:from_trackings).inverse_of(:from_trackable_system).with_foreign_key(:from_trackable_system_id).dependent(:restrict_with_exception).class_name("Tracking") }
+    it { expect(trackable_system.from_trackings).to eq [] }
+    it { expect(trackable_system.from_trackings).to eq [tracking] }
+  end
+
+  describe "#to_trackings" do
+    subject(:trackable_system) { create(:trackable_system, :with_required_attributes) }
+
+    let(:tracking) { create(:tracking, :with_required_attributes, :with_required_dependencies, to_trackable_system: trackable_system) }
+
+    it { is_expected.to have_many(:to_trackings).inverse_of(:to_trackable_system).with_foreign_key(:to_trackable_system_id).dependent(:restrict_with_exception).class_name("Tracking") }
+    it { expect(trackable_system.to_trackings).to eq [] }
+    it { expect(trackable_system.to_trackings).to eq [tracking] }
+  end
 end

@@ -71,12 +71,12 @@ describe Tracking do
   end
 
   describe "#from_trackable_system" do
-    let(:from_trackable_system) { build(:trackable_system) }
+    let(:from_trackable_system) { create(:trackable_system, :with_required_attributes) }
 
     it { is_expected.to have_db_index(:from_trackable_system_id) }
     it { is_expected.to have_db_column(:from_trackable_system_id).of_type(:integer) }
     it { is_expected.to belong_to(:from_trackable_system).class_name("TrackableSystem").inverse_of(:from_trackings) }
-    it { expect(build(:tracking, from_trackable_system:).from_trackable_system).to eq from_trackable_system }
+    it { expect(create(:tracking, :with_required_attributes, :with_required_dependencies, from_trackable_system:).from_trackable_system).to eq from_trackable_system }
 
     it {
       expect { create(:tracking, :with_required_attributes, :with_required_dependencies, from_trackable_system: nil) }
@@ -85,12 +85,12 @@ describe Tracking do
   end
 
   describe "#to_trackable_system" do
-    let(:to_trackable_system) { build(:trackable_system) }
+    let(:to_trackable_system) { create(:trackable_system, :with_required_attributes) }
 
     it { is_expected.to have_db_index(:to_trackable_system_id) }
     it { is_expected.to have_db_column(:to_trackable_system_id).of_type(:integer) }
     it { is_expected.to belong_to(:to_trackable_system).class_name("TrackableSystem").inverse_of(:to_trackings) }
-    it { expect(build(:tracking, to_trackable_system:).to_trackable_system).to eq to_trackable_system }
+    it { expect(create(:tracking, :with_required_attributes, :with_required_dependencies, to_trackable_system:).to_trackable_system).to eq to_trackable_system }
 
     it {
       expect { create(:tracking, :with_required_attributes, :with_required_dependencies, to_trackable_system: nil) }
