@@ -101,12 +101,12 @@ RSpec.describe "SPA" do
 
       it do
         first(".ant-table-column-title", text: "From").click
-        expect(page).to have_content(trackings.first&.from_trackable_system&.name, wait: 5)
+        expect(page).to have_content(trackings.map { |tracking| tracking.from_trackable_system.name }.min, wait: 5)
       end
 
       it do
         first(".ant-table-column-title", text: "To").click
-        expect(page).to have_content(trackings.first&.to_trackable_system&.name, wait: 5)
+        expect(page).to have_content(trackings.map { |tracking| tracking.to_trackable_system.name }.min, wait: 5)
       end
 
       it do
@@ -116,7 +116,7 @@ RSpec.describe "SPA" do
 
       it do
         first(".ant-table-column-title", text: "Status").click
-        expect(page).to have_content(trackings.first&.status, wait: 5)
+        expect(page).to have_content(trackings.map { |tracking| tracking.status }.max, wait: 5)
       end
 
       it do
@@ -143,12 +143,13 @@ RSpec.describe "SPA" do
 
       it do
         first(".ant-table-column-title", text: "From").click.click
-        expect(page).to have_content(trackings.last&.from_trackable_system&.name, wait: 5)
+        expect(page).to have_content(trackings.map { |tracking| tracking.from_trackable_system.name }.max, wait: 5)
       end
 
       it do
         first(".ant-table-column-title", text: "To").click.click
-        expect(page).to have_content(trackings.last&.to_trackable_system&.name, wait: 5)
+
+        expect(page).to have_content(trackings.map { |tracking| tracking.to_trackable_system.name }.max, wait: 5)
       end
 
       it do
@@ -158,7 +159,7 @@ RSpec.describe "SPA" do
 
       it do
         first(".ant-table-column-title", text: "Status").click.click
-        expect(page).to have_content(trackings.last&.status, wait: 5)
+        expect(page).to have_content(trackings.map { |tracking| tracking.status }.max, wait: 5)
       end
 
       it do
