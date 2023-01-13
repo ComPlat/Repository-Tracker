@@ -28,11 +28,11 @@ describe API::V1::Trackings, ".authenticated" do
 
     it { expect(response).to have_http_status :ok }
     it { expect(response.content_type).to eq "application/json" }
-    it { expect(JSON.parse(response.body)).to be_a Array }
-    it { expect(JSON.parse(response.body).size).to eq 2 }
-    it { expect(JSON.parse(response.body).first).to eq JSON.parse(API::Entities::Tracking.new(trackings.first).to_json) }
-    it { expect(JSON.parse(response.body).second).to eq JSON.parse(API::Entities::Tracking.new(trackings.second).to_json) }
-    it { expect(JSON.parse(response.body)).to eq expected_json_array }
+    it { expect(response.parsed_body).to be_a Array }
+    it { expect(response.parsed_body.size).to eq 2 }
+    it { expect(response.parsed_body.first).to eq JSON.parse(API::Entities::Tracking.new(trackings.first).to_json) }
+    it { expect(response.parsed_body.second).to eq JSON.parse(API::Entities::Tracking.new(trackings.second).to_json) }
+    it { expect(response.parsed_body).to eq expected_json_array }
   end
 
   describe "GET /api/v1/trackings/:id" do
@@ -57,8 +57,8 @@ describe API::V1::Trackings, ".authenticated" do
 
       it { expect(response).to have_http_status :ok }
       it { expect(response.content_type).to eq "application/json" }
-      it { expect(JSON.parse(response.body)).to eq JSON.parse(API::Entities::Tracking.new(expected_tracking).to_json) }
-      it { expect(JSON.parse(response.body)).to eq expected_json_hash }
+      it { expect(response.parsed_body).to eq JSON.parse(API::Entities::Tracking.new(expected_tracking).to_json) }
+      it { expect(response.parsed_body).to eq expected_json_hash }
     end
 
     context "when tracking does not exist" do
@@ -67,15 +67,16 @@ describe API::V1::Trackings, ".authenticated" do
       before { get "/api/v1/trackings/0", params: {access_token: access_token.token} }
 
       it { expect(response).to have_http_status :not_found }
-      it { expect(response.body).to eq({error: "Couldn't find Tracking with 'id'=0"}.to_json) }
+      it { expect(response.parsed_body).to eq({"error" => "Couldn't find Tracking with 'id'=0"}) }
       it { expect(response.content_type).to eq "application/json" }
     end
   end
 
   describe "POST /api/v1/trackings/" do
-    let(:access_token) { create(:doorkeeper_access_token, :with_required_dependencies) }
+    let(:access_token) { create(:doorkeeper_access_token, :with_required_dependencies, resource_owner_id: user.id) }
 
     context "when validation errors occurs" do
+      let(:user) { create(:user, :with_required_attributes) }
       let(:tracking) { build(:tracking, :with_required_attributes, :with_required_dependencies) }
       let(:tracking_request) { build_request(:tracking_request, :create_invalid) }
 
@@ -85,8 +86,40 @@ describe API::V1::Trackings, ".authenticated" do
       it { expect(JSON.parse(response.body)).to eq "error" => "status is missing, metadata is missing, tracking_item_name is missing, from_trackable_system_name is missing, to_trackable_system_name is missing" }
     end
 
+    context "when authentication errors occurs, because user is no trackable_system_admin" do
+      let(:user) { create(:user, :with_required_attributes, role: :user) }
+      let(:tracking) { build(:tracking, :with_required_attributes, :with_required_dependencies) }
+      let(:tracking_request) {
+        build_request(:tracking_request, :create, from_trackable_system_name:
+          create(:trackable_system, :with_required_attributes, :with_required_dependencies, user:).name)
+      }
+
+      before { post "/api/v1/trackings/", params: tracking_request.merge(access_token: access_token.token) }
+
+      it { expect(response).to have_http_status :unauthorized }
+      it { expect(JSON.parse(response.body)).to eq "error" => Authorization::TrackingsPostAuthorization::MSG_TRACKABLE_SYSTEM_ADMIN }
+    end
+
+    context "when authentication errors occurs, because user is no trackable_system_owner" do
+      let(:user) { create(:user, :with_required_attributes, role: :trackable_system_admin) }
+      let(:tracking) { build(:tracking, :with_required_attributes, :with_required_dependencies) }
+      let(:tracking_request) {
+        build_request(:tracking_request, :create, from_trackable_system_name:
+          create(:trackable_system, :with_required_attributes, :with_required_dependencies).name)
+      }
+
+      before { post "/api/v1/trackings/", params: tracking_request.merge(access_token: access_token.token) }
+
+      it { expect(response).to have_http_status :unauthorized }
+      it { expect(JSON.parse(response.body)).to eq "error" => Authorization::TrackingsPostAuthorization::MSG_TRACKABLE_SYSTEM_OWNER }
+    end
+
     context "when tracking record is created" do
-      let(:tracking_request) { build_request(:tracking_request, :create) }
+      let(:user) { create(:user, :with_required_attributes, role: :trackable_system_admin) }
+      let(:tracking_request) {
+        build_request(:tracking_request, :create, from_trackable_system_name:
+          create(:trackable_system, :with_required_attributes, :with_required_dependencies, user:).name)
+      }
       let(:expected_tracking) { Tracking.first }
       let(:expected_json_hash) {
         {"id" => expected_tracking.id,

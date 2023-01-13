@@ -1,8 +1,15 @@
 module AuthHelper
+  EMAIL = "tobias.vetter@cleanercode.de"
+  PASSWORD = "verysecure"
+
   def register
     @register ||= -> {
       post "/users",
-        params: {user: {name: "name", role: "user", email: "tobias.vetter@cleanercode.de", password: "verysecure", client_id: application.uid}}, as: :json
+        params: {user: {name: "name",
+                        role: "user",
+                        email: EMAIL,
+                        password: PASSWORD,
+                        client_id: application.uid}}, as: :json
       response.parsed_body["access_token"]
     }.call
   end
@@ -11,18 +18,16 @@ module AuthHelper
     post "/oauth/token",
       params: {
         grant_type: "password",
-        email: "tobias.vetter@cleanercode.de",
-        password: "verysecure",
+        email: EMAIL,
+        password: PASSWORD,
         client_id: application.uid
       }, as: :json
   end
 
   def revoke
     post "/oauth/revoke",
-      headers: {Authorization: '"username": "tobias.vetter@cleanercode.de", "password": "verysecure"'},
-      params: {
-        client_id: application.uid
-      }, as: :json
+      headers: {Authorization: "\"username\": #{EMAIL}, \"password\": #{PASSWORD}"},
+      params: {client_id: application.uid}, as: :json
   end
 
   def refresh_token
@@ -37,7 +42,8 @@ module AuthHelper
 
   def create_entry
     @create_entry ||= -> {
-      post "/api/v1/trackings/", params: build_request(:tracking_request, :create).merge(access_token: application.access_tokens.last.token)
+      post "/api/v1/trackings/",
+        params: build_request(:tracking_request, :create).merge(access_token: application.access_tokens.last.token)
 
       response.parsed_body["id"]
     }.call

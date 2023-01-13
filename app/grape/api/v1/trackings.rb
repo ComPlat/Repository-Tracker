@@ -36,12 +36,13 @@ module API::V1
 
       # TODO: mb20221202 user_id have to use from authentication!
       post do
-        present TrackingBuilder.new(params).create!, with: API::Entities::Tracking
+        tracking_post_authorization = Authorization::TrackingsPostAuthorization.new self
+        present TrackingBuilder.new(params).create!, with: API::Entities::Tracking if tracking_post_authorization.authorized?
       end
     end
 
     route :any, "*path" do
-      error!("Not found", 404)
+      error! "Not found", 404
     end
   end
 end
