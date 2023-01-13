@@ -23,8 +23,16 @@ import {
   UserContext,
 } from '../contexts/UserContext';
 import {
+  hasTokenExpired,
+  RefreshToken,
+} from '../helpers/Authentication';
+import {
   FilterObjects,
 } from '../helpers/FilterObjects';
+import {
+  getTokenFromLocalStorage,
+  storeUserInLocalStorage,
+} from '../helpers/LocalStorageHelper';
 import type {
   Tracking,
 } from '../helpers/TrackingItems';
@@ -84,14 +92,27 @@ const SmartTable: React.FC = () => {
     user,
   } = useContext(UserContext);
 
+  const setAllTrackingItems = async () => {
+    await TrackingItems().then(async (item) => {
+      setTrackingItems(await Promise.all(item));
+    });
+  };
+
   useEffect(() => {
     const setTrackingsToState = async () => {
       if (user === null) {
         setTrackingItems([]);
-      } else {
-        await TrackingItems().then(async (item) => {
-          setTrackingItems(await Promise.all(item));
+      } else if (hasTokenExpired()) {
+        const token = getTokenFromLocalStorage();
+
+        storeUserInLocalStorage({
+          email: user.email,
+          token: await RefreshToken(token),
         });
+
+        await setAllTrackingItems();
+      } else {
+        await setAllTrackingItems();
       }
     };
 

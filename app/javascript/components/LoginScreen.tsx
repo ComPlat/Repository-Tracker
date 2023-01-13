@@ -14,8 +14,6 @@ import Title from 'antd/es/typography/Title';
 import React, {
   useCallback,
   useContext,
-  useEffect,
-  useState,
 } from 'react';
 import type {
   UserType,
@@ -24,8 +22,6 @@ import {
   UserContext,
 } from '../contexts/UserContext';
 import {
-  hasTokenExpired,
-  RefreshToken,
   RevokeToken,
   Token,
 } from '../helpers/Authentication';
@@ -86,10 +82,6 @@ export const LoginScreen = () => {
     api,
     contextHolder,
   ] = notification.useNotification();
-  const [
-    tokenExpired,
-    setTokenExpired,
-  ] = useState<boolean>(false);
 
   const {
     user,
@@ -136,27 +128,6 @@ export const LoginScreen = () => {
       Notification('bottomRight', 'Login failed', 'The account data does not exist.');
     }
   };
-
-  useEffect(() => {
-    if (user !== null && hasTokenExpired()) {
-      setTokenExpired(true);
-      const NewTokenWhenTokenExpires = async () => {
-        const token = getTokenFromLocalStorage();
-        const refreshToken = await RefreshToken(token);
-
-        storeUserInLocalStorage({
-          email: token.email,
-          token: refreshToken,
-        });
-        setTokenExpired(false);
-      };
-
-      void NewTokenWhenTokenExpires();
-    }
-  }, [
-    user,
-    tokenExpired,
-  ]);
 
   return (
     <>
