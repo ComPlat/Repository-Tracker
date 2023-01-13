@@ -12,7 +12,10 @@ import type {
 } from 'antd/es/notification/interface';
 import Title from 'antd/es/typography/Title';
 import React, {
+  useCallback,
   useContext,
+  useEffect,
+  useState,
 } from 'react';
 import type {
   UserType,
@@ -21,12 +24,13 @@ import {
   UserContext,
 } from '../contexts/UserContext';
 import {
+  hasTokenExpired,
+  RefreshToken,
   RevokeToken,
   Token,
 } from '../helpers/Authentication';
 import {
   getTokenFromLocalStorage,
-  removeUserFromLocalStorage,
   storeUserInLocalStorage,
 } from '../helpers/LocalStorageHelper';
 import {
@@ -82,19 +86,40 @@ export const LoginScreen = () => {
     api,
     contextHolder,
   ] = notification.useNotification();
+  const [
+    tokenExpired,
+    setTokenExpired,
+  ] = useState<boolean>(false);
 
   const {
     user,
     setUser,
   } = useContext(UserContext);
 
-  const Notification = (placement: NotificationPlacement, message: string, description: string) => {
+  const Notification = useCallback((placement: NotificationPlacement, message: string, description: string) => {
     api.info({
       description,
       message,
       placement,
     });
-  };
+  }, [
+    api,
+  ]);
+
+  const Logout = useCallback(async () => {
+    const token = getTokenFromLocalStorage();
+
+    if (user !== null) {
+      await RevokeToken(token.access_token);
+      localStorage.clear();
+      setUser(null);
+      Notification('bottomRight', 'Logged out', 'You have successfully logged out.');
+    }
+  }, [
+    Notification,
+    setUser,
+    user,
+  ]);
 
   const Login = async (email: string, password: string) => {
     const token = await Token(email, password);
@@ -112,16 +137,26 @@ export const LoginScreen = () => {
     }
   };
 
-  const Logout = async () => {
-    const token = getTokenFromLocalStorage();
+  useEffect(() => {
+    if (user !== null && hasTokenExpired()) {
+      setTokenExpired(true);
+      const NewTokenWhenTokenExpires = async () => {
+        const token = getTokenFromLocalStorage();
+        const refreshToken = await RefreshToken(token);
 
-    if (user !== null) {
-      await RevokeToken(token.access_token);
-      removeUserFromLocalStorage('user');
-      setUser(null);
-      Notification('bottomRight', 'Logged out', 'You have successfully logged out.');
+        storeUserInLocalStorage({
+          email: token.email,
+          token: refreshToken,
+        });
+        setTokenExpired(false);
+      };
+
+      void NewTokenWhenTokenExpires();
     }
-  };
+  }, [
+    user,
+    tokenExpired,
+  ]);
 
   return (
     <>
