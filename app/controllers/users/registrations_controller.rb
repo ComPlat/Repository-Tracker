@@ -11,12 +11,12 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # POST /resource
   def create
-    build_resource(sign_up_params)
+    build_resource(sign_up_params.merge(role: :user)) # HINT: Every higher role needs manual upgrade by an admin.
 
     if resource.save
-      render json: resource
+      render json: resource, status: :ok
     else
-      render json: resource.errors.messages
+      render json: resource.errors.messages, status: :unprocessable_entity
     end
   end
 
@@ -87,7 +87,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # end
 
   def sign_up_params
-    devise_parameter_sanitizer.permit(:sign_up, keys: [:email, :password, :role, :name])
+    devise_parameter_sanitizer.permit(:sign_up, keys: [:email, :password, :name])
     devise_parameter_sanitizer.sanitize(:sign_up)
   end
 end

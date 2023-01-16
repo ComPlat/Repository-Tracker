@@ -5,11 +5,7 @@ module AuthHelper
   def register
     @register ||= -> {
       post "/users",
-        params: {user: {name: "name",
-                        role: "user",
-                        email: EMAIL,
-                        password: PASSWORD,
-                        client_id: application.uid}}, as: :json
+        params: {user: {name: "name", email: EMAIL, password: PASSWORD}}, as: :json
       response.parsed_body["access_token"]
     }.call
   end
