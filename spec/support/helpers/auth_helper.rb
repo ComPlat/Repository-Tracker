@@ -19,9 +19,9 @@ module AuthHelper
 
   def revoke
     post "/oauth/revoke",
-      headers: {Authorization: '"username": "tobias.vetter@cleanercode.de", "password": "verysecure"'},
       params: {
-        client_id: application.uid
+        client_id: application.uid,
+        token: application.access_tokens.last.token
       }, as: :json
   end
 

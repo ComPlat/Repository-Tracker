@@ -1,34 +1,82 @@
 import {
-  Space,
   Typography,
 } from 'antd';
-import React from 'react';
+import React, {
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import {
   createRoot,
 } from 'react-dom/client';
+import {
+  LoginScreen,
+} from './components/LoginScreen';
 import SmartTable from './components/SmartTable';
-import assertNonNullish from './helpers/assertNonNullish';
+import {
+  container,
+} from './container';
+import {
+  UserContext,
+} from './contexts/UserContext';
+import {
+  getUserFromLocalStorage,
+  storeUserInLocalStorage,
+} from './helpers/LocalStorageHelper';
 
 const {
   Title,
 } = Typography;
 
 const App = () => {
+  const [
+    user,
+    setUser,
+  ] = useState(
+    getUserFromLocalStorage(),
+  );
+
+  const providerValue = useMemo(() => {
+    return {
+      setUser,
+      user,
+    };
+  }, [
+    user,
+    setUser,
+  ]);
+
+  useEffect(() => {
+    storeUserInLocalStorage(user);
+  }, [
+    user,
+  ]);
+
   return (
-    <Space size='large'>
+    <UserContext.Provider value={providerValue}>
       <div style={{
-        padding: '24px',
+        padding: '1rem',
       }}
       >
-        <Title>Repository-Tracker</Title>
-        <SmartTable />
+        <div style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+        }}
+        >
+          <Title>Repository-Tracker</Title>
+          <LoginScreen />
+        </div>
+        <div style={{
+          backgroundColor: 'white',
+          padding: '2rem',
+        }}
+        >
+          <SmartTable />
+        </div>
       </div>
-    </Space>
+    </UserContext.Provider>
   );
 };
-
-const container = document.querySelector('#spa');
-assertNonNullish(container, 'Unable to find DOM element #spa');
 
 const root = createRoot(container);
 root.render(<App />);
