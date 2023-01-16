@@ -1,10 +1,5 @@
 import {
-  LockOutlined,
-  UserOutlined,
-} from '@ant-design/icons';
-import {
   Form,
-  Input,
   notification,
 } from 'antd';
 import type {
@@ -15,6 +10,9 @@ import React, {
   useCallback,
   useContext,
 } from 'react';
+import {
+  RegisterContext,
+} from '../contexts/RegisterContext';
 import type {
   UserType,
 } from '../contexts/UserContext';
@@ -33,49 +31,14 @@ import {
   LoginButton,
 } from './login-screen/LoginButton';
 import {
+  LoginForm,
+} from './login-screen/LoginForm';
+import {
   LogoutButton,
 } from './login-screen/LogoutButton';
-
-const LoginForm = () => {
-  return (
-    <div style={{
-      display: 'flex',
-      gap: '1rem',
-      justifyContent: 'space-between',
-    }}
-    >
-      <Form.Item
-        name='email'
-        rules={[
-          {
-            message: 'Please input your E-Mail address!',
-            required: true,
-          },
-        ]}
-      >
-        <Input
-          placeholder='E-Mail address'
-          prefix={<UserOutlined className='site-form-item-icon' />}
-        />
-      </Form.Item>
-      <Form.Item
-        name='password'
-        rules={[
-          {
-            message: 'Please input your Password!',
-            required: true,
-          },
-        ]}
-      >
-        <Input
-          placeholder='Password'
-          prefix={<LockOutlined className='site-form-item-icon' />}
-          type='password'
-        />
-      </Form.Item>
-    </div>
-  );
-};
+import {
+  RegisterButton,
+} from './registration-screen/RegisterButton';
 
 export const LoginScreen = () => {
   const [
@@ -87,6 +50,10 @@ export const LoginScreen = () => {
     user,
     setUser,
   } = useContext(UserContext);
+
+  const {
+    setRegister,
+  } = useContext(RegisterContext);
 
   const Notification = useCallback((placement: NotificationPlacement, message: string, description: string) => {
     api.info({
@@ -152,6 +119,10 @@ export const LoginScreen = () => {
           <Form.Item>
             {user === null ? <LoginButton /> : <LogoutButton onClick={Logout} />}
           </Form.Item>
+          {user === null ? <RegisterButton onClick={() => {
+            setRegister(true);
+          }}
+          /> : null}
         </div>
       </Form>
     </>

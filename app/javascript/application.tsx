@@ -12,10 +12,16 @@ import {
 import {
   LoginScreen,
 } from './components/LoginScreen';
+import {
+  RegistrationScreen,
+} from './components/RegistrationScreen';
 import SmartTable from './components/SmartTable';
 import {
   container,
 } from './container';
+import {
+  RegisterContext,
+} from './contexts/RegisterContext';
 import {
   UserContext,
 } from './contexts/UserContext';
@@ -36,7 +42,12 @@ const App = () => {
     getUserFromLocalStorage(),
   );
 
-  const providerValue = useMemo(() => {
+  const [
+    register,
+    setRegister,
+  ] = useState(false);
+
+  const userProviderValue = useMemo(() => {
     return {
       setUser,
       user,
@@ -46,6 +57,15 @@ const App = () => {
     setUser,
   ]);
 
+  const registerProviderValue = useMemo(() => {
+    return {
+      register,
+      setRegister,
+    };
+  }, [
+    register,
+  ]);
+
   useEffect(() => {
     storeUserInLocalStorage(user);
   }, [
@@ -53,27 +73,29 @@ const App = () => {
   ]);
 
   return (
-    <UserContext.Provider value={providerValue}>
-      <div style={{
-        padding: '1rem',
-      }}
-      >
+    <UserContext.Provider value={userProviderValue}>
+      <RegisterContext.Provider value={registerProviderValue}>
         <div style={{
-          display: 'flex',
-          justifyContent: 'space-between',
+          padding: '1rem',
         }}
         >
-          <Title>Repository-Tracker</Title>
-          <LoginScreen />
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+          }}
+          >
+            <Title>Repository-Tracker</Title>
+            <LoginScreen />
+          </div>
+          <div style={{
+            backgroundColor: 'white',
+            padding: '2rem',
+          }}
+          >
+            {register ? <RegistrationScreen /> : <SmartTable />}
+          </div>
         </div>
-        <div style={{
-          backgroundColor: 'white',
-          padding: '2rem',
-        }}
-        >
-          <SmartTable />
-        </div>
-      </div>
+      </RegisterContext.Provider>
     </UserContext.Provider>
   );
 };
