@@ -10,7 +10,11 @@ import type {
 import Title from 'antd/es/typography/Title';
 import React, {
   useCallback,
+  useContext,
 } from 'react';
+import {
+  RegisterContext,
+} from '../../contexts/RegisterContext';
 import {
   Register,
 } from '../../helpers/Registration';
@@ -30,6 +34,10 @@ export const SignUpForm = () => {
     contextHolder,
   ] = notification.useNotification();
 
+  const {
+    setRegister,
+  } = useContext(RegisterContext);
+
   const Notification = useCallback((placement: NotificationPlacement, message: string, description: string) => {
     api.info({
       description,
@@ -47,6 +55,9 @@ export const SignUpForm = () => {
           Notification('bottomRight', 'Registration unsuccessful', 'E-Mail has already been taken.');
         } else {
           Notification('bottomRight', 'Registration successful', 'You have successfully signed up.');
+          setInterval(() => {
+            setRegister(false);
+          }, 3_000);
         }
       });
     }
@@ -54,9 +65,22 @@ export const SignUpForm = () => {
 
   return (
     <div>
-      <Title level={3}>Sign up</Title>
+      <Title
+        level={3} style={{
+          alignItems: 'center',
+          display: 'flex',
+          justifyContent: 'center',
+        }}
+      >Sign up</Title>
       {contextHolder}
-      <Form {...layout} name='nest-messages' onFinish={onFinish}>
+      <Form
+        style={{
+          left: '-50%',
+          marginTop: '48px',
+          position: 'relative',
+        }}
+        {...layout} name='nest-messages' onFinish={onFinish}
+      >
         <Form.Item
           label='Name'
           name='name'
@@ -67,7 +91,12 @@ export const SignUpForm = () => {
             },
           ]}
         >
-          <Input placeholder='Name' />
+          <Input
+            placeholder='Name'
+            style={{
+              minWidth: '300px',
+            }}
+          />
         </Form.Item>
         <Form.Item
           label='E-Mail'
@@ -83,7 +112,12 @@ export const SignUpForm = () => {
             },
           ]}
         >
-          <Input placeholder='E-Mail' />
+          <Input
+            placeholder='E-Mail'
+            style={{
+              minWidth: '300px',
+            }}
+          />
         </Form.Item>
         <Form.Item
           hasFeedback
@@ -102,6 +136,9 @@ export const SignUpForm = () => {
         >
           <Input
             placeholder='Password'
+            style={{
+              minWidth: '300px',
+            }}
             type='password'
           />
         </Form.Item>
@@ -135,6 +172,9 @@ export const SignUpForm = () => {
         >
           <Input
             placeholder='Password'
+            style={{
+              minWidth: '300px',
+            }}
             type='password'
           />
         </Form.Item>

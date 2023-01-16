@@ -5,6 +5,13 @@ import {
 
 export const RegistrationScreen = () => {
   return (
-    <SignUpForm />
+    <div style={{
+      alignItems: 'center',
+      display: 'flex',
+      justifyContent: 'center',
+    }}
+    >
+      <SignUpForm />
+    </div>
   );
 };
