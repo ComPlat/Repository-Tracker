@@ -2,24 +2,24 @@ describe Users::RegistrationsController do
   include AuthHelper
 
   describe "POST /users" do
+    let(:user) { build(:user, :with_required_attributes) }
     let(:application) { create(:doorkeeper_application, :with_required_attributes) }
 
     context "when valid registration request is being completed" do
-      it { expect { register }.to change(User, :count).from(0).to(1) }
+      it { expect { register(user.name, user.email, user.password) }.to change(User, :count).from(0).to(1) }
     end
 
     context "when valid registration request has been completed" do
-      let(:expected_user) { User.last }
       let(:expected_response) {
-        {"created_at" => expected_user&.created_at&.iso8601(3),
-         "email" => expected_user&.email,
-         "id" => expected_user&.id,
-         "name" => expected_user&.name,
-         "role" => expected_user&.role,
-         "updated_at" => expected_user&.updated_at&.iso8601(3)}
+        {"created_at" => User.last&.created_at&.iso8601(3),
+         "email" => User.last&.email,
+         "id" => User.last&.id,
+         "name" => User.last&.name,
+         "role" => User.last&.role,
+         "updated_at" => User.last&.updated_at&.iso8601(3)}
       }
 
-      before { register }
+      before { register(user.name, user.email, user.password) }
 
       it { expect(response).to have_http_status(:ok) }
       it { expect(response.parsed_body).to eq expected_response }
@@ -27,15 +27,18 @@ describe Users::RegistrationsController do
     end
 
     context "when INVALID registration request is being completed" do
-      before { create(:user, :with_required_attributes, email: AuthHelper::EMAIL) }
+      let(:existing_user) { create(:user, :with_required_attributes) }
 
-      it { expect { register }.not_to change(User, :count).from(1) }
+      before { existing_user }
+
+      it { expect { register(existing_user.name, existing_user.email, existing_user.password) }.not_to change(User, :count).from(1) }
     end
 
     context "when INVALID registration request has been completed" do
+      let(:existing_user) { create(:user, :with_required_attributes) }
+
       before {
-        create(:user, :with_required_attributes, email: AuthHelper::EMAIL)
-        register
+        register(existing_user.name, existing_user.email, existing_user.password)
       }
 
       it { expect(response).to have_http_status(:unprocessable_entity) }

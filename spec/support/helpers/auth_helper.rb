@@ -2,27 +2,28 @@ module AuthHelper
   EMAIL = "tobias.vetter@cleanercode.de"
   PASSWORD = "verysecure"
 
-  def register
+  def register(name, email, password)
     @register ||= -> {
       post "/users",
-        params: {user: {name: "name", email: EMAIL, password: PASSWORD}}, as: :json
+        params: {user: {name:, email:, password:}}, as: :json
       response.parsed_body["access_token"]
     }.call
   end
 
-  def login
+  def login(email, password)
     post "/oauth/token",
+      headers: {"Content-Type": "application/json"},
       params: {
         grant_type: "password",
-        email: EMAIL,
-        password: PASSWORD,
+        email:,
+        password:,
         client_id: application.uid
       }, as: :json
   end
 
-  def revoke
+  def revoke(email, password)
     post "/oauth/revoke",
-      headers: {Authorization: "\"username\": #{EMAIL}, \"password\": #{PASSWORD}"},
+      headers: {Authorization: "\"username\": #{email}, \"password\": #{password}"},
       params: {client_id: application.uid}, as: :json
   end
 

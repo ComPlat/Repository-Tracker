@@ -4,24 +4,24 @@ describe API::V1::Trackings, ".authenticated" do
   describe "GET /api/v1/trackings/" do
     let(:trackings) { create_list(:tracking, 2, :with_required_attributes, :with_required_dependencies) }
     let(:expected_json_array) {
-      [{"id" => trackings.first.id,
-        "date_time" => trackings.first.date_time.strftime("%Y-%m-%dT%H:%M:%S.%LZ"),
-        "status" => trackings.first.status,
-        "metadata" => trackings.first.metadata,
-        "tracking_item_name" => trackings.first.tracking_item.name,
-        "from_trackable_system_name" => trackings.first.from_trackable_system.name,
-        "to_trackable_system_name" => trackings.first.to_trackable_system.name,
-        "owner_name" => trackings.first.tracking_item.user.name},
-        {"id" => trackings.second.id,
-         "date_time" => trackings.second.date_time.strftime("%Y-%m-%dT%H:%M:%S.%LZ"),
-         "status" => trackings.second.status,
-         "metadata" => trackings.second.metadata,
-         "tracking_item_name" => trackings.second.tracking_item.name,
-         "from_trackable_system_name" => trackings.second.from_trackable_system.name,
-         "to_trackable_system_name" => trackings.second.to_trackable_system.name,
-         "owner_name" => trackings.second.tracking_item.user.name}]
+      [{"id" => trackings.first&.id,
+        "date_time" => trackings.first&.date_time&.strftime("%Y-%m-%dT%H:%M:%S.%LZ"),
+        "status" => trackings.first&.status,
+        "metadata" => trackings.first&.metadata,
+        "tracking_item_name" => trackings.first&.tracking_item&.name,
+        "from_trackable_system_name" => trackings.first&.from_trackable_system&.name,
+        "to_trackable_system_name" => trackings.first&.to_trackable_system&.name,
+        "owner_name" => trackings.first&.tracking_item&.user&.name},
+        {"id" => trackings.second&.id,
+         "date_time" => trackings.second&.date_time&.strftime("%Y-%m-%dT%H:%M:%S.%LZ"),
+         "status" => trackings.second&.status,
+         "metadata" => trackings.second&.metadata,
+         "tracking_item_name" => trackings.second&.tracking_item&.name,
+         "from_trackable_system_name" => trackings.second&.from_trackable_system&.name,
+         "to_trackable_system_name" => trackings.second&.to_trackable_system&.name,
+         "owner_name" => trackings.second&.tracking_item&.user&.name}]
     }
-    let(:user) { trackings.first.tracking_item.user }
+    let(:user) { trackings.first&.tracking_item&.user }
     let(:access_token) { create(:doorkeeper_access_token, :with_required_dependencies, resource_owner_id: user.id) }
 
     before { get "/api/v1/trackings", params: {access_token: access_token.token} }
@@ -50,7 +50,7 @@ describe API::V1::Trackings, ".authenticated" do
          "owner_name" => expected_tracking.tracking_item.user.name}
       }
 
-      let(:user) { trackings.first.tracking_item.user }
+      let(:user) { trackings.first&.tracking_item&.user }
       let(:access_token) { create(:doorkeeper_access_token, :with_required_dependencies, resource_owner_id: user.id) }
 
       before { get "/api/v1/trackings/#{expected_tracking.id}", params: {access_token: access_token.token} }
