@@ -10,7 +10,7 @@ RSpec.describe "SPA" do
   let(:user) { create(:user, :with_required_attributes) }
   let(:access_token) { create(:doorkeeper_access_token, :with_required_dependencies, resource_owner_id: user.id) }
   # HINT: Database has UTC timestamp, we format it to format used in frontend and zone used on machine (like frontend).
-  let(:time) { trackings.last&.date_time&.in_time_zone(Time.now.getlocal.zone)&.strftime("%d.%m.%Y, %H:%M:%S") }
+  let(:time) { trackings.map { |tracking| tracking.date_time.in_time_zone(Time.now.getlocal.zone).strftime("%d.%m.%Y, %H:%M:%S") }.min }
 
   before do
     freeze_time
@@ -116,7 +116,7 @@ RSpec.describe "SPA" do
         find(".ant-notification-notice-close").click
       end
 
-      it { expect(page).to have_content(trackings.first&.id, wait: 5) }
+      it { expect(page).to have_content(trackings.map { |tracking| tracking.id }.min, wait: 5) }
     end
 
     context "when email is already taken" do
@@ -174,7 +174,7 @@ RSpec.describe "SPA" do
     describe "Ascending order" do
       it do
         first(".ant-table-column-title", text: "ID").click
-        expect(page).to have_content(trackings.first&.id, wait: 5)
+        expect(page).to have_content(trackings.map { |tracking| tracking.id }.min, wait: 5)
       end
 
       it do
@@ -199,24 +199,24 @@ RSpec.describe "SPA" do
 
       it do
         first(".ant-table-column-title", text: "Data/Metadata").click
-        expect(page).to have_content(trackings.first&.metadata&.to_json, wait: 5)
+        expect(page).to have_content(trackings.map { |tracking| tracking.metadata.to_json }.min, wait: 5)
       end
 
       it do
         first(".ant-table-column-title", text: "Tracker Number").click
-        expect(page).to have_content(trackings.first&.tracking_item&.name, wait: 5)
+        expect(page).to have_content(trackings.map { |tracking| tracking.tracking_item.name }.min, wait: 5)
       end
 
       it do
         first(".ant-table-column-title", text: "Owner").click
-        expect(page).to have_content(trackings.first&.tracking_item&.user&.name, wait: 5)
+        expect(page).to have_content(trackings.map { |tracking| tracking.tracking_item.user.name }.min, wait: 5)
       end
     end
 
     describe "Descending order" do
       it do
         first(".ant-table-column-title", text: "ID").click.click
-        expect(page).to have_content(trackings.last&.id, wait: 5)
+        expect(page).to have_content(trackings.map { |tracking| tracking.id }.max, wait: 5)
       end
 
       it do
@@ -242,17 +242,17 @@ RSpec.describe "SPA" do
 
       it do
         first(".ant-table-column-title", text: "Data/Metadata").click.click
-        expect(page).to have_content(trackings.last&.metadata&.to_json, wait: 5)
+        expect(page).to have_content(trackings.map { |tracking| tracking.metadata.to_json }.max, wait: 5)
       end
 
       it do
         first(".ant-table-column-title", text: "Tracker Number").click.click
-        expect(page).to have_content(trackings.last&.tracking_item&.name, wait: 5)
+        expect(page).to have_content(trackings.map { |tracking| tracking.tracking_item.name }.max, wait: 5)
       end
 
       it do
         first(".ant-table-column-title", text: "Owner").click.click
-        expect(page).to have_content(trackings.last&.tracking_item&.user&.name, wait: 5)
+        expect(page).to have_content(trackings.map { |tracking| tracking.tracking_item.user.name }.max, wait: 5)
       end
     end
   end
@@ -440,7 +440,7 @@ RSpec.describe "SPA" do
         find(".ant-pagination-item-2").click
         find(".ant-pagination-prev").click
 
-        expect(page).to have_content(trackings.first&.id, wait: 5)
+        expect(page).to have_content(trackings.map { |tracking| tracking.id }.min, wait: 5)
       end
     end
 
