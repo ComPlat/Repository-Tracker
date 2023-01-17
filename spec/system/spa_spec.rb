@@ -84,6 +84,84 @@ RSpec.describe "SPA" do
     it { expect(page).to have_content("The account data does not exist.", wait: 5) }
   end
 
+  describe "Register" do
+    context "when registration is successful" do
+      before do
+        visit "/"
+        find(".ant-btn", text: "Sign up").click
+        find(:xpath, "/html/body/div/div/div[2]/div/div/form/div[1]/div/div[2]/div/div/input").click.fill_in(with: "New User")
+        find(:xpath, "/html/body/div/div/div[2]/div/div/form/div[2]/div/div[2]/div/div/input").click.fill_in(with: "newuser@exmaple.com")
+        find(:xpath, "/html/body/div/div/div[2]/div/div/form/div[3]/div/div[2]/div/div/span/input").click.fill_in(with: "SecurePassword123-")
+        find(:xpath, "/html/body/div/div/div[2]/div/div/form/div[4]/div/div[2]/div/div/span/input").click.fill_in(with: "SecurePassword123-")
+        find(".ant-btn", text: "Submit").click
+      end
+
+      it { expect(page).to have_content("Registration successful", wait: 5) }
+      it { expect(page).to have_content("You have successfully signed up. You will be redirected to the main page.", wait: 5) }
+    end
+
+    context "when registration is successful and user can login" do
+      before do
+        visit "/"
+        find(".ant-btn", text: "Sign up").click
+        find(:xpath, "/html/body/div/div/div[2]/div/div/form/div[1]/div/div[2]/div/div/input").click.fill_in(with: "New User")
+        find(:xpath, "/html/body/div/div/div[2]/div/div/form/div[2]/div/div[2]/div/div/input").click.fill_in(with: "newuser@exmaple.com")
+        find(:xpath, "/html/body/div/div/div[2]/div/div/form/div[3]/div/div[2]/div/div/span/input").click.fill_in(with: "SecurePassword123-")
+        find(:xpath, "/html/body/div/div/div[2]/div/div/form/div[4]/div/div[2]/div/div/span/input").click.fill_in(with: "SecurePassword123-")
+        find(".ant-btn", text: "Submit").click
+        sleep 3
+        find(:xpath, "/html/body/div/div/div[1]/form/div/div[1]/div[1]/div/div/div/div").click.fill_in(with: user.email)
+        find(:xpath, "/html/body/div/div/div[1]/form/div/div[1]/div[2]/div/div/div/div").click.fill_in(with: user.password)
+        find(:xpath, "/html/body/div/div/div[1]/form/div/div[2]/div/div/div/div").click
+        find(".ant-notification-notice-close").click
+      end
+
+      it { expect(page).to have_content(trackings.first&.id, wait: 5) }
+    end
+
+    context "when email is already taken" do
+      before do
+        visit "/"
+        find(".ant-btn", text: "Sign up").click
+        find(:xpath, "/html/body/div/div/div[2]/div/div/form/div[1]/div/div[2]/div/div/input").click.fill_in(with: user.name)
+        find(:xpath, "/html/body/div/div/div[2]/div/div/form/div[2]/div/div[2]/div/div/input").click.fill_in(with: user.email)
+        find(:xpath, "/html/body/div/div/div[2]/div/div/form/div[3]/div/div[2]/div/div/span/input").click.fill_in(with: user.password)
+        find(:xpath, "/html/body/div/div/div[2]/div/div/form/div[4]/div/div[2]/div/div/span/input").click.fill_in(with: user.password)
+        find(".ant-btn", text: "Submit").click
+      end
+
+      it { expect(page).to have_content("Registration unsuccessful", wait: 5) }
+      it { expect(page).to have_content("E-Mail has already been taken", wait: 5) }
+    end
+
+    context "when password has not a valid format" do
+      before do
+        visit "/"
+        find(".ant-btn", text: "Sign up").click
+        find(:xpath, "/html/body/div/div/div[2]/div/div/form/div[1]/div/div[2]/div/div/input").click.fill_in(with: user.name)
+        find(:xpath, "/html/body/div/div/div[2]/div/div/form/div[2]/div/div[2]/div/div/input").click.fill_in(with: user.email)
+        find(:xpath, "/html/body/div/div/div[2]/div/div/form/div[3]/div/div[2]/div/div/span/input").click.fill_in(with: "notavalidpassword")
+        sleep 1
+      end
+
+      it { expect(page).to have_content("Password must be at least 6 characters long, have at least 1 number, 1 uppercase letter and 1 special character (@$!%*?&-)", wait: 5) }
+    end
+
+    context "when password and confirmation of password do NOT match" do
+      before do
+        visit "/"
+        find(".ant-btn", text: "Sign up").click
+        find(:xpath, "/html/body/div/div/div[2]/div/div/form/div[1]/div/div[2]/div/div/input").click.fill_in(with: user.name)
+        find(:xpath, "/html/body/div/div/div[2]/div/div/form/div[2]/div/div[2]/div/div/input").click.fill_in(with: user.email)
+        find(:xpath, "/html/body/div/div/div[2]/div/div/form/div[3]/div/div[2]/div/div/span/input").click.fill_in(with: user.password)
+        find(:xpath, "/html/body/div/div/div[2]/div/div/form/div[4]/div/div[2]/div/div/span/input").click.fill_in(with: "#{user.password}test")
+        find(".ant-btn", text: "Submit").click
+      end
+
+      it { expect(page).to have_content("The two passwords that you entered do not match!", wait: 5) }
+    end
+  end
+
   describe "Buttons to sort the items in a certain order" do
     before do
       visit "/"

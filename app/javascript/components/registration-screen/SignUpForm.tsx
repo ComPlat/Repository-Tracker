@@ -54,7 +54,7 @@ export const SignUpForm = () => {
         if (response.email[0] === 'has already been taken') {
           Notification('bottomRight', 'Registration unsuccessful', 'E-Mail has already been taken.');
         } else {
-          Notification('bottomRight', 'Registration successful', 'You have successfully signed up.');
+          Notification('bottomRight', 'Registration successful', 'You have successfully signed up. You will be redirected to the main page.');
           setInterval(() => {
             setRegister(false);
           }, 3_000);
