@@ -1,6 +1,9 @@
 import {
   DateTime,
 } from './DateTime';
+import {
+  getUserFromLocalStorage,
+} from './LocalStorageHelper';
 
 export type Metadata = {
   [p: string]: Metadata | number | string | null,
@@ -17,13 +20,16 @@ export type Tracking = {
   tracking_item_name: string,
 };
 
-const url = '/api/v1/trackings';
-
 const getTrackings = async () => {
-  return await fetch(url).then(async (response: Response) => {
+  const user = getUserFromLocalStorage();
+
+  return await fetch('/api/v1/trackings', {
+    headers: {
+      Authorization: `Bearer ${user.token.access_token}`,
+    },
+    method: 'GET',
+  }).then(async (response) => {
     return await response.json();
-  }).catch((error) => {
-    return error;
   });
 };
 
@@ -34,12 +40,10 @@ const trackingItemAsObject = (tracking: Tracking): Tracking => {
   });
 };
 
-export const getTrackingItems = async () => {
+export const TrackingItems = async () => {
   return await getTrackings().then(async (trackings: Tracking[]) => {
     return trackings.map(async (tracking) => {
       return trackingItemAsObject(tracking);
     });
-  }).catch((error) => {
-    return error;
   });
 };

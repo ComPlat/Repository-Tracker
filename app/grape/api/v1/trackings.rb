@@ -4,9 +4,7 @@ module API::V1
 
     helpers Doorkeeper::Grape::Helpers
 
-    # rubocop:disable Style/GlobalVars
-    before { doorkeeper_authorize! unless $without_auth }
-    # rubocop:enable Style/GlobalVars
+    before { doorkeeper_authorize! }
 
     namespace :trackings do
       desc "Return list of trackings"

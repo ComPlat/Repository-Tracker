@@ -1,7 +1,4 @@
 module AuthHelper
-  EMAIL = "tobias.vetter@cleanercode.de"
-  PASSWORD = "verysecure"
-
   def register(name, email, password)
     @register ||= -> {
       post "/users",
@@ -12,7 +9,6 @@ module AuthHelper
 
   def login(email, password)
     post "/oauth/token",
-      headers: {"Content-Type": "application/json"},
       params: {
         grant_type: "password",
         email:,

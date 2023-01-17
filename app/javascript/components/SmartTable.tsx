@@ -15,18 +15,30 @@ import type {
   TableProps,
 } from 'antd/es/table';
 import React, {
+  useContext,
   useEffect,
   useState,
 } from 'react';
 import {
+  UserContext,
+} from '../contexts/UserContext';
+import {
+  hasTokenExpired,
+  RefreshToken,
+} from '../helpers/Authentication';
+import {
   FilterObjects,
 } from '../helpers/FilterObjects';
+import {
+  getTokenFromLocalStorage,
+  storeUserInLocalStorage,
+} from '../helpers/LocalStorageHelper';
 import type {
   Tracking,
-} from '../helpers/getTrackingItems';
+} from '../helpers/TrackingItems';
 import {
-  getTrackingItems,
-} from '../helpers/getTrackingItems';
+  TrackingItems,
+} from '../helpers/TrackingItems';
 import {
   AutoCompleteSearch,
 } from './AutoCompleteSearch';
@@ -76,15 +88,38 @@ const SmartTable: React.FC = () => {
     setTrackingItems,
   ] = useState<Tracking[]>([]);
 
+  const {
+    user,
+  } = useContext(UserContext);
+
+  const setAllTrackingItems = async () => {
+    await TrackingItems().then(async (item) => {
+      setTrackingItems(await Promise.all(item));
+    });
+  };
+
   useEffect(() => {
     const setTrackingsToState = async () => {
-      await getTrackingItems().then(async (item) => {
-        setTrackingItems(await Promise.all(item));
-      });
+      if (user === null) {
+        setTrackingItems([]);
+      } else if (hasTokenExpired()) {
+        const token = getTokenFromLocalStorage();
+
+        storeUserInLocalStorage({
+          email: user.email,
+          token: await RefreshToken(token),
+        });
+
+        await setAllTrackingItems();
+      } else {
+        await setAllTrackingItems();
+      }
     };
 
     void setTrackingsToState();
-  }, []);
+  }, [
+    user,
+  ]);
 
   const handleSizeChange = (event: RadioChangeEvent) => {
     setSize(event.target.value);
