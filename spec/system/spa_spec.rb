@@ -17,7 +17,6 @@ RSpec.describe "SPA" do
     freeze_time
 
     access_token
-    trackings
     time
   end
 
