@@ -20,3 +20,6 @@ Rails:
     - bin/bundle
 RSpec:
   Enabled: true
+
+RSpec/MultipleMemoizedHelpers:
+  Max: 6
