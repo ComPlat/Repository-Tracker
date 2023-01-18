@@ -63,6 +63,8 @@ export const RegisterForm = () => {
     }
   };
 
+  const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&-])[A-Za-z\d@$!%*?&-]{6,}$/u;
+
   return (
     <div>
       <Title
@@ -126,7 +128,7 @@ export const RegisterForm = () => {
           rules={[
             {
               message: 'Password must be at least 6 characters long, have at least 1 number, 1 uppercase letter and 1 special character (@$!%*?&-)',
-              pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&-])[A-Za-z\d@$!%*?&-]{6,}$/u,
+              pattern: passwordPattern,
             },
             {
               required: true,
