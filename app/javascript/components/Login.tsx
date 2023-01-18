@@ -1,6 +1,7 @@
 import {
   Form,
   notification,
+  Space,
 } from 'antd';
 import type {
   NotificationPlacement,
@@ -22,25 +23,25 @@ import {
 import {
   RevokeToken,
   Token,
-} from '../helpers/Authentication';
+} from '../helpers/AuthenticationHelper';
 import {
   getTokenFromLocalStorage,
   storeUserInLocalStorage,
 } from '../helpers/LocalStorageHelper';
 import {
   LoginButton,
-} from './login-screen/LoginButton';
+} from './login/LoginButton';
 import {
   LoginForm,
-} from './login-screen/LoginForm';
+} from './login/LoginForm';
 import {
   LogoutButton,
-} from './login-screen/LogoutButton';
+} from './login/LogoutButton';
 import {
   RegisterButton,
-} from './registration-screen/RegisterButton';
+} from './registration/RegisterButton';
 
-export const LoginScreen = () => {
+export const Login = () => {
   const [
     api,
     contextHolder,
@@ -65,7 +66,7 @@ export const LoginScreen = () => {
     api,
   ]);
 
-  const Logout = useCallback(async () => {
+  const LogoutFromSystem = useCallback(async () => {
     const token = getTokenFromLocalStorage();
 
     if (user !== null) {
@@ -80,7 +81,7 @@ export const LoginScreen = () => {
     user,
   ]);
 
-  const Login = async (email: string, password: string) => {
+  const LoginIntoSystem = async (email: string, password: string) => {
     const token = await Token(email, password);
     const userData: UserType = {
       email,
@@ -106,24 +107,21 @@ export const LoginScreen = () => {
         }}
         name='normal_login'
         onFinish={async (value) => {
-          await Login(value.email, value.password);
+          await LoginIntoSystem(value.email, value.password);
         }}
       >
-        <div style={{
-          display: 'flex',
-          gap: '1rem',
-          justifyContent: 'space-between',
-        }}
-        >
+        <Space size='middle'>
           {user === null ? <LoginForm /> : <Title level={5}>{user.email}</Title>}
           <Form.Item>
-            {user === null ? <LoginButton /> : <LogoutButton onClick={Logout} />}
+            {user === null ? <LoginButton /> : <LogoutButton onClick={LogoutFromSystem} />}
           </Form.Item>
-          {user === null ? <RegisterButton onClick={() => {
-            setRegister(true);
-          }}
-          /> : null}
-        </div>
+          <Form.Item>
+            {user === null ? <RegisterButton onClick={() => {
+              setRegister(true);
+            }}
+            /> : null}
+          </Form.Item>
+        </Space>
       </Form>
     </>
   );

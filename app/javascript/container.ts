@@ -19,7 +19,12 @@ const clientId = (() => {
   return result;
 })();
 
+const csrfToken = (() => {
+  return document.querySelector('[name=csrf-token]')?.getAttribute('content') as string;
+})();
+
 export {
   container,
   clientId,
+  csrfToken,
 };

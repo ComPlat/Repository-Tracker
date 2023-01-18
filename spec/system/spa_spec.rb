@@ -1,4 +1,6 @@
 RSpec.describe "SPA" do
+  include SpaHelper
+
   let(:trackings) do
     [create(:tracking, :with_required_dependencies, :with_required_attributes,
       from_trackable_system: create(:trackable_system, :with_required_attributes,
@@ -75,9 +77,7 @@ RSpec.describe "SPA" do
   describe "Failed login" do
     before do
       visit "/"
-      find(:xpath, "/html/body/div/div/div[1]/form/div/div[1]/div[1]/div/div/div/div").click.fill_in(with: "notauser@example.com")
-      find(:xpath, "/html/body/div/div/div[1]/form/div/div[1]/div[2]/div/div/div/div").click.fill_in(with: "notapassword")
-      find(:xpath, "/html/body/div/div/div[1]/form/div/div[2]/div/div/div/div").click
+      login_with_wrong_credentials
     end
 
     it { expect(page).to have_content("Login failed", wait: 5) }
@@ -88,12 +88,7 @@ RSpec.describe "SPA" do
     context "when registration is successful" do
       before do
         visit "/"
-        find(".ant-btn", text: "Sign up").click
-        find(:xpath, "/html/body/div/div/div[2]/div/div/form/div[1]/div/div[2]/div/div/input").click.fill_in(with: "New User")
-        find(:xpath, "/html/body/div/div/div[2]/div/div/form/div[2]/div/div[2]/div/div/input").click.fill_in(with: "newuser@exmaple.com")
-        find(:xpath, "/html/body/div/div/div[2]/div/div/form/div[3]/div/div[2]/div/div/span/input").click.fill_in(with: "SecurePassword123-")
-        find(:xpath, "/html/body/div/div/div[2]/div/div/form/div[4]/div/div[2]/div/div/span/input").click.fill_in(with: "SecurePassword123-")
-        find(".ant-btn", text: "Submit").click
+        registration_new_user
       end
 
       it { expect(page).to have_content("Registration successful", wait: 5) }
@@ -103,31 +98,19 @@ RSpec.describe "SPA" do
     context "when registration is successful and user can login" do
       before do
         visit "/"
-        find(".ant-btn", text: "Sign up").click
-        find(:xpath, "/html/body/div/div/div[2]/div/div/form/div[1]/div/div[2]/div/div/input").click.fill_in(with: "New User")
-        find(:xpath, "/html/body/div/div/div[2]/div/div/form/div[2]/div/div[2]/div/div/input").click.fill_in(with: "newuser@exmaple.com")
-        find(:xpath, "/html/body/div/div/div[2]/div/div/form/div[3]/div/div[2]/div/div/span/input").click.fill_in(with: "SecurePassword123-")
-        find(:xpath, "/html/body/div/div/div[2]/div/div/form/div[4]/div/div[2]/div/div/span/input").click.fill_in(with: "SecurePassword123-")
-        find(".ant-btn", text: "Submit").click
+        registration_new_user
         sleep 3
-        find(:xpath, "/html/body/div/div/div[1]/form/div/div[1]/div[1]/div/div/div/div").click.fill_in(with: user.email)
-        find(:xpath, "/html/body/div/div/div[1]/form/div/div[1]/div[2]/div/div/div/div").click.fill_in(with: user.password)
-        find(:xpath, "/html/body/div/div/div[1]/form/div/div[2]/div/div/div/div").click
-        find(".ant-notification-notice-close").click
+        login_with_correct_credentials
+        close_notification
       end
 
-      it { expect(page).to have_content(trackings.map { |tracking| tracking.id }.min, wait: 5) }
+      it { expect(page).to have_content(trackings.pluck(:id).min, wait: 5) }
     end
 
     context "when email is already taken" do
       before do
         visit "/"
-        find(".ant-btn", text: "Sign up").click
-        find(:xpath, "/html/body/div/div/div[2]/div/div/form/div[1]/div/div[2]/div/div/input").click.fill_in(with: user.name)
-        find(:xpath, "/html/body/div/div/div[2]/div/div/form/div[2]/div/div[2]/div/div/input").click.fill_in(with: user.email)
-        find(:xpath, "/html/body/div/div/div[2]/div/div/form/div[3]/div/div[2]/div/div/span/input").click.fill_in(with: user.password)
-        find(:xpath, "/html/body/div/div/div[2]/div/div/form/div[4]/div/div[2]/div/div/span/input").click.fill_in(with: user.password)
-        find(".ant-btn", text: "Submit").click
+        registration_with_existing_user
       end
 
       it { expect(page).to have_content("Registration unsuccessful", wait: 5) }
@@ -137,11 +120,7 @@ RSpec.describe "SPA" do
     context "when password has not a valid format" do
       before do
         visit "/"
-        find(".ant-btn", text: "Sign up").click
-        find(:xpath, "/html/body/div/div/div[2]/div/div/form/div[1]/div/div[2]/div/div/input").click.fill_in(with: user.name)
-        find(:xpath, "/html/body/div/div/div[2]/div/div/form/div[2]/div/div[2]/div/div/input").click.fill_in(with: user.email)
-        find(:xpath, "/html/body/div/div/div[2]/div/div/form/div[3]/div/div[2]/div/div/span/input").click.fill_in(with: "notavalidpassword")
-        sleep 1
+        registration_password_not_valid
       end
 
       it { expect(page).to have_content("Password must be at least 6 characters long, have at least 1 number, 1 uppercase letter and 1 special character (@$!%*?&-)", wait: 5) }
@@ -150,12 +129,7 @@ RSpec.describe "SPA" do
     context "when password and confirmation of password do NOT match" do
       before do
         visit "/"
-        find(".ant-btn", text: "Sign up").click
-        find(:xpath, "/html/body/div/div/div[2]/div/div/form/div[1]/div/div[2]/div/div/input").click.fill_in(with: user.name)
-        find(:xpath, "/html/body/div/div/div[2]/div/div/form/div[2]/div/div[2]/div/div/input").click.fill_in(with: user.email)
-        find(:xpath, "/html/body/div/div/div[2]/div/div/form/div[3]/div/div[2]/div/div/span/input").click.fill_in(with: user.password)
-        find(:xpath, "/html/body/div/div/div[2]/div/div/form/div[4]/div/div[2]/div/div/span/input").click.fill_in(with: "#{user.password}test")
-        find(".ant-btn", text: "Submit").click
+        registration_password_invalid_confirmation
       end
 
       it { expect(page).to have_content("The two passwords that you entered do not match!", wait: 5) }
@@ -165,16 +139,14 @@ RSpec.describe "SPA" do
   describe "Buttons to sort the items in a certain order" do
     before do
       visit "/"
-      find(:xpath, "/html/body/div/div/div[1]/form/div/div[1]/div[1]/div/div/div/div").click.fill_in(with: user.email)
-      find(:xpath, "/html/body/div/div/div[1]/form/div/div[1]/div[2]/div/div/div/div").click.fill_in(with: user.password)
-      find(:xpath, "/html/body/div/div/div[1]/form/div/div[2]/div/div/div/div").click
-      find(".ant-notification-notice-close").click
+      login_with_correct_credentials
+      close_notification
     end
 
     describe "Ascending order" do
       it do
         first(".ant-table-column-title", text: "ID").click
-        expect(page).to have_content(trackings.map { |tracking| tracking.id }.min, wait: 5)
+        expect(page).to have_content(trackings.pluck(:id).min, wait: 5)
       end
 
       it do
@@ -194,7 +166,7 @@ RSpec.describe "SPA" do
 
       it do
         first(".ant-table-column-title", text: "Status").click
-        expect(page).to have_content(trackings.map { |tracking| tracking.status }.max, wait: 5)
+        expect(page).to have_content(trackings.pluck(:status).min, wait: 5)
       end
 
       it do
@@ -216,7 +188,7 @@ RSpec.describe "SPA" do
     describe "Descending order" do
       it do
         first(".ant-table-column-title", text: "ID").click.click
-        expect(page).to have_content(trackings.map { |tracking| tracking.id }.max, wait: 5)
+        expect(page).to have_content(trackings.pluck(:id).max, wait: 5)
       end
 
       it do
@@ -237,7 +209,7 @@ RSpec.describe "SPA" do
 
       it do
         first(".ant-table-column-title", text: "Status").click.click
-        expect(page).to have_content(trackings.map { |tracking| tracking.status }.max, wait: 5)
+        expect(page).to have_content(trackings.pluck(:status).max, wait: 5)
       end
 
       it do
@@ -260,18 +232,14 @@ RSpec.describe "SPA" do
   describe "Column search" do
     before do
       visit "/"
-      find(:xpath, "/html/body/div/div/div[1]/form/div/div[1]/div[1]/div/div/div/div").click.fill_in(with: user.email)
-      find(:xpath, "/html/body/div/div/div[1]/form/div/div[1]/div[2]/div/div/div/div").click.fill_in(with: user.password)
-      find(:xpath, "/html/body/div/div/div[1]/form/div/div[2]/div/div/div/div").click
-      find(".ant-notification-notice-close").click
+      login_with_correct_credentials
+      close_notification
     end
 
     context "when search for 'chemotion_electronic_laboratory_notebook' in 'From' column" do
       before do
-        first(".ant-table-filter-column", text: "From").find(".ant-table-filter-trigger").click
-        find(".ant-select-selection-overflow").click.fill_in(with: "chemotion_electronic_laboratory_notebook")
-        first(".ant-select-item-option-content").click
-        find(:xpath, "/html").click
+        column_selection_search("From", "chemotion_electronic_laboratory_notebook")
+        click_on_empty_space
       end
 
       it do
@@ -283,10 +251,8 @@ RSpec.describe "SPA" do
 
     context "when search for 'radar4kit' in 'To' column" do
       before do
-        first(".ant-table-filter-column", text: "To").find(".ant-table-filter-trigger").click
-        find(".ant-select-selection-overflow").click.fill_in(with: "radar4kit")
-        first(".ant-select-item-option-content").click
-        find(:xpath, "/html").click
+        column_selection_search("To", "radar4kit")
+        click_on_empty_space
       end
 
       it do
@@ -298,10 +264,8 @@ RSpec.describe "SPA" do
 
     context "when search for 'draft' in 'Status' column" do
       before do
-        first(".ant-table-filter-column", text: "Status").find(".ant-table-filter-trigger").click
-        find(".ant-select-selection-overflow").click.fill_in(with: "draft")
-        first(".ant-select-item-option-content").click
-        find(:xpath, "/html").click
+        column_selection_search("Status", "draft")
+        click_on_empty_space
       end
 
       it do
@@ -313,10 +277,8 @@ RSpec.describe "SPA" do
 
     context "when search for 'name1' in 'Tracker Number' column" do
       before do
-        first(".ant-table-filter-column", text: "Tracker Number").find(".ant-table-filter-trigger").click
-        find(".ant-select-selection-overflow").click.fill_in(with: "name1")
-        first(".ant-select-item-option-content").click
-        find(:xpath, "/html").click
+        column_selection_search("Tracker Number", "name1")
+        click_on_empty_space
       end
 
       it do
@@ -328,19 +290,11 @@ RSpec.describe "SPA" do
 
     context "when search for 'chemotion_electronic_laboratory_notebook', 'radar4kit', 'draft' and 'name1' together" do
       before do
-        first(".ant-table-filter-column", text: "From").find(".ant-table-filter-trigger").click
-        find(".ant-select-selection-overflow").click.fill_in(with: "chemotion_electronic_laboratory_notebook")
-        first(".ant-select-item-option-content").click
-        first(".ant-table-filter-column", text: "To").find(".ant-table-filter-trigger").click
-        find(".ant-select-selection-overflow").click.fill_in(with: "radar4kit")
-        first(".ant-select-item-option-content").click
-        first(".ant-table-filter-column", text: "Status").find(".ant-table-filter-trigger").click
-        find(".ant-select-selection-overflow").click.fill_in(with: "draft")
-        first(".ant-select-item-option-content").click
-        first(".ant-table-filter-column", text: "Tracker Number").find(".ant-table-filter-trigger").click
-        find(".ant-select-selection-overflow").click.fill_in(with: "name1")
-        first(".ant-select-item-option-content").click
-        find(:xpath, "/html").click
+        column_selection_search("From", "chemotion_electronic_laboratory_notebook")
+        column_selection_search("To", "radar4kit")
+        column_selection_search("Status", "draft")
+        column_selection_search("Tracker Number", "name1")
+        click_on_empty_space
       end
 
       it do
@@ -369,14 +323,12 @@ RSpec.describe "SPA" do
     end
 
     context "when first owner is selected for search" do
-      let(:owner_name) { first(".ant-select-item-option-content").text }
-
       before do
         first(".ant-table-filter-column", text: "Owner").find(".ant-table-filter-trigger").click
         find(".ant-select-selection-overflow").click
         owner_name
         first(".ant-select-item-option-content").click
-        find(:xpath, "/html").click
+        click_on_empty_space
       end
 
       it do
@@ -393,15 +345,13 @@ RSpec.describe "SPA" do
     end
 
     it do
-      find(".ant-table-small")
-      find(".ant-radio-group", text: "Middle").click
+      click_on_size_button("Middle")
 
       expect(page).to have_selector(".ant-table-middle", wait: 5)
     end
 
     it do
-      find(".ant-table-small")
-      find(".ant-radio-group", text: "Large").click
+      click_on_size_button("Large")
 
       expect(page).to have_none_of_selectors(".ant-table-small", wait: 5)
     end
@@ -410,10 +360,8 @@ RSpec.describe "SPA" do
   describe "Pagination" do
     before do
       visit "/"
-      find(:xpath, "/html/body/div/div/div[1]/form/div/div[1]/div[1]/div/div/div/div").click.fill_in(with: user.email)
-      find(:xpath, "/html/body/div/div/div[1]/form/div/div[1]/div[2]/div/div/div/div").click.fill_in(with: user.password)
-      find(:xpath, "/html/body/div/div/div[1]/form/div/div[2]/div/div/div/div").click
-      find(".ant-notification-notice-close").click
+      login_with_correct_credentials
+      close_notification
     end
 
     describe "Pagination items" do
@@ -440,7 +388,7 @@ RSpec.describe "SPA" do
         find(".ant-pagination-item-2").click
         find(".ant-pagination-prev").click
 
-        expect(page).to have_content(trackings.map { |tracking| tracking.id }.min, wait: 5)
+        expect(page).to have_content(trackings.pluck(:id).min, wait: 5)
       end
     end
 

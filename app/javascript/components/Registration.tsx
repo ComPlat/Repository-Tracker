@@ -1,9 +1,9 @@
 import React from 'react';
 import {
-  SignUpForm,
-} from './registration-screen/SignUpForm';
+  RegisterForm,
+} from './registration/RegisterForm';
 
-export const RegistrationScreen = () => {
+export const Registration = () => {
   return (
     <div style={{
       alignItems: 'center',
@@ -11,7 +11,7 @@ export const RegistrationScreen = () => {
       justifyContent: 'center',
     }}
     >
-      <SignUpForm />
+      <RegisterForm />
     </div>
   );
 };

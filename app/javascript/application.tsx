@@ -1,4 +1,6 @@
 import {
+  Col,
+  Row,
   Typography,
 } from 'antd';
 import React, {
@@ -10,12 +12,18 @@ import {
   createRoot,
 } from 'react-dom/client';
 import {
-  LoginScreen,
-} from './components/LoginScreen';
+  Login,
+} from './components/Login';
 import {
-  RegistrationScreen,
-} from './components/RegistrationScreen';
+  Registration,
+} from './components/Registration';
 import SmartTable from './components/SmartTable';
+import {
+  Header,
+} from './components/custom-styling/Header';
+import {
+  Padding,
+} from './components/custom-styling/Padding';
 import {
   container,
 } from './container';
@@ -34,7 +42,7 @@ const {
   Title,
 } = Typography;
 
-const App = () => {
+const App: React.FC = () => {
   const [
     user,
     setUser,
@@ -75,26 +83,17 @@ const App = () => {
   return (
     <UserContext.Provider value={userProviderValue}>
       <RegisterContext.Provider value={registerProviderValue}>
-        <div style={{
-          padding: '1rem',
-        }}
-        >
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-          }}
-          >
-            <Title>Repository-Tracker</Title>
-            <LoginScreen />
-          </div>
-          <div style={{
-            backgroundColor: 'white',
-            padding: '2rem',
-          }}
-          >
-            {register ? <RegistrationScreen /> : <SmartTable />}
-          </div>
-        </div>
+        <Padding>
+          <Header>
+            <Row align='middle' justify='space-between'>
+              <Col><Title>Repository-Tracker</Title></Col>
+              <Col><Login /></Col>
+            </Row>
+          </Header>
+          <Row>
+            {register ? <Registration /> : <SmartTable />}
+          </Row>
+        </Padding>
       </RegisterContext.Provider>
     </UserContext.Provider>
   );

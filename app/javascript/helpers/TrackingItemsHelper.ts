@@ -1,6 +1,6 @@
 import {
-  DateTime,
-} from './DateTime';
+  DateTimeHelper,
+} from './DateTimeHelper';
 import {
   getUserFromLocalStorage,
 } from './LocalStorageHelper';
@@ -35,12 +35,12 @@ const getTrackings = async () => {
 
 const trackingItemAsObject = (tracking: Tracking): Tracking => {
   return Object.assign(tracking, {
-    date_time: DateTime(tracking.date_time),
+    date_time: DateTimeHelper(tracking.date_time),
     metadata: JSON.stringify(tracking.metadata),
   });
 };
 
-export const TrackingItems = async () => {
+export const TrackingItemsHelper = async () => {
   return await getTrackings().then(async (trackings: Tracking[]) => {
     return trackings.map(async (tracking) => {
       return trackingItemAsObject(tracking);

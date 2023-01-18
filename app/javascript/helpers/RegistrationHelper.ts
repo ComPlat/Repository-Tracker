@@ -1,3 +1,7 @@
+import {
+  csrfToken,
+} from '../container';
+
 export const Register = async (email: string, password: string) => {
   const response = await fetch('/users', {
     body: JSON.stringify({
@@ -10,7 +14,7 @@ export const Register = async (email: string, password: string) => {
     }),
     headers: {
       'Content-Type': 'application/json',
-      'X-CSRF-TOKEN': `${document.querySelector('[name=csrf-token]')?.getAttribute('content')}`,
+      'X-CSRF-TOKEN': csrfToken,
     },
     method: 'POST',
   });

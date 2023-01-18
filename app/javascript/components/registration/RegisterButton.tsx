@@ -11,7 +11,7 @@ export const RegisterButton = ({
       type='default'
       {...buttonProps}
     >
-      Sign up
+      Register
     </Button>
   );
 };

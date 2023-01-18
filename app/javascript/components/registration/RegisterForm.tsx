@@ -17,7 +17,7 @@ import {
 } from '../../contexts/RegisterContext';
 import {
   Register,
-} from '../../helpers/Registration';
+} from '../../helpers/RegistrationHelper';
 
 const layout = {
   labelCol: {
@@ -28,7 +28,7 @@ const layout = {
   },
 };
 
-export const SignUpForm = () => {
+export const RegisterForm = () => {
   const [
     api,
     contextHolder,
