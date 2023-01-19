@@ -110,18 +110,27 @@ export const Login = () => {
           await LoginIntoSystem(value.email, value.password);
         }}
       >
-        <Space size='middle'>
-          {user === null ? <LoginForm /> : <Title level={5}>{user.email}</Title>}
-          <Form.Item>
-            {user === null ? <LoginButton /> : <LogoutButton onClick={LogoutFromSystem} />}
-          </Form.Item>
-          <Form.Item>
-            {user === null ? <RegisterButton onClick={() => {
-              setRegister(true);
-            }}
-            /> : null}
-          </Form.Item>
-        </Space>
+        {(() => {
+          if (user === null) {
+            return (
+              <Space.Compact>
+                <LoginForm />
+                <LoginButton />
+                <RegisterButton onClick={() => {
+                  setRegister(true);
+                }}
+                />
+              </Space.Compact>
+            );
+          } else {
+            return (
+              <Space size='large'>
+                <Title level={5}>{user.email}</Title>
+                <LogoutButton onClick={LogoutFromSystem} />
+              </Space>
+            );
+          }
+        })()}
       </Form>
     </>
   );

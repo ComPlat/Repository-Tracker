@@ -5,17 +5,13 @@ import {
 import {
   Form,
   Input,
+  Space,
 } from 'antd';
 import React from 'react';
 
 export const LoginForm = () => {
   return (
-    <div style={{
-      display: 'flex',
-      gap: '1rem',
-      justifyContent: 'space-between',
-    }}
-    >
+    <Space.Compact>
       <Form.Item
         name='email'
         rules={[
@@ -45,6 +41,6 @@ export const LoginForm = () => {
           type='password'
         />
       </Form.Item>
-    </div>
+    </Space.Compact>
   );
 };

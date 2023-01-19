@@ -85,12 +85,12 @@ const App: React.FC = () => {
       <RegisterContext.Provider value={registerProviderValue}>
         <Padding>
           <Header>
-            <Row align='middle' justify='space-between'>
+            <Row justify='space-between'>
               <Col><Title>Repository-Tracker</Title></Col>
               <Col><Login /></Col>
             </Row>
           </Header>
-          <Row>
+          <Row justify='center'>
             {register ? <Registration /> : <SmartTable />}
           </Row>
         </Padding>

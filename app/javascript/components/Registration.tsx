@@ -1,3 +1,6 @@
+import {
+  Space,
+} from 'antd';
 import React from 'react';
 import {
   RegisterForm,
@@ -5,13 +8,8 @@ import {
 
 export const Registration = () => {
   return (
-    <div style={{
-      alignItems: 'center',
-      display: 'flex',
-      justifyContent: 'center',
-    }}
-    >
+    <Space>
       <RegisterForm />
-    </div>
+    </Space>
   );
 };

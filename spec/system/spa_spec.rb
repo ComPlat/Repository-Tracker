@@ -366,12 +366,14 @@ RSpec.describe "SPA" do
 
     describe "Pagination items" do
       it do
+        find(".ant-pagination-item-1").click
         find(".ant-pagination-item-2").click
 
         expect(page).to have_content(trackings[10].id, wait: 5)
       end
 
       it do
+        find(".ant-pagination-item-1").click
         find(".ant-pagination-item-ellipsis").click
         find(".ant-pagination-item-8").click
 
@@ -379,12 +381,14 @@ RSpec.describe "SPA" do
       end
 
       it do
+        find(".ant-pagination-item-1").click
         find(".ant-pagination-next").click
 
         expect(page).to have_content(trackings[10].id, wait: 5)
       end
 
       it do
+        find(".ant-pagination-item-1").click
         find(".ant-pagination-item-2").click
         find(".ant-pagination-prev").click
 
@@ -399,6 +403,7 @@ RSpec.describe "SPA" do
 
       it do
         find(".ant-select-item-option-content", text: "20 / page").click
+        find(".ant-pagination-item-1").click
         scroll_to(:bottom)
 
         expect(page).to have_content(trackings[19].id, wait: 5)
@@ -406,6 +411,7 @@ RSpec.describe "SPA" do
 
       it do
         find(".ant-select-item-option-content", text: "50 / page").click
+        find(".ant-pagination-item-1").click
         scroll_to(:bottom)
 
         expect(page).to have_content(trackings[49].id, wait: 5)
@@ -413,6 +419,7 @@ RSpec.describe "SPA" do
 
       it do
         find(".ant-select-item-option-content", text: "100 / page").click
+        find(".ant-pagination-item-1").click
         scroll_to(:bottom)
 
         expect(page).to have_content(trackings[99].id, wait: 5)
