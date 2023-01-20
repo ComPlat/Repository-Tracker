@@ -25,20 +25,20 @@ import {
 import {
   hasTokenExpired,
   RefreshToken,
-} from '../helpers/Authentication';
+} from '../helpers/AuthenticationHelper';
 import {
-  FilterObjects,
-} from '../helpers/FilterObjects';
+  FilterObjectsHelper,
+} from '../helpers/FilterObjectsHelper';
 import {
   getTokenFromLocalStorage,
   storeUserInLocalStorage,
 } from '../helpers/LocalStorageHelper';
 import type {
   Tracking,
-} from '../helpers/TrackingItems';
+} from '../helpers/TrackingItemsHelper';
 import {
-  TrackingItems,
-} from '../helpers/TrackingItems';
+  TrackingItemsHelper,
+} from '../helpers/TrackingItemsHelper';
 import {
   AutoCompleteSearch,
 } from './AutoCompleteSearch';
@@ -93,7 +93,7 @@ const SmartTable: React.FC = () => {
   } = useContext(UserContext);
 
   const setAllTrackingItems = async () => {
-    await TrackingItems().then(async (item) => {
+    await TrackingItemsHelper().then(async (item) => {
       setTrackingItems(await Promise.all(item));
     });
   };
@@ -159,7 +159,7 @@ const SmartTable: React.FC = () => {
       },
       filteredValue: fromSelection.length === 0 ? null : ownerSelection && fromSelection,
       filterIcon: CustomFilterIcon(fromSelection.length !== 0),
-      filters: FilterObjects(trackingItems.map((item) => {
+      filters: FilterObjectsHelper(trackingItems.map((item) => {
         return item.from_trackable_system_name;
       })),
       key: 'from',
@@ -186,7 +186,7 @@ const SmartTable: React.FC = () => {
       },
       filteredValue: toSelection.length === 0 ? null : ownerSelection && toSelection,
       filterIcon: CustomFilterIcon(toSelection.length !== 0),
-      filters: FilterObjects(trackingItems.map((item) => {
+      filters: FilterObjectsHelper(trackingItems.map((item) => {
         return item.to_trackable_system_name;
       })),
       key: 'to',
@@ -223,7 +223,7 @@ const SmartTable: React.FC = () => {
       },
       filteredValue: statusSelection.length === 0 ? null : ownerSelection && statusSelection,
       filterIcon: CustomFilterIcon(statusSelection.length !== 0),
-      filters: FilterObjects(trackingItems.map((item) => {
+      filters: FilterObjectsHelper(trackingItems.map((item) => {
         return item.status;
       })),
       key: 'status',

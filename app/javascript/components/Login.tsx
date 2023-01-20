@@ -1,11 +1,7 @@
 import {
-  LockOutlined,
-  UserOutlined,
-} from '@ant-design/icons';
-import {
   Form,
-  Input,
   notification,
+  Space,
 } from 'antd';
 import type {
   NotificationPlacement,
@@ -15,6 +11,9 @@ import React, {
   useCallback,
   useContext,
 } from 'react';
+import {
+  RegisterContext,
+} from '../contexts/RegisterContext';
 import type {
   UserType,
 } from '../contexts/UserContext';
@@ -24,60 +23,25 @@ import {
 import {
   RevokeToken,
   Token,
-} from '../helpers/Authentication';
+} from '../helpers/AuthenticationHelper';
 import {
   getTokenFromLocalStorage,
   storeUserInLocalStorage,
 } from '../helpers/LocalStorageHelper';
 import {
   LoginButton,
-} from './login-screen/LoginButton';
+} from './login/LoginButton';
+import {
+  LoginForm,
+} from './login/LoginForm';
 import {
   LogoutButton,
-} from './login-screen/LogoutButton';
+} from './login/LogoutButton';
+import {
+  RegisterButton,
+} from './registration/RegisterButton';
 
-const LoginForm = () => {
-  return (
-    <div style={{
-      display: 'flex',
-      gap: '1rem',
-      justifyContent: 'space-between',
-    }}
-    >
-      <Form.Item
-        name='email'
-        rules={[
-          {
-            message: 'Please input your E-Mail address!',
-            required: true,
-          },
-        ]}
-      >
-        <Input
-          placeholder='E-Mail address'
-          prefix={<UserOutlined className='site-form-item-icon' />}
-        />
-      </Form.Item>
-      <Form.Item
-        name='password'
-        rules={[
-          {
-            message: 'Please input your Password!',
-            required: true,
-          },
-        ]}
-      >
-        <Input
-          placeholder='Password'
-          prefix={<LockOutlined className='site-form-item-icon' />}
-          type='password'
-        />
-      </Form.Item>
-    </div>
-  );
-};
-
-export const LoginScreen = () => {
+export const Login = () => {
   const [
     api,
     contextHolder,
@@ -87,6 +51,10 @@ export const LoginScreen = () => {
     user,
     setUser,
   } = useContext(UserContext);
+
+  const {
+    setRegister,
+  } = useContext(RegisterContext);
 
   const Notification = useCallback((placement: NotificationPlacement, message: string, description: string) => {
     api.info({
@@ -98,7 +66,7 @@ export const LoginScreen = () => {
     api,
   ]);
 
-  const Logout = useCallback(async () => {
+  const LogoutFromSystem = useCallback(async () => {
     const token = getTokenFromLocalStorage();
 
     if (user !== null) {
@@ -113,7 +81,7 @@ export const LoginScreen = () => {
     user,
   ]);
 
-  const Login = async (email: string, password: string) => {
+  const LoginIntoSystem = async (email: string, password: string) => {
     const token = await Token(email, password);
     const userData: UserType = {
       email,
@@ -139,20 +107,30 @@ export const LoginScreen = () => {
         }}
         name='normal_login'
         onFinish={async (value) => {
-          await Login(value.email, value.password);
+          await LoginIntoSystem(value.email, value.password);
         }}
       >
-        <div style={{
-          display: 'flex',
-          gap: '1rem',
-          justifyContent: 'space-between',
-        }}
-        >
-          {user === null ? <LoginForm /> : <Title level={5}>{user.email}</Title>}
-          <Form.Item>
-            {user === null ? <LoginButton /> : <LogoutButton onClick={Logout} />}
-          </Form.Item>
-        </div>
+        {(() => {
+          if (user === null) {
+            return (
+              <Space.Compact>
+                <LoginForm />
+                <LoginButton />
+                <RegisterButton onClick={() => {
+                  setRegister(true);
+                }}
+                />
+              </Space.Compact>
+            );
+          } else {
+            return (
+              <Space size='large'>
+                <Title level={5}>{user.email}</Title>
+                <LogoutButton onClick={LogoutFromSystem} />
+              </Space>
+            );
+          }
+        })()}
       </Form>
     </>
   );

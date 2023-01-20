@@ -19,7 +19,24 @@ const clientId = (() => {
   return result;
 })();
 
+const csrfToken = (() => {
+  const csrfTokenElement = document.querySelector('[name=csrf-token]');
+
+  if (csrfTokenElement === null) {
+    throw new Error('Unable to find Element with [name=csrf-token]');
+  }
+
+  const contentAttribute = csrfTokenElement.getAttribute('content');
+
+  if (contentAttribute === null) {
+    throw new Error('Unable to find attribute content on Element with [name=csrf-token]');
+  }
+
+  return contentAttribute;
+})();
+
 export {
   container,
   clientId,
+  csrfToken,
 };

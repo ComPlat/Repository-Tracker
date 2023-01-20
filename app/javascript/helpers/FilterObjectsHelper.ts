@@ -1,4 +1,4 @@
-export const FilterObjects = (collection: string[]) => {
+export const FilterObjectsHelper = (collection: string[]) => {
   return collection.map((item) => {
     return {
       text: item,

@@ -2,7 +2,7 @@ const convertIsoDateStringToDate = (isoDate: string) => {
   return new Date(isoDate.replace(' ', 'T'));
 };
 
-export const DateTime = (isoDate: string) => {
+export const DateTimeHelper = (isoDate: string) => {
   return convertIsoDateStringToDate(isoDate).toLocaleString('de-DE', {
     day: '2-digit',
     hour: '2-digit',
