@@ -2,7 +2,6 @@ module AuthHelper
   def register
     @register ||= -> {
       post "/users",
-        headers: {"X-CSRF-TOKEN": "test123", "Content-Type": "application/json"},
         params: {user: {name: "name", role: "user", email: "tobias.vetter@cleanercode.de", password: "verysecure", client_id: application.uid}}, as: :json
       response.parsed_body["access_token"]
     }.call

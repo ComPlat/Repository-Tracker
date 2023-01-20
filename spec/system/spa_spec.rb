@@ -27,6 +27,7 @@ RSpec.describe "SPA" do
 
   after do
     unfreeze_time
+    ActionController::Base.allow_forgery_protection = false
   end
 
   describe "h1" do
