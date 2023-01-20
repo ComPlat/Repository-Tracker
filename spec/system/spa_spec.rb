@@ -15,6 +15,9 @@ RSpec.describe "SPA" do
   let(:time) { trackings.map { |tracking| tracking.date_time.in_time_zone(Time.now.getlocal.zone).strftime("%d.%m.%Y, %H:%M:%S") }.min }
 
   before do
+    # HINT: We use CSRF protection, which is switched off in test environments by default
+    ActionController::Base.allow_forgery_protection = true
+
     freeze_time
 
     access_token
