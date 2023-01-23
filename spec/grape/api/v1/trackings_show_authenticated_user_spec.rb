@@ -1,7 +1,5 @@
 describe API::V1::Trackings, ".show_authenticated_user" do
   # TODO: Avoid exposing whole SQL statements as error messages!
-  # TODO: Missing specs for "trackings does NOT exist + authorized(?!)"
-  # Authentication: which user is logged in, Authorization: which resources can be accessed by user
 
   describe "GET /api/v1/trackings/:id" do
     context "when tracking id exists and user is authorized" do

@@ -1,6 +1,5 @@
 describe API::V1::Trackings, ".index_authenticated_user" do
   # TODO: Implement "GET /api/v1/tracking_items/:name/trackings"
-  # TODO: Missing specs for "trackings exist + authorized", "trackings exist + NOT authorized", "trackings does NOT exist + authorized(?!)"
 
   describe "GET /api/v1/trackings/" do
     context "when trackings exist and user is authorized" do

@@ -19,9 +19,9 @@ describe API::V1::Trackings, ".create_authenticated_user" do
       let(:user) { create(:user, :with_required_attributes_as_user) }
       let(:tracking) { build(:tracking, :with_required_attributes, :with_required_dependencies) }
       let(:tracking_request) {
-        build_request(:tracking_request, :create, from_trackable_system_name:
+        build_request(:tracking_request, :create, from_trackable_system:
           create(:trackable_system, :with_required_attributes, :with_required_dependencies, user:
-            create(:user, :with_required_attributes_as_trackable_system_admin)).name)
+            create(:user, :with_required_attributes_as_trackable_system_admin)))
       }
 
       before { post "/api/v1/trackings/", params: tracking_request.merge(access_token: access_token.token) }
@@ -34,8 +34,8 @@ describe API::V1::Trackings, ".create_authenticated_user" do
       let(:user) { create(:user, :with_required_attributes_as_trackable_system_admin) }
       let(:tracking) { build(:tracking, :with_required_attributes, :with_required_dependencies) }
       let(:tracking_request) {
-        build_request(:tracking_request, :create, from_trackable_system_name:
-          create(:trackable_system, :with_required_attributes, :with_required_dependencies).name)
+        build_request(:tracking_request, :create, from_trackable_system:
+          create(:trackable_system, :with_required_attributes, :with_required_dependencies))
       }
 
       before { post "/api/v1/trackings/", params: tracking_request.merge(access_token: access_token.token) }
