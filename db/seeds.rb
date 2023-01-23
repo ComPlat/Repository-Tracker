@@ -18,8 +18,8 @@ if Rails.env.development?
   password = "VerySecurePassword1!"
 
   normal_user = User.create!(email: "user@example.com", password:, name: "User1", role: :user)
-  super_user = User.create!(email: "super@example.com", password:, name: "Super1", role: :super)
-  admin_user = User.create!(email: "admin@example.com", password:, name: "Admin1", role: :admin)
+  User.create!(email: "super@example.com", password:, name: "Super1", role: :super)
+  User.create!(email: "admin@example.com", password:, name: "Admin1", role: :admin)
 
   ts_radar4kit = TrackableSystem.create!(name: :radar4kit,
     user: User.create!(name: "radar4kit", email: "radar4@kit.de", password:, role: :trackable_system_admin))
