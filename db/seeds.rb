@@ -28,11 +28,13 @@ if Rails.env.development?
     name: "Admin1",
     role: User.roles[:admin])
 
-  ts_radar4kit = TrackableSystem.create!(name: :radar4kit, user_id: admin_user.id)
-  ts_radar4chem = TrackableSystem.create!(name: :radar4chem, user_id: admin_user.id)
-  ts_chemotion_repository = TrackableSystem.create!(name: :chemotion_repository, user_id: admin_user.id)
-  ts_chemotion_electronic_laboratory_notebook = TrackableSystem.create!(name: :chemotion_electronic_laboratory_notebook, user_id: admin_user.id)
-  ts_nmrxiv = TrackableSystem.create!(name: :nmrxiv, user_id: admin_user.id)
+  password_trackable_systems = "VerySecurePassword1!"
+
+  ts_radar4kit = TrackableSystem.create!(name: :radar4kit, user: User.create!(name: "radar4kit", email: "radar4@kit.de", password: password_trackable_systems, role: :trackable_system_admin))
+  ts_radar4chem = TrackableSystem.create!(name: :radar4chem, user: User.create!(name: "radar4chem", email: "radar4@chem.de", password: password_trackable_systems, role: :trackable_system_admin))
+  ts_chemotion_repository = TrackableSystem.create!(name: :chemotion_repository, user: User.create!(name: "chemotionrepository", email: "chemotion@reposito.ry", password: password_trackable_systems, role: :trackable_system_admin))
+  ts_chemotion_electronic_laboratory_notebook = TrackableSystem.create!(name: :chemotion_electronic_laboratory_notebook, user: User.create!(name: "chemotioneln", email: "chemotion@repository.eln", password: password_trackable_systems, role: :trackable_system_admin))
+  ts_nmrxiv = TrackableSystem.create!(name: :nmrxiv, user: User.create!(name: "nmrxiv", email: "nm@rx.iv", password: password_trackable_systems, role: :trackable_system_admin))
 
   tracking_item1 = TrackingItem.create!(name: "Tracking Item 1", user_id: normal_user.id)
   tracking_item2 = TrackingItem.create!(name: "Tracking Item 2", user_id: admin_user.id)
