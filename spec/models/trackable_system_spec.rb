@@ -76,7 +76,12 @@ describe TrackableSystem do
 
     it {
       expect { create(:trackable_system, :with_required_attributes, user: nil) }
-        .to raise_error ActiveRecord::RecordInvalid, "Validation failed: User must exist"
+        .to raise_error ActiveRecord::RecordInvalid, "Validation failed: User #{described_class::USER_INCLUSION_ERROR_MESSAGE}, User must exist"
+    }
+
+    it {
+      expect { create(:trackable_system, :with_required_attributes, user: create(:user, :with_required_attributes, role: :user)) }
+        .to raise_error ActiveRecord::RecordInvalid, "Validation failed: User #{described_class::USER_INCLUSION_ERROR_MESSAGE}"
     }
   end
 end

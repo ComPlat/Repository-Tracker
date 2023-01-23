@@ -94,7 +94,8 @@ describe API::V1::Trackings, ".authenticated_user" do
       let(:tracking) { build(:tracking, :with_required_attributes, :with_required_dependencies) }
       let(:tracking_request) {
         build_request(:tracking_request, :create, from_trackable_system_name:
-          create(:trackable_system, :with_required_attributes, :with_required_dependencies, user:).name)
+          create(:trackable_system, :with_required_attributes, :with_required_dependencies, user:
+            create(:user, :with_required_attributes, role: :trackable_system_admin)).name)
       }
 
       before { post "/api/v1/trackings/", params: tracking_request.merge(access_token: access_token.token) }
@@ -103,7 +104,7 @@ describe API::V1::Trackings, ".authenticated_user" do
       it { expect(JSON.parse(response.body)).to eq "error" => Authorization::TrackingsPost::MSG_TRACKABLE_SYSTEM_ADMIN }
     end
 
-    context "when authentication errors occurs, because user is no trackable_system_owner" do
+    context "when authentication errors occurs, because user is a trackable_system_admin but not its owner" do
       let(:user) { create(:user, :with_required_attributes, role: :trackable_system_admin) }
       let(:tracking) { build(:tracking, :with_required_attributes, :with_required_dependencies) }
       let(:tracking_request) {

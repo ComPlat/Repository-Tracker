@@ -2,15 +2,14 @@ RSpec.describe "SPA" do
   include SpaHelper
 
   let(:user) { create(:user, :with_required_attributes) }
-  let(:admin) { create(:user, :with_required_attributes_as_admin) }
   let(:tracking_item) { create(:tracking_item, :with_required_attributes, user:) }
   let(:trackings) do
     # TODO: Trackable systems do NOT belong the admin. This should not be possible!
     [create(:tracking, :with_required_attributes, tracking_item:,
-      from_trackable_system: create(:trackable_system, :with_required_attributes,
-        name: "chemotion_electronic_laboratory_notebook", user_id: admin.id),
-      to_trackable_system: create(:trackable_system, :with_required_attributes,
-        name: "radar4kit", user_id: admin.id))] +
+      from_trackable_system: create(:trackable_system, :with_required_attributes, :with_required_dependencies,
+        name: "chemotion_electronic_laboratory_notebook"),
+      to_trackable_system: create(:trackable_system, :with_required_attributes, :with_required_dependencies,
+        name: "radar4kit"))] +
       create_list(:tracking, 99, :with_required_attributes, :with_required_dependencies, tracking_item:)
   end
   let(:access_token) { create(:doorkeeper_access_token, :with_required_dependencies) }
