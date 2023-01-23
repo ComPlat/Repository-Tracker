@@ -33,9 +33,9 @@ if Rails.env.development?
     user: User.create!(name: "nmrxiv", email: "nm@rx.iv", password:, role: :trackable_system_admin))
 
   tracking_item1 = TrackingItem.create!(name: "Tracking Item 1", user: normal_user)
-  tracking_item2 = TrackingItem.create!(name: "Tracking Item 2", user: admin_user)
+  tracking_item2 = TrackingItem.create!(name: "Tracking Item 2", user: normal_user)
   tracking_item3 = TrackingItem.create!(name: "Tracking Item 3", user: normal_user)
-  tracking_item4 = TrackingItem.create!(name: "Tracking Item 4", user: super_user)
+  tracking_item4 = TrackingItem.create!(name: "Tracking Item 4", user: normal_user)
   tracking_item5 = TrackingItem.create!(name: "Tracking Item 5", user: normal_user)
 
   Tracking.create!(status: :draft, metadata: {data: "some new data"}, tracking_item: tracking_item1,
