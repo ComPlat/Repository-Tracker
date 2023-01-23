@@ -2,7 +2,7 @@ RSpec.describe Doorkeeper::AccessToken do
   include AuthHelper
 
   describe "POST /oauth/token" do
-    let(:user) { build(:user, :with_required_attributes) }
+    let(:user) { build(:user, :with_required_attributes_as_user) }
     let(:application) { create(:doorkeeper_application, :with_required_attributes) }
 
     let(:expected_response) {

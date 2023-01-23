@@ -5,7 +5,7 @@ FactoryBot.define do
     end
 
     trait :with_required_dependencies do
-      user { create(:user, :with_required_attributes, role: :trackable_system_admin) }
+      user { create(:user, :with_required_attributes_as_trackable_system_admin) }
     end
   end
 end

@@ -2,7 +2,7 @@ describe Users::RegistrationsController do
   include AuthHelper
 
   describe "POST /users" do
-    let(:user) { build(:user, :with_required_attributes) }
+    let(:user) { build(:user, :with_required_attributes_as_user) }
     let(:application) { create(:doorkeeper_application, :with_required_attributes) }
 
     context "when valid registration request is being completed" do
@@ -27,7 +27,7 @@ describe Users::RegistrationsController do
     end
 
     context "when INVALID registration request is being completed" do
-      let(:existing_user) { create(:user, :with_required_attributes) }
+      let(:existing_user) { create(:user, :with_required_attributes_as_user) }
 
       before { existing_user }
 
@@ -35,7 +35,7 @@ describe Users::RegistrationsController do
     end
 
     context "when INVALID registration request has been completed" do
-      let(:existing_user) { create(:user, :with_required_attributes) }
+      let(:existing_user) { create(:user, :with_required_attributes_as_user) }
 
       before {
         register(existing_user.name, existing_user.email, existing_user.password)

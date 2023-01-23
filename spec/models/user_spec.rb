@@ -1,9 +1,9 @@
 describe User do
   describe "factory" do
     it { expect(build(:user)).to be_invalid }
-    it { expect(build(:user, :with_required_attributes)).to be_valid }
-    it { expect(create(:user, :with_required_attributes)).to be_persisted }
-    it { expect(create(:user, :with_required_attributes)).to be_valid }
+    it { expect(build(:user, :with_required_attributes_as_user)).to be_valid }
+    it { expect(create(:user, :with_required_attributes_as_user)).to be_persisted }
+    it { expect(create(:user, :with_required_attributes_as_user)).to be_valid }
   end
 
   describe "#id" do
@@ -22,7 +22,7 @@ describe User do
     it { is_expected.to have_db_column(:role).of_type(:enum) }
     it { is_expected.to define_enum_for(:role).with_values(values).backed_by_column_of_type(:enum) }
     it { expect { build(:user, role: "invalid_role") }.to raise_error ArgumentError, "'invalid_role' is not a valid role" }
-    it { values.values.map { |value| expect(create(:user, :with_required_attributes, role: value).role).to eq value } }
+    it { values.values.map { |value| expect(create(:user, :with_required_attributes_as_user, role: value).role).to eq value } }
   end
 
   describe "#created_at" do
@@ -54,7 +54,7 @@ describe User do
   end
 
   describe "#trackable_systems" do
-    subject(:user) { create(:user, :with_required_attributes, role: :trackable_system_admin) }
+    subject(:user) { create(:user, :with_required_attributes_as_trackable_system_admin) }
 
     let(:trackable_system) { create(:trackable_system, :with_required_attributes, user:) }
 
@@ -65,7 +65,7 @@ describe User do
   end
 
   describe "#tracking_items" do
-    subject(:user) { create(:user, :with_required_attributes) }
+    subject(:user) { create(:user, :with_required_attributes_as_user) }
 
     let(:tracking_item) { create(:tracking_item, :with_required_attributes, user:) }
 
@@ -76,7 +76,7 @@ describe User do
   end
 
   describe "#access_tokens" do
-    subject(:user) { create(:user, :with_required_attributes) }
+    subject(:user) { create(:user, :with_required_attributes_as_user) }
 
     let(:access_token) { create(:doorkeeper_access_token, :with_required_dependencies, resource_owner_id: user.id) }
 

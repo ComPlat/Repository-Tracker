@@ -30,7 +30,7 @@ describe TrackingItem do
   end
 
   describe "#user" do
-    let(:user) { create(:user, :with_required_attributes) }
+    let(:user) { create(:user, :with_required_attributes_as_user) }
 
     it { is_expected.to have_db_index(:user_id) }
     it { is_expected.to have_db_column(:user_id).of_type(:integer) }
@@ -43,7 +43,7 @@ describe TrackingItem do
     }
 
     it {
-      expect { create(:tracking_item, :with_required_attributes, user: create(:user, :with_required_attributes, role: :admin)) }
+      expect { create(:tracking_item, :with_required_attributes, user: create(:user, :with_required_attributes_as_admin)) }
         .to raise_error ActiveRecord::RecordInvalid, "Validation failed: User #{described_class::USER_INCLUSION_ERROR_MESSAGE}"
     }
   end

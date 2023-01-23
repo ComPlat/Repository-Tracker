@@ -1,11 +1,11 @@
 describe API::V1::Trackings, ".create_authenticated_user" do
-  # TODO: Missing specs for "trackings exist + authorized", "trackings exist + NOT authorized", "trackings does NOT exist + authorized(?!)"
+  # TODO: Missing specs for "NOT authorized", "authorized and NOT valid", "authorized, valid and dependencies do NOT exist yet"
 
   describe "POST /api/v1/trackings/" do
     let(:access_token) { create(:doorkeeper_access_token, :with_required_dependencies, resource_owner_id: user.id) }
 
     context "when validation errors occurs" do
-      let(:user) { create(:user, :with_required_attributes) }
+      let(:user) { create(:user, :with_required_attributes_as_user) }
       let(:tracking) { build(:tracking, :with_required_attributes, :with_required_dependencies) }
       let(:tracking_request) { build_request(:tracking_request, :create_invalid) }
 
@@ -16,12 +16,12 @@ describe API::V1::Trackings, ".create_authenticated_user" do
     end
 
     context "when authentication errors occurs, because user is no trackable_system_admin" do
-      let(:user) { create(:user, :with_required_attributes, role: :user) }
+      let(:user) { create(:user, :with_required_attributes_as_user) }
       let(:tracking) { build(:tracking, :with_required_attributes, :with_required_dependencies) }
       let(:tracking_request) {
         build_request(:tracking_request, :create, from_trackable_system_name:
           create(:trackable_system, :with_required_attributes, :with_required_dependencies, user:
-            create(:user, :with_required_attributes, role: :trackable_system_admin)).name)
+            create(:user, :with_required_attributes_as_trackable_system_admin)).name)
       }
 
       before { post "/api/v1/trackings/", params: tracking_request.merge(access_token: access_token.token) }
@@ -31,7 +31,7 @@ describe API::V1::Trackings, ".create_authenticated_user" do
     end
 
     context "when authentication errors occurs, because user is a trackable_system_admin but not its owner" do
-      let(:user) { create(:user, :with_required_attributes, role: :trackable_system_admin) }
+      let(:user) { create(:user, :with_required_attributes_as_trackable_system_admin) }
       let(:tracking) { build(:tracking, :with_required_attributes, :with_required_dependencies) }
       let(:tracking_request) {
         build_request(:tracking_request, :create, from_trackable_system_name:
@@ -44,8 +44,8 @@ describe API::V1::Trackings, ".create_authenticated_user" do
       it { expect(JSON.parse(response.body)).to eq "error" => Authorization::TrackingsPost::MSG_TRACKABLE_SYSTEM_OWNER }
     end
 
-    context "when tracking record is created" do
-      let(:user) { create(:user, :with_required_attributes, role: :trackable_system_admin) }
+    context "when authorized and tracking_request is valid" do
+      let(:user) { create(:user, :with_required_attributes_as_trackable_system_admin) }
       let(:tracking_request) {
         build_request(:tracking_request, :create, from_trackable_system_name:
           create(:trackable_system, :with_required_attributes, :with_required_dependencies, user:).name)

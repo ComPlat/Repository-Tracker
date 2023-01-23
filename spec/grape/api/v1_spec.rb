@@ -10,7 +10,7 @@ describe "API::V1" do
     end
 
     context "when path does not exist and authenticated" do
-      let(:user) { build(:user, :with_required_attributes) }
+      let(:user) { build(:user, :with_required_attributes_as_user) }
       let(:application) { create(:doorkeeper_application, :with_required_attributes) }
 
       before {

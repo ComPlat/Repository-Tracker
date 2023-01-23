@@ -1,7 +1,7 @@
 RSpec.describe "SPA" do
   include SpaHelper
 
-  let(:user) { create(:user, :with_required_attributes) }
+  let(:user) { create(:user, :with_required_attributes_as_user) }
   let(:tracking_item) { create(:tracking_item, :with_required_attributes, user:) }
   let(:trackings) do
     # TODO: Trackable systems do NOT belong the admin. This should not be possible!

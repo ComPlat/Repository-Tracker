@@ -4,7 +4,7 @@ RSpec.describe "Workflow" do
   let(:application) { create(:doorkeeper_application, :with_required_attributes) }
 
   describe "As role :user" do
-    let(:user) { build(:user, :with_required_attributes) }
+    let(:user) { build(:user, :with_required_attributes_as_user) }
 
     describe "1. Register" do
       before { register(user.name, user.email, user.password) }
