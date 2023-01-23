@@ -1,8 +1,12 @@
-describe API::V1::Trackings, ".authenticated" do
+describe API::V1::Trackings, ".authenticated_user" do
   # TODO: Implement "GET /api/v1/tracking_items/:name/trackings"
+  # TODO: A lot of specs missing, a lot of structural refactor needed!
+  # TODO: Avoid exposing whole SQL statements as error messages!
 
   describe "GET /api/v1/trackings/" do
-    let(:trackings) { create_list(:tracking, 2, :with_required_attributes, :with_required_dependencies) }
+    let(:user) { create(:user, :with_required_attributes) }
+    let(:tracking_item) { create(:tracking_item, :with_required_attributes, user:) }
+    let!(:trackings) { create_list(:tracking, 2, :with_required_attributes, :with_required_dependencies, tracking_item:) }
     let(:expected_json_array) {
       [{"id" => trackings.first&.id,
         "date_time" => trackings.first&.date_time&.strftime("%Y-%m-%dT%H:%M:%S.%LZ"),
@@ -21,7 +25,6 @@ describe API::V1::Trackings, ".authenticated" do
          "to_trackable_system_name" => trackings.second&.to_trackable_system&.name,
          "owner_name" => trackings.second&.tracking_item&.user&.name}]
     }
-    let(:user) { trackings.first&.tracking_item&.user }
     let(:access_token) { create(:doorkeeper_access_token, :with_required_dependencies, resource_owner_id: user.id) }
 
     before { get "/api/v1/trackings", params: {access_token: access_token.token} }
@@ -37,7 +40,9 @@ describe API::V1::Trackings, ".authenticated" do
 
   describe "GET /api/v1/trackings/:id" do
     context "when tracking id exists" do
-      let(:trackings) { create_list(:tracking, 3, :with_required_attributes, :with_required_dependencies) }
+      let(:user) { create(:user, :with_required_attributes) }
+      let(:tracking_item) { create(:tracking_item, :with_required_attributes, user:) }
+      let!(:trackings) { create_list(:tracking, 3, :with_required_attributes, :with_required_dependencies, tracking_item:) }
       let(:expected_tracking) { trackings.last }
       let(:expected_json_hash) {
         {"id" => expected_tracking.id,
@@ -49,8 +54,6 @@ describe API::V1::Trackings, ".authenticated" do
          "to_trackable_system_name" => expected_tracking.to_trackable_system.name,
          "owner_name" => expected_tracking.tracking_item.user.name}
       }
-
-      let(:user) { trackings.first&.tracking_item&.user }
       let(:access_token) { create(:doorkeeper_access_token, :with_required_dependencies, resource_owner_id: user.id) }
 
       before { get "/api/v1/trackings/#{expected_tracking.id}", params: {access_token: access_token.token} }
@@ -67,7 +70,7 @@ describe API::V1::Trackings, ".authenticated" do
       before { get "/api/v1/trackings/0", params: {access_token: access_token.token} }
 
       it { expect(response).to have_http_status :not_found }
-      it { expect(response.parsed_body).to eq({"error" => "Couldn't find Tracking with 'id'=0"}) }
+      it { expect(response.parsed_body).to eq("error" => "Couldn't find Tracking with 'id'=0 [WHERE \"trackings\".\"tracking_item_id\" IN (SELECT \"tracking_items\".\"id\" FROM \"tracking_items\" WHERE \"tracking_items\".\"user_id\" = $1)]") }
       it { expect(response.content_type).to eq "application/json" }
     end
   end
@@ -97,7 +100,7 @@ describe API::V1::Trackings, ".authenticated" do
       before { post "/api/v1/trackings/", params: tracking_request.merge(access_token: access_token.token) }
 
       it { expect(response).to have_http_status :unauthorized }
-      it { expect(JSON.parse(response.body)).to eq "error" => Authorization::TrackingsPostAuthorization::MSG_TRACKABLE_SYSTEM_ADMIN }
+      it { expect(JSON.parse(response.body)).to eq "error" => Authorization::TrackingsPost::MSG_TRACKABLE_SYSTEM_ADMIN }
     end
 
     context "when authentication errors occurs, because user is no trackable_system_owner" do
@@ -111,7 +114,7 @@ describe API::V1::Trackings, ".authenticated" do
       before { post "/api/v1/trackings/", params: tracking_request.merge(access_token: access_token.token) }
 
       it { expect(response).to have_http_status :unauthorized }
-      it { expect(JSON.parse(response.body)).to eq "error" => Authorization::TrackingsPostAuthorization::MSG_TRACKABLE_SYSTEM_OWNER }
+      it { expect(JSON.parse(response.body)).to eq "error" => Authorization::TrackingsPost::MSG_TRACKABLE_SYSTEM_OWNER }
     end
 
     context "when tracking record is created" do
