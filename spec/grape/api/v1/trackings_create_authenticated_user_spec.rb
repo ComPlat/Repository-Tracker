@@ -1,5 +1,5 @@
 describe API::V1::Trackings, ".create_authenticated_user" do
-  # TODO: Missing specs for "NOT authorized", "authorized and NOT valid", "authorized, valid and dependencies do NOT exist yet"
+  # TODO: Missing specs for "authorized, valid and dependencies do NOT exist yet"
 
   describe "POST /api/v1/trackings/" do
     let(:access_token) { create(:doorkeeper_access_token, :with_required_dependencies, resource_owner_id: user.id) }
