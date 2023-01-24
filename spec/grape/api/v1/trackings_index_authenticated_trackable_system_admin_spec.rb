@@ -1,5 +1,5 @@
 describe API::V1::Trackings, ".index_authenticated_trackable_system_admin" do
-  describe "GET /api/v1/trackings/:id" do
+  describe "GET /api/v1/trackings/" do
     let(:user) { create(:user, :with_required_attributes_as_trackable_system_admin) }
     let(:tracking_item) { create(:tracking_item, :with_required_attributes, :with_required_dependencies) }
     let(:expected_json_array) {
@@ -22,7 +22,7 @@ describe API::V1::Trackings, ".index_authenticated_trackable_system_admin" do
     }
     let(:access_token) { create(:doorkeeper_access_token, :with_required_dependencies, resource_owner_id: user.id) }
 
-    context "when trackings exist, user is authorized but tracking do NOT belong to trackable system" do
+    context "when trackings exist, user is authorized but trackings do NOT belong to trackable system" do
       let(:trackings) { create_list(:tracking, 2, :with_required_attributes, :with_required_dependencies, tracking_item:) }
 
       before do
