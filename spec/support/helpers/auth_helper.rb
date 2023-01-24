@@ -36,7 +36,8 @@ module AuthHelper
   def create_entry
     @create_entry ||= -> {
       post "/api/v1/trackings/",
-        params: build_request(:tracking_request, :create).merge(access_token: application.access_tokens.last.token)
+        params: build_request(:tracking_request, :create)
+          .merge(access_token: application.access_tokens.last.token)
 
       response.parsed_body["id"]
     }.call
