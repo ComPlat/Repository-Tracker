@@ -12,7 +12,7 @@ class Authorization::TrackingsPost
   end
 
   def authorized?
-    return true if admin?
+    # return true if admin?
 
     error! MSG_TRACKABLE_SYSTEM_ADMIN, STATUS unless trackable_system_admin?
     error! MSG_TRACKABLE_SYSTEM_OWNER, STATUS unless trackable_system_owner?
@@ -22,7 +22,7 @@ class Authorization::TrackingsPost
 
   private
 
-  def admin? = @admin ||= current_user.admin?
+  # def admin? = @admin ||= current_user.admin?
 
   def error!(message, status) = @trackings_grape_api.error!(message, status)
 

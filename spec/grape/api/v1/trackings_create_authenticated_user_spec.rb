@@ -13,7 +13,7 @@ describe API::V1::Trackings, ".create_authenticated_user" do
       before { post "/api/v1/trackings/", params: tracking_request.merge(access_token: access_token.token) }
 
       it { expect(response).to have_http_status :bad_request }
-      it { expect(JSON.parse(response.body)).to eq "error" => "status is missing, metadata is missing, tracking_item_name is missing, from_trackable_system_name is missing, to_trackable_system_name is missing" }
+      it { expect(response.parsed_body).to eq "error" => "status is missing, metadata is missing, tracking_item_name is missing, from_trackable_system_name is missing, to_trackable_system_name is missing" }
     end
 
     context "when authentication errors occurs, because user is no trackable_system_admin" do
@@ -27,7 +27,7 @@ describe API::V1::Trackings, ".create_authenticated_user" do
       before { post "/api/v1/trackings/", params: tracking_request.merge(access_token: access_token.token) }
 
       it { expect(response).to have_http_status :unauthorized }
-      it { expect(JSON.parse(response.body)).to eq "error" => Authorization::TrackingsPost::MSG_TRACKABLE_SYSTEM_ADMIN }
+      it { expect(response.parsed_body).to eq "error" => Authorization::TrackingsPost::MSG_TRACKABLE_SYSTEM_ADMIN }
     end
 
     context "when authentication errors occurs, because user is a trackable_system_admin but not its owner" do
@@ -40,7 +40,7 @@ describe API::V1::Trackings, ".create_authenticated_user" do
       before { post "/api/v1/trackings/", params: tracking_request.merge(access_token: access_token.token) }
 
       it { expect(response).to have_http_status :unauthorized }
-      it { expect(JSON.parse(response.body)).to eq "error" => Authorization::TrackingsPost::MSG_TRACKABLE_SYSTEM_OWNER }
+      it { expect(response.parsed_body).to eq "error" => Authorization::TrackingsPost::MSG_TRACKABLE_SYSTEM_OWNER }
     end
 
     context "when authorized and tracking_request is valid" do
@@ -65,8 +65,8 @@ describe API::V1::Trackings, ".create_authenticated_user" do
 
       it { expect(response).to have_http_status :created }
       it { expect(response.content_type).to eq "application/json" }
-      it { expect(JSON.parse(response.body)).to eq JSON.parse(API::Entities::Tracking.new(expected_tracking).to_json) }
-      it { expect(JSON.parse(response.body)).to eq expected_json_hash }
+      it { expect(response.parsed_body).to eq JSON.parse(API::Entities::Tracking.new(expected_tracking).to_json) }
+      it { expect(response.parsed_body).to eq expected_json_hash }
     end
   end
 end

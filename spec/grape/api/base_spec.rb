@@ -61,7 +61,7 @@ describe API::Base do
   describe "/api/swagger_doc.json" do
     before { get "/api/swagger_doc.json" }
 
-    let(:parsed_and_symbolized_response_body) { JSON.parse(response.body).deep_symbolize_keys }
+    let(:parsed_and_symbolized_response_body) { response.parsed_body.deep_symbolize_keys }
 
     it { expect(response).to have_http_status(:ok) }
     it { expect(parsed_and_symbolized_response_body.keys.size).to eq 7 }
