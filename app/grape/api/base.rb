@@ -1,7 +1,7 @@
 module API
   class Base < Grape::API
     rescue_from ActiveRecord::RecordNotFound do |error|
-      error! error.message, 404
+      error! "Couldn't find #{error.model} with 'id'=#{error.id}", 404
     end
 
     rescue_from ActiveRecord::RecordInvalid do |error|

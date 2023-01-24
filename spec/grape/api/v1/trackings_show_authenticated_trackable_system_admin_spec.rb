@@ -24,7 +24,7 @@ describe API::V1::Trackings, ".show_authenticated_trackable_system_admin" do
       end
 
       it { expect(response).to have_http_status :not_found }
-      it { expect(response.parsed_body).to eq({"error" => "Couldn't find Tracking with 'id'=#{expected_tracking.id} [WHERE (1=0 OR 1=0)]"}) }
+      it { expect(response.parsed_body).to eq({"error" => "Couldn't find Tracking with 'id'=#{expected_tracking.id}"}) }
     end
 
     context "when tracking id exists, user is authorized but trackings do belong to from_trackable_system" do
@@ -72,14 +72,14 @@ describe API::V1::Trackings, ".show_authenticated_trackable_system_admin" do
 
       it { expect(response).to have_http_status :not_found }
       it { expect(response.content_type).to eq "application/json" }
-      it { expect(response.parsed_body).to eq({"error" => "Couldn't find Tracking with 'id'=#{expected_tracking.id} [WHERE (1=0 OR 1=0)]"}) }
+      it { expect(response.parsed_body).to eq({"error" => "Couldn't find Tracking with 'id'=#{expected_tracking.id}"}) }
     end
 
     context "when tracking id does NOT exist" do
       before { get "/api/v1/trackings/0", params: {access_token: access_token.token} }
 
       it { expect(response).to have_http_status :not_found }
-      it { expect(response.parsed_body).to eq("error" => "Couldn't find Tracking with 'id'=0 [WHERE (1=0 OR 1=0)]") }
+      it { expect(response.parsed_body).to eq("error" => "Couldn't find Tracking with 'id'=0") }
       it { expect(response.content_type).to eq "application/json" }
     end
   end

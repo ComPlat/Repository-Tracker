@@ -1,6 +1,4 @@
 describe API::V1::Trackings, ".show_authenticated_user" do
-  # TODO: Avoid exposing whole SQL statements as error messages!
-
   describe "GET /api/v1/trackings/:id" do
     let(:user) { create(:user, :with_required_attributes_as_user) }
     let(:trackings) { create_list(:tracking, 3, :with_required_attributes, :with_required_dependencies, tracking_item:) }
@@ -41,14 +39,14 @@ describe API::V1::Trackings, ".show_authenticated_user" do
 
       it { expect(response).to have_http_status :not_found }
       it { expect(response.content_type).to eq "application/json" }
-      it { expect(response.parsed_body).to eq({"error" => "Couldn't find Tracking with 'id'=#{expected_tracking.id} [WHERE \"trackings\".\"tracking_item_id\" IN (SELECT \"tracking_items\".\"id\" FROM \"tracking_items\" WHERE \"tracking_items\".\"user_id\" = $1)]"}) }
+      it { expect(response.parsed_body).to eq({"error" => "Couldn't find Tracking with 'id'=#{expected_tracking.id}"}) }
     end
 
     context "when tracking id does NOT exist" do
       before { get "/api/v1/trackings/0", params: {access_token: access_token.token} }
 
       it { expect(response).to have_http_status :not_found }
-      it { expect(response.parsed_body).to eq("error" => "Couldn't find Tracking with 'id'=0 [WHERE \"trackings\".\"tracking_item_id\" IN (SELECT \"tracking_items\".\"id\" FROM \"tracking_items\" WHERE \"tracking_items\".\"user_id\" = $1)]") }
+      it { expect(response.parsed_body).to eq("error" => "Couldn't find Tracking with 'id'=0") }
       it { expect(response.content_type).to eq "application/json" }
     end
   end
