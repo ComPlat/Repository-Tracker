@@ -4,7 +4,6 @@ RSpec.describe "SPA" do
   let(:user) { create(:user, :with_required_attributes_as_user) }
   let(:tracking_item) { create(:tracking_item, :with_required_attributes, user:) }
   let(:trackings) do
-    # TODO: Trackable systems do NOT belong the admin. This should not be possible!
     [create(:tracking, :with_required_attributes, tracking_item:,
       from_trackable_system: create(:trackable_system, :with_required_attributes, :with_required_dependencies,
         name: "chemotion_electronic_laboratory_notebook"),
