@@ -2,10 +2,11 @@ describe API::V1::Trackings, ".create_authenticated_user" do
   # TODO: Missing specs for "authorized, valid and dependencies do NOT exist yet"
 
   describe "POST /api/v1/trackings/" do
+    let(:user) { create(:user, :with_required_attributes_as_user) }
+    let(:tracking) { build(:tracking, :with_required_attributes, :with_required_dependencies) }
     let(:access_token) { create(:doorkeeper_access_token, :with_required_dependencies, resource_owner_id: user.id) }
 
     context "when validation errors occurs" do
-      let(:user) { create(:user, :with_required_attributes_as_user) }
       let(:tracking) { build(:tracking, :with_required_attributes, :with_required_dependencies) }
       let(:tracking_request) { build_request(:tracking_request, :create_invalid) }
 
@@ -17,7 +18,6 @@ describe API::V1::Trackings, ".create_authenticated_user" do
 
     context "when authentication errors occurs, because user is no trackable_system_admin" do
       let(:user) { create(:user, :with_required_attributes_as_user) }
-      let(:tracking) { build(:tracking, :with_required_attributes, :with_required_dependencies) }
       let(:tracking_request) {
         build_request(:tracking_request, :create, from_trackable_system:
           create(:trackable_system, :with_required_attributes, :with_required_dependencies, user:
@@ -32,7 +32,6 @@ describe API::V1::Trackings, ".create_authenticated_user" do
 
     context "when authentication errors occurs, because user is a trackable_system_admin but not its owner" do
       let(:user) { create(:user, :with_required_attributes_as_trackable_system_admin) }
-      let(:tracking) { build(:tracking, :with_required_attributes, :with_required_dependencies) }
       let(:tracking_request) {
         build_request(:tracking_request, :create, from_trackable_system:
           create(:trackable_system, :with_required_attributes, :with_required_dependencies))

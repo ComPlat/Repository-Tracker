@@ -1,13 +1,14 @@
-describe API::V1::Trackings, ".index_authenticated_user" do
-  # TODO: Implement "GET /api/v1/tracking_items/:name/trackings"
+describe API::V1::Trackings, ".index_authenticated_super" do
+  describe "GET /api/v1/trackings/:id" do
+    # HINT: Super user is always authorized
 
-  let(:user) { create(:user, :with_required_attributes_as_user) }
-  let(:access_token) { create(:doorkeeper_access_token, :with_required_dependencies, resource_owner_id: user.id) }
+    let(:user) { create(:user, :with_required_attributes_as_super) }
+    let(:access_token) { create(:doorkeeper_access_token, :with_required_dependencies, resource_owner_id: user.id) }
 
-  describe "GET /api/v1/trackings/" do
-    context "when trackings exist and user is authorized" do
-      let(:tracking_item) { create(:tracking_item, :with_required_attributes, user:) }
+    context "when tracking id exists and user is authorized" do
+      let(:tracking_item) { create(:tracking_item, :with_required_attributes, :with_required_dependencies) }
       let(:trackings) { create_list(:tracking, 2, :with_required_attributes, :with_required_dependencies, tracking_item:) }
+      let(:expected_tracking) { trackings.last }
       let(:expected_json_array) {
         [{"id" => trackings.first&.id,
           "date_time" => trackings.first&.date_time&.strftime("%Y-%m-%dT%H:%M:%S.%LZ"),
@@ -29,7 +30,7 @@ describe API::V1::Trackings, ".index_authenticated_user" do
 
       before do
         trackings
-        get "/api/v1/trackings", params: {access_token: access_token.token}
+        get "/api/v1/trackings/", params: {access_token: access_token.token}
       end
 
       it { expect(response).to have_http_status :ok }
@@ -41,21 +42,7 @@ describe API::V1::Trackings, ".index_authenticated_user" do
       it { expect(response.parsed_body).to eq expected_json_array }
     end
 
-    context "when trackings exist and user is NOT authorized" do
-      let(:tracking_item) { create(:tracking_item, :with_required_attributes, user: create(:user, :with_required_attributes_as_user)) }
-      let(:trackings) { create_list(:tracking, 3, :with_required_attributes, :with_required_dependencies, tracking_item:) }
-
-      before do
-        trackings
-        get "/api/v1/trackings/", params: {access_token: access_token.token}
-      end
-
-      it { expect(response).to have_http_status :ok }
-      it { expect(response.content_type).to eq "application/json" }
-      it { expect(response.parsed_body).to eq [] }
-    end
-
-    context "when trackings do NOT exist" do
+    context "when tracking id does NOT exist" do
       before { get "/api/v1/trackings/", params: {access_token: access_token.token} }
 
       it { expect(response).to have_http_status :ok }
