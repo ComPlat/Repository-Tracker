@@ -1,4 +1,6 @@
 describe API::V1::Trackings, ".index_authenticated_admin" do
+  # TODO: Implement "GET /api/v1/tracking_items/:name/trackings"
+
   describe "GET /api/v1/trackings/:id" do
     # HINT: Admin user is always authorized
 

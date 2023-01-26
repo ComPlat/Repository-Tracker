@@ -13,6 +13,7 @@ describe API::V1::Trackings, ".create_authenticated_trackable_system_admin" do
       before { post "/api/v1/trackings/", params: tracking_request.merge(access_token: access_token.token) }
 
       it { expect(response).to have_http_status :bad_request }
+      # HINT: This error message comes from params validation which is done before user authentication.
       it { expect(response.parsed_body).to eq "error" => "status is missing, metadata is missing, tracking_item_name is missing, from_trackable_system_name is missing, to_trackable_system_name is missing" }
     end
 
@@ -53,6 +54,20 @@ describe API::V1::Trackings, ".create_authenticated_trackable_system_admin" do
       it { expect(response.content_type).to eq "application/json" }
       it { expect(response.parsed_body).to eq JSON.parse(API::Entities::Tracking.new(expected_tracking).to_json) }
       it { expect(response.parsed_body).to eq expected_json_hash }
+    end
+
+    context "when authorized, tracking_request is valid, but tracking_item do NOT exist yet" do
+      let(:user) { create(:user, :with_required_attributes_as_trackable_system_admin) }
+      let(:tracking_request) {
+        build_request(:tracking_request, :create, from_trackable_system_name:
+          create(:trackable_system, :with_required_attributes, user:).name, tracking_item_name: nil)
+      }
+
+      before { post "/api/v1/trackings/", params: tracking_request.merge(access_token: access_token.token) }
+
+      it { expect(response).to have_http_status :unprocessable_entity }
+      it { expect(response.content_type).to eq "application/json" }
+      it { expect(response.parsed_body).to eq "error" => "Validation failed: Name can't be blank, User may only be of role user, User must exist" }
     end
   end
 end
