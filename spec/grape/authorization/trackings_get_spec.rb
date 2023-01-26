@@ -159,7 +159,7 @@ RSpec.describe Authorization::TrackingsGet do
         allow(trackings_get).to receive(:id).and_return(expected_tracking.id)
       end
 
-      it { expect { one }.to raise_error ActiveRecord::RecordNotFound }
+      it { expect { one }.to raise_error ActiveRecord::RecordNotFound, "Couldn't find Tracking with 'id'=#{expected_tracking.id} [WHERE (1=0 OR 1=0)]" }
     end
   end
 end

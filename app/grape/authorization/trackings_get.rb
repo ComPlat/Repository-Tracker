@@ -20,9 +20,7 @@ class Authorization::TrackingsGet
     end
   }.call
 
-  def one
-    @one ||= all.find(id)
-  end
+  def one = @one ||= all.find(id)
 
   private
 
