@@ -21,7 +21,7 @@ RSpec.describe Authorization::TrackingsPost do
 
       it {
         authorized
-        expect(trackings_post).to have_received :error!
+        expect(trackings_post).to have_received(:error!).with(described_class::MSG_TRACKABLE_SYSTEM_ADMIN, 401)
       }
     end
 
@@ -35,7 +35,7 @@ RSpec.describe Authorization::TrackingsPost do
 
       it {
         authorized
-        expect(trackings_post).to have_received :error!
+        expect(trackings_post).to have_received(:error!).with(described_class::MSG_TRACKABLE_SYSTEM_ADMIN, 401)
       }
     end
 
@@ -49,7 +49,7 @@ RSpec.describe Authorization::TrackingsPost do
 
       it {
         authorized
-        expect(trackings_post).to have_received :error!
+        expect(trackings_post).to have_received(:error!).with(described_class::MSG_TRACKABLE_SYSTEM_ADMIN, 401)
       }
     end
 
@@ -67,7 +67,6 @@ RSpec.describe Authorization::TrackingsPost do
 
     context "when user role is :trackable_system_admin and trackable_system_admin is NOT the owner of from_trackable_system" do
       let(:user) { create(:user, :with_required_attributes_as_trackable_system_admin) }
-      let(:trackable_system_user) { create(:user, :with_required_attributes_as_trackable_system_admin) }
 
       before do
         allow(trackings_post).to receive(:current_user).and_return(user)
@@ -78,7 +77,7 @@ RSpec.describe Authorization::TrackingsPost do
 
       it {
         authorized
-        expect(trackings_post).to have_received :error!
+        expect(trackings_post).to have_received(:error!).with(described_class::MSG_TRACKABLE_SYSTEM_OWNER, 401)
       }
     end
   end
