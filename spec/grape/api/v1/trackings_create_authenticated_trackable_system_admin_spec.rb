@@ -1,6 +1,4 @@
 describe API::V1::Trackings, ".create_authenticated_trackable_system_admin" do
-  # TODO: Missing specs for "authorized, valid and dependencies do NOT exist yet"
-
   describe "POST /api/v1/trackings/" do
     let(:user) { create(:user, :with_required_attributes_as_trackable_system_admin) }
     let(:tracking) { build(:tracking, :with_required_attributes, :with_required_dependencies) }
