@@ -1,6 +1,4 @@
 describe API::V1::Trackings, ".index_authenticated_user" do
-  # TODO: Implement "GET /api/v1/tracking_items/:name/trackings"
-
   let(:user) { create(:user, :with_required_attributes_as_user) }
   let(:access_token) { create(:doorkeeper_access_token, :with_required_dependencies, resource_owner_id: user.id) }
 

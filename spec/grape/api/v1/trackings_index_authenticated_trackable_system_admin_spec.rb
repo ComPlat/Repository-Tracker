@@ -1,6 +1,4 @@
 describe API::V1::Trackings, ".index_authenticated_trackable_system_admin" do
-  # TODO: Implement "GET /api/v1/tracking_items/:name/trackings"
-
   describe "GET /api/v1/trackings/" do
     let(:user) { create(:user, :with_required_attributes_as_trackable_system_admin) }
     let(:tracking_item) { create(:tracking_item, :with_required_attributes, :with_required_dependencies) }

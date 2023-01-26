@@ -1,6 +1,4 @@
 describe API::V1::Trackings, ".index_authenticated_super" do
-  # TODO: Implement "GET /api/v1/tracking_items/:name/trackings"
-
   describe "GET /api/v1/trackings/:id" do
     # HINT: Super user is always authorized
 
