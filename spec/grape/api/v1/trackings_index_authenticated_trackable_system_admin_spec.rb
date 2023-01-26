@@ -59,7 +59,6 @@ describe API::V1::Trackings, ".index_authenticated_trackable_system_admin" do
         create_list(:tracking, 2, :with_required_attributes, :with_required_dependencies, tracking_item:, to_trackable_system: create(:trackable_system, :with_required_attributes, :with_required_dependencies,
           name: "chemotion_electronic_laboratory_notebook", user:))
       }
-      let(:expected_tracking) { trackings.last }
 
       before { get "/api/v1/trackings/", params: {access_token: access_token.token} }
 

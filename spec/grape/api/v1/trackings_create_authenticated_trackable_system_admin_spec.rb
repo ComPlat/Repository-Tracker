@@ -34,23 +34,22 @@ describe API::V1::Trackings, ".create_authenticated_trackable_system_admin" do
         build_request(:tracking_request, :create, from_trackable_system_name:
           create(:trackable_system, :with_required_attributes, :with_required_dependencies, user:).name)
       }
-      let(:expected_tracking) { Tracking.first }
       let(:expected_json_hash) {
-        {"id" => expected_tracking.id,
-         "date_time" => expected_tracking.date_time.strftime("%Y-%m-%dT%H:%M:%S.%LZ"),
+        {"id" => Tracking.first.id,
+         "date_time" => Tracking.first.date_time.strftime("%Y-%m-%dT%H:%M:%S.%LZ"),
          "status" => tracking_request[:status],
          "metadata" => tracking_request[:metadata],
          "tracking_item_name" => tracking_request[:tracking_item_name],
          "from_trackable_system_name" => tracking_request[:from_trackable_system_name],
          "to_trackable_system_name" => tracking_request[:to_trackable_system_name],
-         "owner_name" => expected_tracking.tracking_item.user.name}
+         "owner_name" => Tracking.first.tracking_item.user.name}
       }
 
       before { post "/api/v1/trackings/", params: tracking_request.merge(access_token: access_token.token) }
 
       it { expect(response).to have_http_status :created }
       it { expect(response.content_type).to eq "application/json" }
-      it { expect(response.parsed_body).to eq JSON.parse(API::Entities::Tracking.new(expected_tracking).to_json) }
+      it { expect(response.parsed_body).to eq JSON.parse(API::Entities::Tracking.new(Tracking.first).to_json) }
       it { expect(response.parsed_body).to eq expected_json_hash }
     end
 
