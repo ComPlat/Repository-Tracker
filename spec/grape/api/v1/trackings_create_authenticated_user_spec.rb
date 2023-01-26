@@ -13,6 +13,7 @@ describe API::V1::Trackings, ".create_authenticated_user" do
       before { post "/api/v1/trackings/", params: tracking_request.merge(access_token: access_token.token) }
 
       it { expect(response).to have_http_status :bad_request }
+      # HINT: This error message comes from params validation which is done before user authentication.
       it { expect(response.parsed_body).to eq "error" => "status is missing, metadata is missing, tracking_item_name is missing, from_trackable_system_name is missing, to_trackable_system_name is missing" }
     end
 

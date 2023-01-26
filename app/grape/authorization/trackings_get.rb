@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class Authorization::TrackingsGet
-  # TODO: This needs a unit spec.
-
   def initialize(trackings_grape_api)
     @trackings_grape_api = trackings_grape_api
   end
@@ -22,7 +20,9 @@ class Authorization::TrackingsGet
     end
   }.call
 
-  def one = @one ||= all.find(id)
+  def one
+    @one ||= all.find(id)
+  end
 
   private
 

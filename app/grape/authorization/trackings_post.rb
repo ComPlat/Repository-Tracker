@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class Authorization::TrackingsPost
-  # TODO: This needs a unit spec.
-
   MSG_TRACKABLE_SYSTEM_ADMIN = "Only Trackable System Admins are allowed to create Tracking records."
   MSG_TRACKABLE_SYSTEM_OWNER = "Only Trackable System Admin of either source (from) or target (to) Trackable System is allowed to create Tracking record."
   STATUS = 401
@@ -12,8 +10,8 @@ class Authorization::TrackingsPost
   end
 
   def authorized?
-    error! MSG_TRACKABLE_SYSTEM_ADMIN, STATUS unless trackable_system_admin?
-    error! MSG_TRACKABLE_SYSTEM_OWNER, STATUS unless trackable_system_owner?
+    return error! MSG_TRACKABLE_SYSTEM_ADMIN, STATUS unless trackable_system_admin?
+    return error! MSG_TRACKABLE_SYSTEM_OWNER, STATUS unless trackable_system_owner?
 
     true
   end
@@ -29,7 +27,9 @@ class Authorization::TrackingsPost
     .pluck(:user_id)
     .include?(current_user.id)
 
-  def name = @name ||= [params["from_trackable_system_name"], params["to_trackable_system_name"]]
+  def name
+    @name ||= [params["from_trackable_system_name"], params["to_trackable_system_name"]]
+  end
 
   def params = @params ||= @trackings_grape_api.params
 

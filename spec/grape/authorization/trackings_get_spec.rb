@@ -9,7 +9,7 @@ RSpec.describe Authorization::TrackingsGet do
   end
 
   describe "#all" do
-    subject { trackings_get.all }
+    subject(:all) { trackings_get.all }
 
     context "when user role is :user" do
       let(:user) { create(:user, :with_required_attributes_as_user) }
@@ -82,7 +82,7 @@ RSpec.describe Authorization::TrackingsGet do
   end
 
   describe "#one" do
-    subject { trackings_get.one }
+    subject(:one) { trackings_get.one }
 
     context "when user role is :user" do
       let(:user) { create(:user, :with_required_attributes_as_user) }
@@ -130,7 +130,7 @@ RSpec.describe Authorization::TrackingsGet do
       it { is_expected.to eq expected_tracking }
     end
 
-    context "when user role is :trackable_system_admin and trackable_system_admin belong to a trackable system" do
+    context "when user role is :trackable_system_admin and trackable_system_admin belongs to a trackable system" do
       let(:user) { create(:user, :with_required_attributes_as_trackable_system_admin) }
       let(:trackings) {
         create_list(:tracking, 3, :with_required_attributes, :with_required_dependencies,
@@ -148,7 +148,7 @@ RSpec.describe Authorization::TrackingsGet do
       it { is_expected.to eq expected_tracking }
     end
 
-    context "when user role is :trackable_system_admin and trackable_system_admin belong NOT to a trackable system" do
+    context "when user role is :trackable_system_admin and trackable_system_admin belongs NOT to a trackable system" do
       let(:user) { create(:user, :with_required_attributes_as_trackable_system_admin) }
       let(:trackings) { create_list(:tracking, 3, :with_required_attributes, :with_required_dependencies) }
       let(:expected_tracking) { trackings.first }
@@ -160,7 +160,7 @@ RSpec.describe Authorization::TrackingsGet do
         allow(trackings_get).to receive(:id).and_return(expected_tracking.id)
       end
 
-      it { is_expected.to raise_error "Couldn't find Tracking with 'id'=#{expected_tracking.id} [WHERE (1=0 OR 1=0)]" }
+      it { expect { one }.to raise_error ActiveRecord::RecordNotFound }
     end
   end
 end
