@@ -27,7 +27,7 @@ describe API::V1::Trackings, ".index_authenticated_user" do
 
       before do
         trackings
-        get "/api/v1/trackings", params: {access_token: access_token.token}
+        get "/api/v1/trackings", params: {access_token: access_token.token, tracking_item_owner_email: tracking_item.user.email}
       end
 
       it { expect(response).to have_http_status :ok }
@@ -45,7 +45,7 @@ describe API::V1::Trackings, ".index_authenticated_user" do
 
       before do
         trackings
-        get "/api/v1/trackings/", params: {access_token: access_token.token}
+        get "/api/v1/trackings/", params: {access_token: access_token.token, tracking_item_owner_email: tracking_item.user.email}
       end
 
       it { expect(response).to have_http_status :ok }

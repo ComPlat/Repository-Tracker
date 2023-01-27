@@ -104,6 +104,7 @@ describe API::Base do
         [{description: "Tracking status", in: "formData", name: "status", required: true, type: "string"},
           {description: "Tracking metadata", in: "formData", name: "metadata", required: true, type: "json"},
           {description: "Tracking unique identifier", in: "formData", name: "tracking_item_name", required: true, type: "string"},
+          {description: "Tracking item owner name", in: "formData", name: "tracking_item_owner_name", required: true, type: "string"},
           {description: "Tracking source", in: "formData", name: "from_trackable_system_name", required: true, type: "string"},
           {description: "Tracking receiver", in: "formData", name: "to_trackable_system_name", required: true, type: "string"}]
       }
