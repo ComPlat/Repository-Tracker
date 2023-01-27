@@ -28,6 +28,7 @@ class API::V1::Trackings < Grape::API
       requires :status, type: String, desc: "Tracking status"
       requires :metadata, type: JSON, desc: "Tracking metadata"
       requires :tracking_item_name, type: String, desc: "Tracking unique identifier"
+      requires :tracking_item_owner_name, type: String, desc: "Tracking item owner name"
       requires :from_trackable_system_name, type: String, desc: "Tracking source"
       requires :to_trackable_system_name, type: String, desc: "Tracking receiver"
     end

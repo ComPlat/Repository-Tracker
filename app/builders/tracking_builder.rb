@@ -19,9 +19,12 @@ class TrackingBuilder
 
   def metadata = @metadata ||= @params["metadata"]
 
-  # TODO: Check ownership!
   def tracking_item_id = @tracking_item_id ||=
-                           TrackingItem.find_or_create_by!(name: @params["tracking_item_name"]).id
+                           TrackingItem.find_or_create_by!(name: @params["tracking_item_name"], user:).id
+
+  def user
+    User.find_by(email: @params["tracking_item_owner_email"], role: :user) || User.create!(email: @params["tracking_item_owner_email"], name: @params["tracking_item_owner_email"], role: :user, password: SecureRandom.base64(12))
+  end
 
   def from_trackable_system_id
     @from_trackable_system_id ||= TrackableSystem.find_or_create_by!(name: @params["from_trackable_system_name"]).id

@@ -64,7 +64,7 @@ describe API::V1::Trackings, ".create_authenticated_trackable_system_admin" do
 
       it { expect(response).to have_http_status :unprocessable_entity }
       it { expect(response.content_type).to eq "application/json" }
-      it { expect(response.parsed_body).to eq "error" => "Validation failed: Name can't be blank, User may only be of role user, User must exist" }
+      it { expect(response.parsed_body).to eq "error" => "TrackingItem: Validation failed: Name can't be blank, User may only be of role user, User must exist" }
     end
   end
 end

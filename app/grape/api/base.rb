@@ -5,7 +5,7 @@ module API
     end
 
     rescue_from ActiveRecord::RecordInvalid do |error|
-      error! error.message, 422
+      error! "#{error.record.model_name.name}: #{error.message}", 422
     end
 
     format :json
