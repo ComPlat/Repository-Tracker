@@ -34,8 +34,8 @@ RSpec.describe "WorkflowUser" do
     before {
       register(user.name, user.email, user.password)
       login(user.email, user.password)
-      create_entry
-      get "/api/v1/trackings/#{create_entry}", params: {access_token: application.access_tokens.last&.token}
+      create_entry(user.name)
+      get "/api/v1/trackings/#{create_entry(user.name)}", params: {access_token: application.access_tokens.last&.token}
     }
 
     it { expect(response).to have_http_status(:ok) }
@@ -49,7 +49,7 @@ RSpec.describe "WorkflowUser" do
       at.expires_in = 0
       at.save!
 
-      get "/api/v1/trackings/#{create_entry}", params: {access_token: application.access_tokens.last&.token}
+      get "/api/v1/trackings/#{create_entry(user.name)}", params: {access_token: application.access_tokens.last&.token}
     }
 
     it { expect(response).to have_http_status(:unauthorized) }

@@ -25,7 +25,7 @@ RSpec.describe "WorkflowTrackableSystemAdmin" do
     before {
       register(trackable_system_admin.name, trackable_system_admin.email, trackable_system_admin.password)
       login(trackable_system_admin.email, trackable_system_admin.password)
-      create_entry
+      create_entry(trackable_system_admin.name)
     }
 
     it { expect(response).to have_http_status(:unauthorized) }
@@ -35,7 +35,7 @@ RSpec.describe "WorkflowTrackableSystemAdmin" do
     before {
       register(trackable_system_admin.name, trackable_system_admin.email, trackable_system_admin.password)
       login(trackable_system_admin.email, trackable_system_admin.password)
-      create_entry
+      create_entry(trackable_system_admin.name)
       get "/api/v1/trackings", params: {access_token: application.access_tokens.last&.token}
     }
 
@@ -47,8 +47,8 @@ RSpec.describe "WorkflowTrackableSystemAdmin" do
     before {
       register(trackable_system_admin.name, trackable_system_admin.email, trackable_system_admin.password)
       login(trackable_system_admin.email, trackable_system_admin.password)
-      create_entry
-      get "/api/v1/trackings/#{create_entry}", params: {access_token: application.access_tokens.last&.token}
+      create_entry(trackable_system_admin.name)
+      get "/api/v1/trackings/#{create_entry(trackable_system_admin.name)}", params: {access_token: application.access_tokens.last&.token}
     }
 
     it { expect(response).to have_http_status(:ok) }
@@ -62,7 +62,7 @@ RSpec.describe "WorkflowTrackableSystemAdmin" do
       at.expires_in = 0
       at.save!
 
-      get "/api/v1/trackings/#{create_entry}", params: {access_token: application.access_tokens.last&.token}
+      get "/api/v1/trackings/#{create_entry(trackable_system_admin.name)}", params: {access_token: application.access_tokens.last&.token}
     }
 
     it { expect(response).to have_http_status(:unauthorized) }

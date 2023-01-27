@@ -33,11 +33,11 @@ module AuthHelper
     response.parsed_body["refresh_token"]
   end
 
-  def create_entry
+  def create_entry(name)
     @create_entry ||= -> {
       post "/api/v1/trackings/",
         params: build_request(:tracking_request, :create)
-          .merge(access_token: application.access_tokens.last.token)
+          .merge(access_token: application.access_tokens.last.token, tracking_item_owner_name: name)
 
       response.parsed_body["id"]
     }.call
