@@ -16,7 +16,6 @@ describe API::V1::Trackings, ".create_authenticated_trackable_system_admin" do
     end
 
     context "when authentication errors occurs, because user is a trackable_system_admin but not its owner" do
-      let(:user) { create(:user, :with_required_attributes_as_trackable_system_admin) }
       let(:tracking_request) {
         build_request(:tracking_request, :create, from_trackable_system:
           create(:trackable_system, :with_required_attributes, :with_required_dependencies))
@@ -29,23 +28,23 @@ describe API::V1::Trackings, ".create_authenticated_trackable_system_admin" do
     end
 
     context "when authorized and tracking_request is valid" do
-      let(:user) { create(:user, :with_required_attributes_as_trackable_system_admin) }
       let(:tracking_request) {
         build_request(:tracking_request, :create, from_trackable_system_name:
-          create(:trackable_system, :with_required_attributes, :with_required_dependencies, user:).name)
+          create(:trackable_system, :with_required_attributes, user:).name)
       }
+
       let(:expected_json_hash) {
-        {"id" => Tracking.first.id,
-         "date_time" => Tracking.first.date_time.strftime("%Y-%m-%dT%H:%M:%S.%LZ"),
+        {"id" => Tracking.first&.id,
+         "date_time" => Tracking.first&.date_time&.strftime("%Y-%m-%dT%H:%M:%S.%LZ"),
          "status" => tracking_request[:status],
          "metadata" => tracking_request[:metadata],
          "tracking_item_name" => tracking_request[:tracking_item_name],
          "from_trackable_system_name" => tracking_request[:from_trackable_system_name],
          "to_trackable_system_name" => tracking_request[:to_trackable_system_name],
-         "owner_name" => Tracking.first.tracking_item.user.name}
+         "owner_name" => Tracking.first&.tracking_item&.user&.name}
       }
 
-      before { post "/api/v1/trackings/", params: tracking_request.merge(access_token: access_token.token, tracking_item_owner_name: user.name) }
+      before { post "/api/v1/trackings/", params: tracking_request.merge(access_token: access_token.token, tracking_item_owner_name: "user1", tracking_item_owner_email: "user1@example.com") }
 
       it { expect(response).to have_http_status :created }
       it { expect(response.content_type).to eq "application/json" }
@@ -54,17 +53,27 @@ describe API::V1::Trackings, ".create_authenticated_trackable_system_admin" do
     end
 
     context "when authorized, tracking_request is valid, but tracking_item do NOT exist yet" do
-      let(:user) { create(:user, :with_required_attributes_as_trackable_system_admin) }
       let(:tracking_request) {
         build_request(:tracking_request, :create, from_trackable_system_name:
           create(:trackable_system, :with_required_attributes, user:).name, tracking_item_name: nil)
       }
 
-      before { post "/api/v1/trackings/", params: tracking_request.merge(access_token: access_token.token) }
+      let(:expected_json_hash) {
+        {"id" => Tracking.first&.id,
+         "date_time" => Tracking.first&.date_time&.strftime("%Y-%m-%dT%H:%M:%S.%LZ"),
+         "status" => tracking_request[:status],
+         "metadata" => tracking_request[:metadata],
+         "tracking_item_name" => TrackingItem.first&.name,
+         "from_trackable_system_name" => tracking_request[:from_trackable_system_name],
+         "to_trackable_system_name" => tracking_request[:to_trackable_system_name],
+         "owner_name" => Tracking.first&.tracking_item&.user&.name}
+      }
 
-      it { expect(response).to have_http_status :unprocessable_entity }
+      before { post "/api/v1/trackings/", params: tracking_request.merge(access_token: access_token.token, tracking_item_owner_name: "user1", tracking_item_owner_email: "user1@example.com", tracking_item_name: "name1") }
+
+      it { expect(response).to have_http_status :created }
       it { expect(response.content_type).to eq "application/json" }
-      it { expect(response.parsed_body).to eq "error" => "TrackingItem: Validation failed: Name can't be blank, User may only be of role user, User must exist" }
+      it { expect(response.parsed_body).to eq expected_json_hash }
     end
   end
 end
