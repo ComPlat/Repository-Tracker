@@ -33,7 +33,6 @@ class API::V1::Trackings < Grape::API
       requires :to_trackable_system_name, type: String, desc: "Tracking receiver"
     end
 
-    # TODO: mb20221202 user_id have to use from authentication!
     post do
       trackings_post_authorization = Authorization::TrackingsPost.new self
       present TrackingBuilder.new(params).create!, with: API::Entities::Tracking if trackings_post_authorization.authorized?
