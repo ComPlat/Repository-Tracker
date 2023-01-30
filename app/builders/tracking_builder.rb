@@ -28,9 +28,8 @@ class TrackingBuilder
         role: :user, password: SecureRandom.base64(12))
   end
 
-  def from_trackable_system_id
-    @from_trackable_system_id ||= TrackableSystem.find_or_create_by!(name: @params["from_trackable_system_name"]).id
-  end
+  def from_trackable_system_id = @from_trackable_system_id ||=
+                                   TrackableSystem.find_or_create_by!(name: @params["from_trackable_system_name"]).id
 
   def to_trackable_system_id = @to_trackable_system_id ||=
                                  TrackableSystem.find_or_create_by!(name: @params["to_trackable_system_name"]).id
