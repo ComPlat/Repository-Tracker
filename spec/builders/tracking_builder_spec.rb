@@ -40,7 +40,6 @@ describe TrackingBuilder do
          "metadata" => tracking.metadata,
          "from_trackable_system_name" => tracking.from_trackable_system.name,
          "to_trackable_system_name" => tracking.to_trackable_system.name,
-         "tracking_item_name" => tracking.tracking_item.name,
          "tracking_item_owner_email" => tracking.tracking_item.user.email}
       end
 
@@ -54,7 +53,6 @@ describe TrackingBuilder do
          "metadata" => tracking.metadata,
          "from_trackable_system_name" => tracking.from_trackable_system.name,
          "to_trackable_system_name" => tracking.to_trackable_system.name,
-         "tracking_item_name" => "my tracking item",
          "tracking_item_owner_email" => "user@example.com"}
       end
 

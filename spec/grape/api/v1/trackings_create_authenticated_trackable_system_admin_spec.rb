@@ -69,7 +69,7 @@ describe API::V1::Trackings, ".create_authenticated_trackable_system_admin" do
          "owner_name" => Tracking.first&.tracking_item&.user&.name}
       }
 
-      before { post "/api/v1/trackings/", params: tracking_request.merge(access_token: access_token.token, tracking_item_owner_name: "user1", tracking_item_owner_email: "user1@example.com", tracking_item_name: "name1") }
+      before { post "/api/v1/trackings/", params: tracking_request.merge(access_token: access_token.token, tracking_item_owner_name: "user1", tracking_item_owner_email: "user1@example.com") }
 
       it { expect(response).to have_http_status :created }
       it { expect(response.content_type).to eq "application/json" }
