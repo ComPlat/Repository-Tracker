@@ -27,9 +27,7 @@ class Authorization::TrackingsPost
     .pluck(:user_id)
     .include?(current_user.id)
 
-  def name
-    @name ||= [params["from_trackable_system_name"], params["to_trackable_system_name"]]
-  end
+  def name = @name ||= [params["from_trackable_system_name"], params["to_trackable_system_name"]]
 
   def params = @params ||= @trackings_grape_api.params
 
