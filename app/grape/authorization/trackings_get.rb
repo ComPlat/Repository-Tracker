@@ -27,12 +27,13 @@ class Authorization::TrackingsGet
   def admin_or_super_records = Tracking.all
 
   def trackable_system_admin_records
-    trackable_system_ids = TrackableSystem.where(user: current_user).ids
     Tracking.where(from_trackable_system_id: trackable_system_ids)
       .or(Tracking.where(to_trackable_system_id: trackable_system_ids))
   end
 
   def user_records = Tracking.where(tracking_item: TrackingItem.where(user: current_user))
+
+  def trackable_system_ids = @trackable_system_ids ||= TrackableSystem.where(user: current_user).ids
 
   def no_records = []
 
