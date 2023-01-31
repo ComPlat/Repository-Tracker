@@ -45,6 +45,7 @@ describe TrackingBuilder do
       end
 
       it { expect { created_tracking }.to change(Tracking, :count).from(0).to(1) }
+      it { expect { created_tracking }.to change(TrackingItem, :count).from(0).to(1) }
     end
 
     context "when trackable systems exist, but tracking item do NOT exist in database" do
@@ -59,6 +60,7 @@ describe TrackingBuilder do
       end
 
       it { expect { created_tracking }.to change(Tracking, :count).from(0).to(1) }
+      it { expect { created_tracking }.to change(TrackingItem, :count).from(0).to(1) }
     end
   end
 end
