@@ -18,7 +18,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_22_102807) do
   # Note that some types may not work with other database engines. Be careful if changing database.
   create_enum "trackable_systems_name", ["radar4kit", "radar4chem", "chemotion_repository", "chemotion_electronic_laboratory_notebook", "nmrxiv"]
   create_enum "trackings_status", ["draft", "published", "submitted", "reviewing", "pending", "accepted", "reviewed", "rejected", "deleted"]
-  create_enum "users_role", ["user", "super", "admin"]
+  create_enum "users_role", ["user", "super", "admin", "trackable_system_admin"]
 
   create_table "oauth_access_tokens", force: :cascade do |t|
     t.bigint "resource_owner_id", null: false
@@ -49,9 +49,11 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_22_102807) do
 
   create_table "trackable_systems", force: :cascade do |t|
     t.enum "name", null: false, enum_type: "trackable_systems_name"
+    t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_trackable_systems_on_name", unique: true
+    t.index ["user_id"], name: "index_trackable_systems_on_user_id"
   end
 
   create_table "tracking_items", force: :cascade do |t|
@@ -93,6 +95,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_22_102807) do
 
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "users", column: "resource_owner_id"
+  add_foreign_key "trackable_systems", "users"
   add_foreign_key "tracking_items", "users"
   add_foreign_key "trackings", "trackable_systems", column: "from_trackable_system_id"
   add_foreign_key "trackings", "trackable_systems", column: "to_trackable_system_id"

@@ -10,11 +10,12 @@ describe "API::V1" do
     end
 
     context "when path does not exist and authenticated" do
+      let(:user) { build(:user, :with_required_attributes_as_user) }
       let(:application) { create(:doorkeeper_application, :with_required_attributes) }
 
       before {
-        register
-        login
+        register(user.name, user.email, user.password)
+        login(user.email, user.password)
         get "/api/v1/not_existing_path", params: {access_token: application.access_tokens.last&.token}
       }
 

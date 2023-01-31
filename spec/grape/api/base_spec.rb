@@ -61,7 +61,7 @@ describe API::Base do
   describe "/api/swagger_doc.json" do
     before { get "/api/swagger_doc.json" }
 
-    let(:parsed_and_symbolized_response_body) { JSON.parse(response.body).deep_symbolize_keys }
+    let(:parsed_and_symbolized_response_body) { response.parsed_body.deep_symbolize_keys }
 
     it { expect(response).to have_http_status(:ok) }
     it { expect(parsed_and_symbolized_response_body.keys.size).to eq 7 }
@@ -104,6 +104,7 @@ describe API::Base do
         [{description: "Tracking status", in: "formData", name: "status", required: true, type: "string"},
           {description: "Tracking metadata", in: "formData", name: "metadata", required: true, type: "json"},
           {description: "Tracking unique identifier", in: "formData", name: "tracking_item_name", required: true, type: "string"},
+          {description: "Tracking item owner name", in: "formData", name: "tracking_item_owner_name", required: true, type: "string"},
           {description: "Tracking source", in: "formData", name: "from_trackable_system_name", required: true, type: "string"},
           {description: "Tracking receiver", in: "formData", name: "to_trackable_system_name", required: true, type: "string"}]
       }

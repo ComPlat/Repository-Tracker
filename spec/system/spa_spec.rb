@@ -1,16 +1,17 @@
 RSpec.describe "SPA" do
   include SpaHelper
 
+  let(:user) { create(:user, :with_required_attributes_as_user) }
+  let(:tracking_item) { create(:tracking_item, :with_required_attributes, user:) }
   let(:trackings) do
-    [create(:tracking, :with_required_dependencies, :with_required_attributes,
-      from_trackable_system: create(:trackable_system, :with_required_attributes,
+    [create(:tracking, :with_required_attributes, tracking_item:,
+      from_trackable_system: create(:trackable_system, :with_required_attributes, :with_required_dependencies,
         name: "chemotion_electronic_laboratory_notebook"),
-      to_trackable_system: create(:trackable_system, :with_required_attributes,
+      to_trackable_system: create(:trackable_system, :with_required_attributes, :with_required_dependencies,
         name: "radar4kit"))] +
-      create_list(:tracking, 99, :with_required_dependencies, :with_required_attributes)
+      create_list(:tracking, 99, :with_required_attributes, :with_required_dependencies, tracking_item:)
   end
-  let(:user) { create(:user, :with_required_attributes) }
-  let(:access_token) { create(:doorkeeper_access_token, :with_required_dependencies, resource_owner_id: user.id) }
+  let(:access_token) { create(:doorkeeper_access_token, :with_required_dependencies) }
   # HINT: Database has UTC timestamp, we format it to format used in frontend and zone used on machine (like frontend).
   let(:time) { trackings.map { |tracking| tracking.date_time.in_time_zone(Time.now.getlocal.zone).strftime("%d.%m.%Y, %H:%M:%S") }.min }
 

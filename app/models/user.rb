@@ -3,8 +3,9 @@ class User < ApplicationRecord
   validates :role, presence: true
   validates :email, presence: true, format: URI::MailTo::EMAIL_REGEXP
 
-  enum role: {user: "user", super: "super", admin: "admin"}
+  enum role: {user: "user", super: "super", admin: "admin", trackable_system_admin: "trackable_system_admin"}
 
+  has_many :trackable_systems, inverse_of: :user, dependent: :restrict_with_exception
   has_many :tracking_items, inverse_of: :user, dependent: :restrict_with_exception
 
   # HINT: Model access_token is constructed by Doorkeeper and therefore, it does NOT have an user dependency.

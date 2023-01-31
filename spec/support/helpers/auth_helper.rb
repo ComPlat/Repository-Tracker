@@ -1,28 +1,26 @@
 module AuthHelper
-  def register
+  def register(name, email, password)
     @register ||= -> {
       post "/users",
-        params: {user: {name: "name", role: "user", email: "tobias.vetter@cleanercode.de", password: "verysecure", client_id: application.uid}}, as: :json
+        params: {user: {name:, email:, password:}}, as: :json
       response.parsed_body["access_token"]
     }.call
   end
 
-  def login
+  def login(email, password)
     post "/oauth/token",
       params: {
         grant_type: "password",
-        email: "tobias.vetter@cleanercode.de",
-        password: "verysecure",
+        email:,
+        password:,
         client_id: application.uid
       }, as: :json
   end
 
-  def revoke
+  def revoke(email, password)
     post "/oauth/revoke",
-      params: {
-        client_id: application.uid,
-        token: application.access_tokens.last.token
-      }, as: :json
+      headers: {Authorization: "\"username\": #{email}, \"password\": #{password}"},
+      params: {client_id: application.uid}, as: :json
   end
 
   def refresh_token
@@ -35,9 +33,11 @@ module AuthHelper
     response.parsed_body["refresh_token"]
   end
 
-  def create_entry
+  def create_entry(name)
     @create_entry ||= -> {
-      post "/api/v1/trackings/", params: build_request(:tracking_request, :create).merge(access_token: application.access_tokens.last.token)
+      post "/api/v1/trackings/",
+        params: build_request(:tracking_request, :create)
+          .merge(access_token: application.access_tokens.last.token, tracking_item_owner_name: name)
 
       response.parsed_body["id"]
     }.call

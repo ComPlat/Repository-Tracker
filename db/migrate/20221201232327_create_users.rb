@@ -1,6 +1,6 @@
 class CreateUsers < ActiveRecord::Migration[7.0]
   def change
-    create_enum :users_role, %w[user super admin]
+    create_enum :users_role, %w[user super admin trackable_system_admin]
 
     create_table :users do |t|
       t.text :name, null: false

@@ -2,6 +2,7 @@ RSpec.describe Doorkeeper::AccessToken do
   include AuthHelper
 
   describe "POST /oauth/token" do
+    let(:user) { build(:user, :with_required_attributes_as_user) }
     let(:application) { create(:doorkeeper_application, :with_required_attributes) }
 
     let(:expected_response) {
@@ -13,8 +14,8 @@ RSpec.describe Doorkeeper::AccessToken do
     }
 
     before do
-      register
-      login
+      register(user.name, user.email, user.password)
+      login(user.email, user.password)
     end
 
     it { expect(response).to have_http_status(:ok) }

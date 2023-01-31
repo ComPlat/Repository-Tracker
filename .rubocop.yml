@@ -20,3 +20,4 @@ Rails:
     - bin/bundle
 RSpec:
   Enabled: true
+

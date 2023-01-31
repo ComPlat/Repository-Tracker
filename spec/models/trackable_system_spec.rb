@@ -1,9 +1,10 @@
 describe TrackableSystem do
   describe "factory" do
     it { expect(build(:trackable_system)).to be_invalid }
-    it { expect(build(:trackable_system, :with_required_attributes)).to be_valid }
-    it { expect(create(:trackable_system, :with_required_attributes)).to be_persisted }
-    it { expect(create(:trackable_system, :with_required_attributes)).to be_valid }
+    it { expect(build(:trackable_system, :with_required_attributes)).to be_invalid }
+    it { expect(build(:trackable_system, :with_required_dependencies)).to be_invalid }
+    it { expect(create(:trackable_system, :with_required_attributes, :with_required_dependencies)).to be_persisted }
+    it { expect(create(:trackable_system, :with_required_attributes, :with_required_dependencies)).to be_valid }
   end
 
   describe "#id" do
@@ -26,13 +27,13 @@ describe TrackableSystem do
 
     it {
       values.values.map { |value|
-        expect(create(:trackable_system, :with_required_attributes, name: value).name).to eq value
+        expect(create(:trackable_system, :with_required_attributes, :with_required_dependencies, name: value).name).to eq value
       }
     }
 
     it {
       values.values.map { |value|
-        expect(create(:trackable_system, :with_required_attributes, name: value).public_send("#{value}?")).to be true
+        expect(create(:trackable_system, :with_required_attributes, :with_required_dependencies, name: value).public_send("#{value}?")).to be true
       }
     }
   end
@@ -43,5 +44,44 @@ describe TrackableSystem do
 
   describe "#updated_at" do
     it { is_expected.to have_db_column(:updated_at).of_type(:datetime) }
+  end
+
+  describe "#from_trackings" do
+    subject(:trackable_system) { create(:trackable_system, :with_required_attributes, :with_required_dependencies) }
+
+    let(:tracking) { create(:tracking, :with_required_attributes, :with_required_dependencies, from_trackable_system: trackable_system) }
+
+    it { is_expected.to have_many(:from_trackings).inverse_of(:from_trackable_system).with_foreign_key(:from_trackable_system_id).dependent(:restrict_with_exception).class_name("Tracking") }
+    it { expect(trackable_system.from_trackings).to eq [] }
+    it { expect(trackable_system.from_trackings).to eq [tracking] }
+  end
+
+  describe "#to_trackings" do
+    subject(:trackable_system) { create(:trackable_system, :with_required_attributes, :with_required_dependencies) }
+
+    let(:tracking) { create(:tracking, :with_required_attributes, :with_required_dependencies, to_trackable_system: trackable_system) }
+
+    it { is_expected.to have_many(:to_trackings).inverse_of(:to_trackable_system).with_foreign_key(:to_trackable_system_id).dependent(:restrict_with_exception).class_name("Tracking") }
+    it { expect(trackable_system.to_trackings).to eq [] }
+    it { expect(trackable_system.to_trackings).to eq [tracking] }
+  end
+
+  describe "#user" do
+    let(:user) { create(:user, :with_required_attributes_as_trackable_system_admin) }
+
+    it { is_expected.to have_db_index(:user_id) }
+    it { is_expected.to have_db_column(:user_id).of_type(:integer) }
+    it { is_expected.to belong_to(:user).inverse_of(:trackable_systems) }
+    it { expect(create(:trackable_system, :with_required_attributes, user:).user).to eq user }
+
+    it {
+      expect { create(:trackable_system, :with_required_attributes, user: nil) }
+        .to raise_error ActiveRecord::RecordInvalid, "Validation failed: User #{described_class::USER_INCLUSION_ERROR_MESSAGE}, User must exist"
+    }
+
+    it {
+      expect { create(:trackable_system, :with_required_attributes, user: create(:user, :with_required_attributes_as_user)) }
+        .to raise_error ActiveRecord::RecordInvalid, "Validation failed: User #{described_class::USER_INCLUSION_ERROR_MESSAGE}"
+    }
   end
 end

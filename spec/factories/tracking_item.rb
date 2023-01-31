@@ -14,7 +14,7 @@ FactoryBot.define do
 
   factory :tracking_item do
     trait :with_required_dependencies do
-      user { create(:user, :with_required_attributes) }
+      user { create(:user, :with_required_attributes_as_user) }
     end
 
     trait :with_required_attributes do
