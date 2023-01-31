@@ -8,6 +8,13 @@ FactoryBot.define do
       to_trackable_system_name { find_or_create(:trackable_system, :with_required_attributes, :with_required_dependencies).name }
     end
 
+    trait :create_without_tracking_item do
+      status { build(:tracking, :with_required_attributes).status }
+      metadata { build(:tracking, :with_required_attributes).metadata }
+      from_trackable_system_name { find_or_create(:trackable_system, :with_required_attributes, :with_required_dependencies).name }
+      to_trackable_system_name { find_or_create(:trackable_system, :with_required_attributes, :with_required_dependencies).name }
+    end
+
     trait :create_invalid do
     end
   end

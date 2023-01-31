@@ -19,13 +19,8 @@ class TrackingBuilder
 
   def metadata = @metadata ||= @params["metadata"]
 
-  def tracking_item_id
-    @tracking_item_id ||= if @params["tracking_item_name"].nil?
-      TrackingItem.create!(name: "tracking_item_name", user:).id
-    else
-      TrackingItem.find_or_create_by!(name: @params["tracking_item_name"], user:).id
-    end
-  end
+  def tracking_item_id = @tracking_item_id ||=
+                           TrackingItem.find_or_create_by!(name: @params["tracking_item_name"], user:).id
 
   def user
     User.find_by(email: @params["tracking_item_owner_email"], role: :user) ||

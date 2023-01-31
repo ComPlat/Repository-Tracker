@@ -40,7 +40,8 @@ describe TrackingBuilder do
          "metadata" => tracking.metadata,
          "from_trackable_system_name" => tracking.from_trackable_system.name,
          "to_trackable_system_name" => tracking.to_trackable_system.name,
-         "tracking_item_owner_email" => tracking.tracking_item.user.email}
+         "tracking_item_owner_email" => tracking.tracking_item.user.email,
+         "tracking_item_name" => tracking.tracking_item.name}
       end
 
       it { expect { created_tracking }.to change(Tracking, :count).from(0).to(1) }
@@ -53,7 +54,8 @@ describe TrackingBuilder do
          "metadata" => tracking.metadata,
          "from_trackable_system_name" => tracking.from_trackable_system.name,
          "to_trackable_system_name" => tracking.to_trackable_system.name,
-         "tracking_item_owner_email" => "user@example.com"}
+         "tracking_item_owner_email" => "user@example.com",
+         "tracking_item_name" => "name1"}
       end
 
       it { expect { created_tracking }.to change(Tracking, :count).from(0).to(1) }

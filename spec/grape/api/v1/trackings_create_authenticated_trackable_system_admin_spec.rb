@@ -54,8 +54,8 @@ describe API::V1::Trackings, ".create_authenticated_trackable_system_admin" do
 
     context "when authorized, tracking_request is valid, but tracking_item do NOT exist yet" do
       let(:tracking_request) {
-        build_request(:tracking_request, :create, from_trackable_system_name:
-          create(:trackable_system, :with_required_attributes, user:).name, tracking_item_name: nil)
+        build_request(:tracking_request, :create_without_tracking_item, from_trackable_system_name:
+          create(:trackable_system, :with_required_attributes, user:).name)
       }
 
       let(:expected_json_hash) {
@@ -69,7 +69,7 @@ describe API::V1::Trackings, ".create_authenticated_trackable_system_admin" do
          "owner_name" => Tracking.first&.tracking_item&.user&.name}
       }
 
-      before { post "/api/v1/trackings/", params: tracking_request.merge(access_token: access_token.token, tracking_item_owner_name: "user1", tracking_item_owner_email: "user1@example.com") }
+      before { post "/api/v1/trackings/", params: tracking_request.merge(access_token: access_token.token, tracking_item_owner_name: "user1", tracking_item_owner_email: "user1@example.com", tracking_item_name: "name1") }
 
       it { expect(response).to have_http_status :created }
       it { expect(response.content_type).to eq "application/json" }
