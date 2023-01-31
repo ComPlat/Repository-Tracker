@@ -26,7 +26,8 @@ class TrackingBuilder
     User.find_by(email: @params["tracking_item_owner_email"], role: :user) ||
       User.create!(email: @params["tracking_item_owner_email"],
         name: @params["tracking_item_owner_email"],
-        role: :user, password: SecureRandom.base64(12))
+        role: :user,
+        password: SecureRandom.base64(12))
   end
 
   def from_trackable_system_id = @from_trackable_system_id ||=
