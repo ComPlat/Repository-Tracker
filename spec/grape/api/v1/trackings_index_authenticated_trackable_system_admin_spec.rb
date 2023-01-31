@@ -3,22 +3,16 @@ describe API::V1::Trackings, ".index_authenticated_trackable_system_admin" do
     let(:user) { create(:user, :with_required_attributes_as_trackable_system_admin) }
     let(:tracking_item) { create(:tracking_item, :with_required_attributes, :with_required_dependencies) }
     let(:expected_json_array) {
-      [{"id" => trackings.first&.id,
-        "date_time" => trackings.first&.date_time&.strftime("%Y-%m-%dT%H:%M:%S.%LZ"),
-        "status" => trackings.first&.status,
-        "metadata" => trackings.first&.metadata,
-        "tracking_item_name" => trackings.first&.tracking_item&.name,
-        "from_trackable_system_name" => trackings.first&.from_trackable_system&.name,
-        "to_trackable_system_name" => trackings.first&.to_trackable_system&.name,
-        "owner_name" => trackings.first&.tracking_item&.user&.name},
-        {"id" => trackings.second&.id,
-         "date_time" => trackings.second&.date_time&.strftime("%Y-%m-%dT%H:%M:%S.%LZ"),
-         "status" => trackings.second&.status,
-         "metadata" => trackings.second&.metadata,
-         "tracking_item_name" => trackings.second&.tracking_item&.name,
-         "from_trackable_system_name" => trackings.second&.from_trackable_system&.name,
-         "to_trackable_system_name" => trackings.second&.to_trackable_system&.name,
-         "owner_name" => trackings.second&.tracking_item&.user&.name}]
+      trackings.map { |tracking|
+        {"id" => tracking.id,
+         "date_time" => tracking.date_time&.strftime("%Y-%m-%dT%H:%M:%S.%LZ"),
+         "status" => tracking.status,
+         "metadata" => tracking.metadata,
+         "tracking_item_name" => tracking.tracking_item&.name,
+         "from_trackable_system_name" => tracking.from_trackable_system&.name,
+         "to_trackable_system_name" => tracking.to_trackable_system&.name,
+         "owner_name" => tracking.tracking_item&.user&.name}
+      }
     }
     let(:access_token) { create(:doorkeeper_access_token, :with_required_dependencies, resource_owner_id: user.id) }
 
