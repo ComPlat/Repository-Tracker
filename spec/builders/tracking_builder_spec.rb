@@ -33,6 +33,25 @@ describe TrackingBuilder do
   describe "#create!" do
     subject(:created_tracking) { described_class.new(params).create! }
 
+    let(:expected_tracking) {
+      {"id" => created_tracking.id,
+       "date_time" => created_tracking.date_time.strftime("%Y-%m-%dT%H:%M:%S.%LZ"),
+       "status" => created_tracking.status,
+       "metadata" => created_tracking.metadata,
+       "tracking_item_id" => created_tracking.tracking_item_id,
+       "from_trackable_system_id" => created_tracking.from_trackable_system_id,
+       "to_trackable_system_id" => created_tracking.to_trackable_system_id,
+       "created_at" => created_tracking.created_at.strftime("%Y-%m-%dT%H:%M:%S.%LZ"),
+       "updated_at" => created_tracking.updated_at.strftime("%Y-%m-%dT%H:%M:%S.%LZ")}
+    }
+    let(:expected_tracking_item) {
+      {"id" => created_tracking.tracking_item.id,
+       "name" => created_tracking.tracking_item.name,
+       "user_id" => created_tracking.tracking_item.user_id,
+       "created_at" => created_tracking.tracking_item.created_at.strftime("%Y-%m-%dT%H:%M:%S.%LZ"),
+       "updated_at" => created_tracking.tracking_item.updated_at.strftime("%Y-%m-%dT%H:%M:%S.%LZ")}
+    }
+
     context "when required dependencies already exist in database" do
       let(:tracking) { build(:tracking, :with_required_attributes, :with_required_dependencies) }
       let(:params) do
@@ -46,6 +65,8 @@ describe TrackingBuilder do
 
       it { expect { created_tracking }.to change(Tracking, :count).from(0).to(1) }
       it { expect { created_tracking }.to change(TrackingItem, :count).from(0).to(1) }
+      it { expect(created_tracking.as_json).to eq expected_tracking }
+      it { expect(created_tracking.tracking_item.as_json).to eq expected_tracking_item }
     end
 
     context "when trackable systems exist, but tracking item do NOT exist in database" do
@@ -61,6 +82,8 @@ describe TrackingBuilder do
 
       it { expect { created_tracking }.to change(Tracking, :count).from(0).to(1) }
       it { expect { created_tracking }.to change(TrackingItem, :count).from(0).to(1) }
+      it { expect(created_tracking.as_json).to eq expected_tracking }
+      it { expect(created_tracking.tracking_item.as_json).to eq expected_tracking_item }
     end
   end
 end
