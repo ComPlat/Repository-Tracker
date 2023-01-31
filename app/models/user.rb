@@ -16,7 +16,7 @@ class User < ApplicationRecord
     dependent: :restrict_with_exception
   # rubocop:enable Rails/InverseOf
 
-  devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable
+  devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable, :confirmable
 
   # HINT: See: https://github.com/heartcombo/devise/wiki/How-To:-Find-a-user-when-you-have-their-credentials
   def self.authenticate(email, password)

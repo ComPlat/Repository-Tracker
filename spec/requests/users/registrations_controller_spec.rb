@@ -46,3 +46,82 @@ describe Users::RegistrationsController do
     end
   end
 end
+
+# describe Users::RegistrationsController do
+#   include AuthHelper
+#
+#   describe "POST /users" do
+#     let(:application) { create(:doorkeeper_application, :with_required_attributes) }
+#     let(:expected_user) { User.last }
+#
+#     it {
+#       register
+#       expect(response).to have_http_status(:ok)
+#     }
+#
+#     it {
+#       register
+#       expect(response.parsed_body.keys).to eq %w[id name role email created_at updated_at]
+#     }
+#
+#     it {
+#       register
+#       expect(response.parsed_body["id"]).to eq expected_user.id
+#     }
+#
+#     it {
+#       register
+#       expect(response.parsed_body["name"]).to eq expected_user.name
+#     }
+#
+#     it {
+#       register
+#       expect(response.parsed_body["role"]).to eq expected_user.role
+#     }
+#
+#     it {
+#       register
+#       expect(response.parsed_body["email"]).to eq expected_user.email
+#     }
+#
+#     it {
+#       register
+#       expect(response.parsed_body["created_at"]).to eq expected_user.created_at.iso8601(3)
+#     }
+#
+#     it {
+#       register
+#       expect(response.parsed_body["updated_at"]).to eq expected_user.updated_at.iso8601(3)
+#     }
+#
+#     it { expect { register }.to change(User, :count).from(0).to(1) }
+#
+#     it {
+#       register
+#       expect(expected_user.confirmed_at).to be_nil
+#     }
+#
+#     it {
+#       register
+#       expect(expected_user.unconfirmed_email).to be_nil
+#     }
+#
+#     # it {
+#     #   register
+#     #   expect(User.last.attributes).to eq({"confirmation_sent_at" => 2023-01-31 16:49:43.954861000 0000,
+#     #                                       "confirmation_token" => "DAbDEnjfwS4-xMPPkuzh",
+#     #                                       "confirmed_at" => nil,
+#     #                                       "created_at" => 2023-01-31 16:49:43.954813000 0000,
+#     #                                       "email" => "tobias.vetter@cleanercode.de",
+#     #                                       "encrypted_password" => "$2a$04$jmFky0Y7sMfbBJ4h2sruM.aTZBppHDu3.VjGC23knbJeRNP28LJVu",
+#     #                                       "id" => 10,
+#     #                                       "name" => "name",
+#     #                                       "remember_created_at" => nil,
+#     #                                       "reset_password_sent_at" => nil,
+#     #                                       "reset_password_token" => nil,
+#     #                                       "role" => "user",
+#     #                                       "unconfirmed_email" => nil,
+#     #                                       "updated_at" => 2023-01-31 16:49:43.954813000 +0000,})
+#     # }
+#   end
+# end
