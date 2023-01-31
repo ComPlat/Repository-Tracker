@@ -34,14 +34,16 @@ describe API::V1::Trackings, ".create_authenticated_trackable_system_admin" do
       }
 
       let(:expected_json_hash) {
-        {"id" => Tracking.first&.id,
-         "date_time" => Tracking.first&.date_time&.strftime("%Y-%m-%dT%H:%M:%S.%LZ"),
+        tracking = Tracking.first
+
+        {"id" => tracking&.id,
+         "date_time" => tracking&.date_time&.strftime("%Y-%m-%dT%H:%M:%S.%LZ"),
          "status" => tracking_request[:status],
          "metadata" => tracking_request[:metadata],
          "tracking_item_name" => tracking_request[:tracking_item_name],
          "from_trackable_system_name" => tracking_request[:from_trackable_system_name],
          "to_trackable_system_name" => tracking_request[:to_trackable_system_name],
-         "owner_name" => Tracking.first&.tracking_item&.user&.name}
+         "owner_name" => tracking&.tracking_item&.user&.name}
       }
 
       before { post "/api/v1/trackings/", params: tracking_request.merge(access_token: access_token.token, tracking_item_owner_name: "user1", tracking_item_owner_email: "user1@example.com") }
@@ -59,14 +61,17 @@ describe API::V1::Trackings, ".create_authenticated_trackable_system_admin" do
       }
 
       let(:expected_json_hash) {
-        {"id" => Tracking.first&.id,
-         "date_time" => Tracking.first&.date_time&.strftime("%Y-%m-%dT%H:%M:%S.%LZ"),
+        tracking = Tracking.first
+        tracking_item = TrackingItem.first
+
+        {"id" => tracking.id,
+         "date_time" => tracking.date_time&.strftime("%Y-%m-%dT%H:%M:%S.%LZ"),
          "status" => tracking_request[:status],
          "metadata" => tracking_request[:metadata],
-         "tracking_item_name" => TrackingItem.first&.name,
+         "tracking_item_name" => tracking_item.name,
          "from_trackable_system_name" => tracking_request[:from_trackable_system_name],
          "to_trackable_system_name" => tracking_request[:to_trackable_system_name],
-         "owner_name" => Tracking.first&.tracking_item&.user&.name}
+         "owner_name" => tracking.tracking_item&.user&.name}
       }
 
       before { post "/api/v1/trackings/", params: tracking_request.merge(access_token: access_token.token, tracking_item_owner_name: "user1", tracking_item_owner_email: "user1@example.com", tracking_item_name: "name1") }

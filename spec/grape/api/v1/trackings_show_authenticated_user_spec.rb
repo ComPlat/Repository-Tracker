@@ -7,14 +7,16 @@ describe API::V1::Trackings, ".show_authenticated_user" do
     context "when tracking id exists and user is authorized" do
       let(:tracking_item) { create(:tracking_item, :with_required_attributes, user:) }
       let(:expected_json_hash) {
-        {"id" => trackings.last&.id,
-         "date_time" => trackings.last&.date_time&.strftime("%Y-%m-%dT%H:%M:%S.%LZ"),
-         "status" => trackings.last&.status,
-         "metadata" => trackings.last&.metadata,
-         "tracking_item_name" => trackings.last&.tracking_item&.name,
-         "from_trackable_system_name" => trackings.last&.from_trackable_system&.name,
-         "to_trackable_system_name" => trackings.last&.to_trackable_system&.name,
-         "owner_name" => trackings.last&.tracking_item&.user&.name}
+        tracking = trackings.last
+
+        {"id" => tracking&.id,
+         "date_time" => tracking&.date_time&.strftime("%Y-%m-%dT%H:%M:%S.%LZ"),
+         "status" => tracking&.status,
+         "metadata" => tracking&.metadata,
+         "tracking_item_name" => tracking&.tracking_item&.name,
+         "from_trackable_system_name" => tracking&.from_trackable_system&.name,
+         "to_trackable_system_name" => tracking&.to_trackable_system&.name,
+         "owner_name" => tracking&.tracking_item&.user&.name}
       }
 
       before do
