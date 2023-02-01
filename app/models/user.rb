@@ -19,8 +19,14 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable, :confirmable
 
   # HINT: See: https://github.com/heartcombo/devise/wiki/How-To:-Find-a-user-when-you-have-their-credentials
+  #            https://medium.com/@khokhanijignesh29/rails-api-doorkeeper-devise-4212115c9f0d
   def self.authenticate(email, password)
-    user = User.find_for_authentication(email: email)
-    user&.valid_password?(password) ? user : nil
+    user = User.find_for_database_authentication(email:)
+
+    return unless user
+    return unless user.valid_password?(password) # HINT: Otherwise user can login with false password.
+    return unless user.confirmed? # HINT: Otherwise user can login without having confirmed his email address.
+
+    user
   end
 end

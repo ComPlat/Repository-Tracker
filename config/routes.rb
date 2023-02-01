@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   Rails.application.routes.draw do
     root "spa#index"
 
-    devise_for :users, controllers: {registrations: "users/registrations"}
+    devise_for :users, controllers: {registrations: "users/registrations", confirmations: "users/confirmations"}
 
     use_doorkeeper do
       skip_controllers :authorizations, :applications,

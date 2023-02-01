@@ -7,6 +7,10 @@ module AuthHelper
     }.call
   end
 
+  def confirm_email(email)
+    get "/users/confirmation", params: {confirmation_token: User.find_by(email:).confirmation_token}
+  end
+
   def login(email, password)
     post "/oauth/token",
       params: {
