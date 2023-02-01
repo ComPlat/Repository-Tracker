@@ -12,7 +12,7 @@ module SpaHelper
   end
 
   def registration_new_user
-    registration_user("New User", "newuser@exmaple.com", "SecurePassword123-", "SecurePassword123-")
+    registration_user("New User", "newuser@example.com", "SecurePassword123-", "SecurePassword123-")
   end
 
   def registration_with_existing_user
