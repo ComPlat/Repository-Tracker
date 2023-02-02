@@ -8,7 +8,7 @@ class Users::ConfirmationsController < Devise::ConfirmationsController
     if resource.errors.empty?
       redirect_to "/#confirmation_successful"
     else
-      redirect_to "/#confirmation_error?errors=#{resource.errors}"
+      redirect_to "/#confirmation_error?errors=#{resource.errors}", allow_other_host: true
     end
   end
 end

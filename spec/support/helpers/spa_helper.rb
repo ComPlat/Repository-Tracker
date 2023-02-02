@@ -61,11 +61,6 @@ module SpaHelper
     find(".ant-radio-group", text: size).click
   end
 
-  def confirmation_link
-    # HINT: We just want the request uri because test environment host is "www.example.com" but Capybara tests on "localhost"
-    URI.parse(confirmation_html.at("a:contains('Confirm my account')")["href"]).request_uri
-  end
-
   def confirm_user_by_email
     visit confirmation_link
   end
@@ -95,5 +90,10 @@ module SpaHelper
 
   def confirmation_html
     Nokogiri::HTML(confirmation_email.body.raw_source)
+  end
+
+  def confirmation_link
+    # HINT: We just want the request uri because test environment host is "www.example.com" but Capybara tests on "localhost"
+    URI.parse(confirmation_html.at("a:contains('Confirm my account')")["href"]).request_uri
   end
 end
