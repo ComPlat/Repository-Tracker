@@ -100,16 +100,27 @@ RSpec.describe "SPA" do
       it { expect(page).to have_content("You have successfully signed up. You will be redirected to the main page.", wait: 5) }
     end
 
+    context "when registration form is filled and user email must be confirmed" do
+      before do
+        visit "/"
+        registration_new_user
+        confirm_user_by_email
+      end
+
+      it { expect(page).to have_current_path "/" }
+    end
+
     context "when registration is successful and user can login" do
       before do
         visit "/"
         registration_new_user
         sleep 3
-        login_with_correct_credentials
+        confirm_user_by_email
+        login_new_user
         close_notification
       end
 
-      it { expect(page).to have_content(trackings.pluck(:id).min, wait: 5) }
+      it { expect(page).to have_selector(".ant-typography", text: "newuser@example.com") }
     end
 
     context "when email is already taken" do

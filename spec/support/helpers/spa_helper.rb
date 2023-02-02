@@ -11,6 +11,12 @@ module SpaHelper
     click_button "Login"
   end
 
+  def login_new_user
+    fill_in_email_input("newuser@example.com")
+    fill_in_password_input("SecurePassword123-")
+    click_button "Login"
+  end
+
   def registration_new_user
     registration_user("New User", "newuser@example.com", "SecurePassword123-", "SecurePassword123-")
   end
@@ -55,14 +61,23 @@ module SpaHelper
     find(".ant-radio-group", text: size).click
   end
 
-  private
-
-  def fill_in_email_input(content)
-    find(:xpath, "/html/body/div/div/div[1]/div/div[2]/form/div/div/div[1]/div/div/div/div").click.fill_in(with: content)
+  def confirmation_link
+    # HINT: We just want the request uri because test environment host is "www.example.com" but Capybara tests on "localhost"
+    URI.parse(confirmation_html.at("a:contains('Confirm my account')")["href"]).request_uri
   end
 
-  def fill_in_password_input(content)
-    find(:xpath, "/html/body/div/div/div[1]/div/div[2]/form/div/div/div[2]/div/div/div/div").click.fill_in(with: content)
+  def confirm_user_by_email
+    visit confirmation_link
+  end
+
+  private
+
+  def fill_in_email_input(email)
+    find(:xpath, "/html/body/div/div/div[1]/div/div[2]/form/div/div/div[1]/div/div/div/div").click.fill_in(with: email)
+  end
+
+  def fill_in_password_input(password)
+    find(:xpath, "/html/body/div/div/div[1]/div/div[2]/form/div/div/div[2]/div/div/div/div").click.fill_in(with: password)
   end
 
   def registration_user(name, email, password, confirmation)
@@ -72,5 +87,13 @@ module SpaHelper
     find(:xpath, "/html/body/div/div/div[2]/div/div/div/form/div[3]/div/div[2]/div/div/span/input").click.fill_in(with: password)
     find(:xpath, "/html/body/div/div/div[2]/div/div/div/form/div[4]/div/div[2]/div/div/span/input").click.fill_in(with: confirmation)
     click_button "Submit"
+  end
+
+  def confirmation_email
+    ActionMailer::Base.deliveries.last
+  end
+
+  def confirmation_html
+    Nokogiri::HTML(confirmation_email.body.raw_source)
   end
 end
