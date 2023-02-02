@@ -12,8 +12,22 @@ import {
   createRoot,
 } from 'react-dom/client';
 import {
+  BrowserRouter,
+  Route,
+  Routes,
+} from 'react-router-dom';
+import {
+  ConfirmationError,
+} from './components/ConfirmationError';
+import {
+  ConfirmationSuccessful,
+} from './components/ConfirmationSuccessful';
+import {
   Login,
 } from './components/Login';
+import {
+  NotFound,
+} from './components/NotFound';
 import {
   Registration,
 } from './components/Registration';
@@ -81,21 +95,28 @@ const App: React.FC = () => {
   ]);
 
   return (
-    <UserContext.Provider value={userProviderValue}>
-      <RegisterContext.Provider value={registerProviderValue}>
-        <Padding>
-          <Header>
-            <Row justify='space-between'>
-              <Col><Title>Repository-Tracker</Title></Col>
-              <Col><Login /></Col>
+    <BrowserRouter>
+      <UserContext.Provider value={userProviderValue}>
+        <RegisterContext.Provider value={registerProviderValue}>
+          <Padding>
+            <Header>
+              <Row justify='space-between'>
+                <Col><Title>Repository-Tracker</Title></Col>
+                <Col><Login /></Col>
+              </Row>
+            </Header>
+            <Row justify='center'>
+              <Routes>
+                <Route element={register ? <Registration /> : <SmartTable />} path='/' />
+                <Route element={<ConfirmationSuccessful />} path='/confirmation_successful' />
+                <Route element={<ConfirmationError />} path='/confirmation_error' />
+                <Route element={<NotFound />} path='/*' />
+              </Routes>
             </Row>
-          </Header>
-          <Row justify='center'>
-            {register ? <Registration /> : <SmartTable />}
-          </Row>
-        </Padding>
-      </RegisterContext.Provider>
-    </UserContext.Provider>
+          </Padding>
+        </RegisterContext.Provider>
+      </UserContext.Provider>
+    </BrowserRouter>
   );
 };
 

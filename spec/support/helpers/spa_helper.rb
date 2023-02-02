@@ -65,6 +65,10 @@ module SpaHelper
     visit confirmation_link
   end
 
+  def confirm_with_invalid_confirmation_link
+    visit "/confirmation?confirmation_token=notavalidconfirmationtoken"
+  end
+
   private
 
   def fill_in_email_input(email)

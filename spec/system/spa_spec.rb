@@ -107,7 +107,17 @@ RSpec.describe "SPA" do
         confirm_user_by_email
       end
 
-      it { expect(page).to have_current_path "/" }
+      it { expect(page).to have_current_path "/confirmation_successful" }
+    end
+
+    context "when confirmation link is invalid" do
+      before do
+        visit "/"
+        registration_new_user
+        confirm_with_invalid_confirmation_link
+      end
+
+      it { expect(page).to have_current_path "/confirmation_error" }
     end
 
     context "when registration is successful and user can login" do
@@ -116,6 +126,7 @@ RSpec.describe "SPA" do
         registration_new_user
         sleep 3
         confirm_user_by_email
+        click_button "Back Home"
         login_new_user
         close_notification
       end

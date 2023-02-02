@@ -17,7 +17,7 @@ RSpec.describe "WorkflowUser" do
     }
 
     it { expect(response).to have_http_status(:found) }
-    it { expect(response.body).to include "/#confirmation_successful" }
+    it { expect(response.body).to include "/confirmation_successful" }
   end
 
   describe "3. Register, confirm email and login" do

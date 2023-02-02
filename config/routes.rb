@@ -4,6 +4,9 @@ Rails.application.routes.draw do
   Rails.application.routes.draw do
     root "spa#index"
 
+    mount API::Base => "/api"
+    mount GrapeSwaggerRails::Engine => "/swagger"
+
     devise_for :users, controllers: {registrations: "users/registrations", confirmations: "users/confirmations"}
 
     use_doorkeeper do
@@ -11,7 +14,6 @@ Rails.application.routes.draw do
         :authorized_applications
     end
 
-    mount API::Base => "/api"
-    mount GrapeSwaggerRails::Engine => "/swagger"
+    get "/*path", to: "spa#index"
   end
 end

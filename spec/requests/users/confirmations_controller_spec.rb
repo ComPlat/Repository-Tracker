@@ -13,7 +13,7 @@ describe Users::ConfirmationsController do
         get "/users/confirmation", params: {confirmation_token: expected_user.confirmation_token}
       }
 
-      it { expect(response.body).to include "/#confirmation_successful" }
+      it { expect(response.body).to include "/confirmation_successful" }
       it { expect(response).to have_http_status :found }
 
       it { expect(User.first.confirmed_at).to be_a ActiveSupport::TimeWithZone }
@@ -26,7 +26,7 @@ describe Users::ConfirmationsController do
         get "/users/confirmation", params: {confirmation_token: "notavalidconfirmationtoken"}
       }
 
-      it { expect(response.body).to include "/#confirmation_error?errors=" }
+      it { expect(response.body).to include "/confirmation_error" }
       it { expect(response).to have_http_status :found }
 
       it { expect(User.first.confirmed_at).to be_nil }

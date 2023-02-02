@@ -6,9 +6,9 @@ class Users::ConfirmationsController < Devise::ConfirmationsController
     self.resource = resource_class.confirm_by_token(params[:confirmation_token])
 
     if resource.errors.empty?
-      redirect_to "/#confirmation_successful"
+      redirect_to "/confirmation_successful"
     else
-      redirect_to "/#confirmation_error?errors=#{resource.errors}", allow_other_host: true
+      redirect_to "/confirmation_error", allow_other_host: true
     end
   end
 end
