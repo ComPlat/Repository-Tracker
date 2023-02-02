@@ -81,6 +81,9 @@ group :development do
 
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
+
+  # bundler-audit provides patch-level verification for Bundled apps. [https://rubydoc.info/gems/bundler-audit/frames]
+  gem "bundler-audit", "0.9.1"
 end
 
 group :test do

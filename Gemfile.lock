@@ -74,6 +74,9 @@ GEM
     bootsnap (1.15.0)
       msgpack (~> 1.2)
     builder (3.2.4)
+    bundler-audit (0.9.1)
+      bundler (>= 1.2.0, < 3)
+      thor (~> 1.0)
     capybara (3.38.0)
       addressable
       matrix
@@ -335,6 +338,7 @@ PLATFORMS
 
 DEPENDENCIES
   bootsnap (= 1.15.0)
+  bundler-audit (= 0.9.1)
   capybara (= 3.38.0)
   cssbundling-rails (= 1.1.2)
   debug (= 1.6.3)
