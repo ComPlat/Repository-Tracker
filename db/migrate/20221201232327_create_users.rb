@@ -27,10 +27,10 @@ class CreateUsers < ActiveRecord::Migration[7.0]
 
       ## Confirmable
       #
-      # unconfirmed_email - An email address copied from the email attr. After confirmation
       t.string :confirmation_token, index: {unique: true}
       t.datetime :confirmed_at
       t.datetime :confirmation_sent_at
+      # unconfirmed_email - An email address copied from the email attr. After confirmation
       t.string :unconfirmed_email # Only if using reconfirmable
 
       ## Lockable
