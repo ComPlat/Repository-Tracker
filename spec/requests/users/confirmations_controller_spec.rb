@@ -17,6 +17,7 @@ describe Users::ConfirmationsController do
       it { expect(response).to have_http_status :found }
 
       it { expect(User.first.confirmed_at).to be_a ActiveSupport::TimeWithZone }
+      it { expect(User.first.confirmed_at).to be_within(0.01).of(User.first.created_at) }
       it { expect(User.first.confirmed?).to be true }
     end
 
