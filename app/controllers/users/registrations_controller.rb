@@ -7,11 +7,9 @@ class Users::RegistrationsController < Devise::RegistrationsController
     resource.save
 
     if resource.persisted?
-      expire_data_after_sign_in!
       render json: resource, status: :ok
     else
       clean_up_passwords resource
-      set_minimum_password_length
       render json: resource.errors.messages, status: :unprocessable_entity
     end
   end
