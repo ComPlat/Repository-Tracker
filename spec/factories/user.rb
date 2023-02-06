@@ -8,8 +8,8 @@ FactoryBot.define do
     end
 
     trait :with_required_attributes_as_confirmed_user do
-      sequence(:name) { |i| "user#{i}" }
-      sequence(:email) { |i| "user#{i}@example.com" }
+      sequence(:name) { |i| "confirmed_user#{i}" }
+      sequence(:email) { |i| "confirmed_user#{i}@example.com" }
       sequence(:password) { |i| "SecureUserPassword#{i}!" }
       role { :user }
       confirmed_at { DateTime.now }
