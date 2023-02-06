@@ -17,13 +17,9 @@ module SpaHelper
     click_button "Login"
   end
 
-  def registration_new_user
-    registration_user("New User", "newuser@example.com", "SecurePassword123-", "SecurePassword123-")
-  end
+  def registration_new_user = registration_user("New User", "newuser@example.com", "SecurePassword123-", "SecurePassword123-")
 
-  def registration_with_existing_user
-    registration_user(user.name, user.email, user.password, user.password)
-  end
+  def registration_with_existing_user = registration_user(user.name, user.email, user.password, user.password)
 
   def registration_password_not_valid
     click_button "Register"
@@ -44,40 +40,26 @@ module SpaHelper
     first(".ant-select-item-option-content").click
   end
 
-  def owner_name
-    @owner_name ||= first(".ant-select-item-option-content").text
-  end
+  def owner_name = @owner_name ||= first(".ant-select-item-option-content").text
 
-  def close_notification
-    find(".ant-notification-notice-close").click
-  end
+  def close_notification = find(".ant-notification-notice-close").click
 
-  def click_on_empty_space
-    find(:xpath, "/html").click
-  end
+  def click_on_empty_space = find(:xpath, "/html").click
 
   def click_on_size_button(size)
     find(".ant-table-small")
     find(".ant-radio-group", text: size).click
   end
 
-  def confirm_user_by_email
-    visit confirmation_link
-  end
+  def confirm_user_by_email = visit confirmation_link
 
-  def confirm_with_invalid_confirmation_link
-    visit "/confirmation?confirmation_token=notavalidconfirmationtoken"
-  end
+  def confirm_with_invalid_confirmation_link = visit "/confirmation?confirmation_token=notavalidconfirmationtoken"
 
   private
 
-  def fill_in_email_input(email)
-    find(:xpath, "/html/body/div/div/div[1]/div/div[2]/form/div/div/div[1]/div/div/div/div").click.fill_in(with: email)
-  end
+  def fill_in_email_input(email) = find(:xpath, "/html/body/div/div/div[1]/div/div[2]/form/div/div/div[1]/div/div/div/div").click.fill_in(with: email)
 
-  def fill_in_password_input(password)
-    find(:xpath, "/html/body/div/div/div[1]/div/div[2]/form/div/div/div[2]/div/div/div/div").click.fill_in(with: password)
-  end
+  def fill_in_password_input(password) = find(:xpath, "/html/body/div/div/div[1]/div/div[2]/form/div/div/div[2]/div/div/div/div").click.fill_in(with: password)
 
   def registration_user(name, email, password, confirmation)
     click_button "Register"
@@ -88,13 +70,9 @@ module SpaHelper
     click_button "Submit"
   end
 
-  def confirmation_email
-    ActionMailer::Base.deliveries.last
-  end
+  def confirmation_email = ActionMailer::Base.deliveries.last
 
-  def confirmation_html
-    Nokogiri::HTML(confirmation_email.body.raw_source)
-  end
+  def confirmation_html = Nokogiri::HTML(confirmation_email.body.raw_source)
 
   def confirmation_link
     # HINT: We just want the request uri because test environment host is "www.example.com" but Capybara tests on "localhost"
