@@ -53,7 +53,7 @@ module SpaHelper
 
   def confirm_user_by_email = visit confirmation_link
 
-  def confirm_with_invalid_confirmation_link = visit "/confirmation?confirmation_token=notavalidconfirmationtoken"
+  def confirm_with_invalid_confirmation_link = visit "/users/confirmation?confirmation_token=notavalidconfirmationtoken"
 
   private
 

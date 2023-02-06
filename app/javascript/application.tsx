@@ -108,9 +108,9 @@ const App: React.FC = () => {
             <Row justify='center'>
               <Routes>
                 <Route element={register ? <Registration /> : <SmartTable />} path='/' />
-                <Route element={<ConfirmationSuccessful />} path='/confirmation_successful' />
-                <Route element={<ConfirmationError />} path='/confirmation_error' />
-                <Route element={<NotFound />} path='/*' />
+                <Route element={<ConfirmationSuccessful />} path='/spa/confirmation_successful' />
+                <Route element={<ConfirmationError />} path='/spa/confirmation_error' />
+                <Route element={<NotFound />} path='/spa/*' />
               </Routes>
             </Row>
           </Padding>

@@ -1,7 +1,7 @@
 RSpec.describe "SPA" do
   include SpaHelper
 
-  let(:user) { create(:user, :with_required_attributes_as_confirmed_user) }
+  let(:user) { create(:user, :with_required_attributes_as_user, confirmed_at: DateTime.now) }
   let(:tracking_item) { create(:tracking_item, :with_required_attributes, user:) }
   let(:trackings) do
     [create(:tracking, :with_required_attributes, tracking_item:,
@@ -107,7 +107,7 @@ RSpec.describe "SPA" do
         confirm_user_by_email
       end
 
-      it { expect(page).to have_current_path "/confirmation_successful" }
+      it { expect(page).to have_current_path "/spa/confirmation_successful" }
     end
 
     context "when confirmation link is invalid" do
@@ -117,7 +117,7 @@ RSpec.describe "SPA" do
         confirm_with_invalid_confirmation_link
       end
 
-      it { expect(page).to have_current_path "/confirmation_error" }
+      it { expect(page).to have_current_path "/spa/confirmation_error" }
     end
 
     context "when registration is successful and user can login" do
@@ -131,7 +131,7 @@ RSpec.describe "SPA" do
         close_notification
       end
 
-      it { expect(page).to have_selector(".ant-typography", text:) }
+      it { expect(page).to have_selector(".ant-typography", text: User.last.email) }
     end
 
     context "when email is already taken" do
