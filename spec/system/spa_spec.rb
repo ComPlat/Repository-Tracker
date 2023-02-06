@@ -131,7 +131,7 @@ RSpec.describe "SPA" do
         close_notification
       end
 
-      it { expect(page).to have_selector(".ant-typography", text: "newuser@example.com") }
+      it { expect(page).to have_selector(".ant-typography", text:) }
     end
 
     context "when email is already taken" do

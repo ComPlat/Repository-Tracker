@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   Rails.application.routes.draw do
-    root "spa#index"
+    root "spa#index", to: redirect("/spa")
 
     mount API::Base => "/api"
     mount GrapeSwaggerRails::Engine => "/swagger"
@@ -14,6 +14,6 @@ Rails.application.routes.draw do
         :authorized_applications
     end
 
-    get "/*path", to: "spa#index"
+    get "/spa/*path", to: "spa#index"
   end
 end
