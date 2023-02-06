@@ -96,8 +96,8 @@ RSpec.describe "SPA" do
         registration_new_user
       end
 
-      it { expect(page).to have_content("Registration successful", wait: 5) }
-      it { expect(page).to have_content("You have successfully signed up. You will be redirected to the main page.", wait: 5) }
+      it { expect(page).to have_content("Confirmation required", wait: 5) }
+      it { expect(page).to have_content("Please check your email mailbox and confirm your account.", wait: 5) }
     end
 
     context "when registration form is filled and user email must be confirmed" do

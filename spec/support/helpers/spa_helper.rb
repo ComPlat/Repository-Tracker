@@ -23,9 +23,9 @@ module SpaHelper
 
   def registration_password_not_valid
     click_button "Register"
-    find(:xpath, "/html/body/div/div/div[2]/div/div/div/form/div[1]/div/div[2]/div/div/input").click.fill_in(with: user.name)
-    find(:xpath, "/html/body/div/div/div[2]/div/div/div/form/div[2]/div/div[2]/div/div/input").click.fill_in(with: user.email)
-    find(:xpath, "/html/body/div/div/div[2]/div/div/div/form/div[3]/div/div[2]/div/div/span/input").click.fill_in(with: "notavalidpassword")
+    find_by_id("nest-messages_name").click.fill_in(with: user.name)
+    find_by_id("nest-messages_email").click.fill_in(with: user.email)
+    find_by_id("nest-messages_password").click.fill_in(with: "notavalidpassword")
   end
 
   def registration_password_invalid_confirmation
@@ -57,16 +57,16 @@ module SpaHelper
 
   private
 
-  def fill_in_email_input(email) = find(:xpath, "/html/body/div/div/div[1]/div/div[2]/form/div/div/div[1]/div/div/div/div").click.fill_in(with: email)
+  def fill_in_email_input(email) = find_by_id("normal_login_email").click.fill_in(with: email)
 
-  def fill_in_password_input(password) = find(:xpath, "/html/body/div/div/div[1]/div/div[2]/form/div/div/div[2]/div/div/div/div").click.fill_in(with: password)
+  def fill_in_password_input(password) = find_by_id("normal_login_password").click.fill_in(with: password)
 
   def registration_user(name, email, password, confirmation)
     click_button "Register"
-    find(:xpath, "/html/body/div/div/div[2]/div/div/div/form/div[1]/div/div[2]/div/div/input").click.fill_in(with: name)
-    find(:xpath, "/html/body/div/div/div[2]/div/div/div/form/div[2]/div/div[2]/div/div/input").click.fill_in(with: email)
-    find(:xpath, "/html/body/div/div/div[2]/div/div/div/form/div[3]/div/div[2]/div/div/span/input").click.fill_in(with: password)
-    find(:xpath, "/html/body/div/div/div[2]/div/div/div/form/div[4]/div/div[2]/div/div/span/input").click.fill_in(with: confirmation)
+    find_by_id("nest-messages_name").click.fill_in(with: name)
+    find_by_id("nest-messages_email").click.fill_in(with: email)
+    find_by_id("nest-messages_password").click.fill_in(with: password)
+    find_by_id("nest-messages_confirm").click.fill_in(with: confirmation)
     click_button "Submit"
   end
 
