@@ -157,7 +157,7 @@ const SmartTable: React.FC = () => {
           setFromSelection(value);
         });
       },
-      filteredValue: fromSelection.length === 0 ? null : ownerSelection && fromSelection,
+      filteredValue: fromSelection.length === 0 ? null : fromSelection,
       filterIcon: CustomFilterIcon(fromSelection.length !== 0),
       filters: FilterObjectsHelper(trackingItems.map((item) => {
         return item.from_trackable_system_name;
@@ -184,7 +184,7 @@ const SmartTable: React.FC = () => {
           setToSelection(value);
         });
       },
-      filteredValue: toSelection.length === 0 ? null : ownerSelection && toSelection,
+      filteredValue: toSelection.length === 0 ? null : toSelection,
       filterIcon: CustomFilterIcon(toSelection.length !== 0),
       filters: FilterObjectsHelper(trackingItems.map((item) => {
         return item.to_trackable_system_name;
@@ -221,7 +221,7 @@ const SmartTable: React.FC = () => {
           setStatusSelection(value);
         });
       },
-      filteredValue: statusSelection.length === 0 ? null : ownerSelection && statusSelection,
+      filteredValue: statusSelection.length === 0 ? null : statusSelection,
       filterIcon: CustomFilterIcon(statusSelection.length !== 0),
       filters: FilterObjectsHelper(trackingItems.map((item) => {
         return item.status;
@@ -260,12 +260,17 @@ const SmartTable: React.FC = () => {
           setTrackingItemsSelection(value);
         });
       },
-      filteredValue: trackingItemsSelection.length === 0 ? null : ownerSelection && trackingItemsSelection,
+      filteredValue: trackingItemsSelection.length === 0 ? null : trackingItemsSelection,
       filterIcon: CustomFilterIcon(trackingItemsSelection.length !== 0),
+      filters: FilterObjectsHelper(trackingItems.map((item) => {
+        return item.tracking_item_name;
+      })),
       key: 'tracker_number',
+      onFilter: (value: boolean | number | string, record: DataType) => {
+        return record.tracking_item_name.startsWith(value as string);
+      },
       sorter: (first: DataType, second: DataType) => {
         return first.tracking_item_name.localeCompare(second.tracking_item_name, 'en', {
-          numeric: true,
           sensitivity: 'base',
         });
       },
@@ -282,7 +287,7 @@ const SmartTable: React.FC = () => {
           setOwnerSelection(value);
         });
       },
-      filteredValue: ownerSelection,
+      filteredValue: ownerSelection.length === 0 ? null : ownerSelection,
       filterIcon: CustomFilterIcon(ownerSelection.length !== 0),
       key: 'owner',
       onFilter: (value: boolean | number | string, record: DataType) => {
