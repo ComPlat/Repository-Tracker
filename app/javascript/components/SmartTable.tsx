@@ -153,7 +153,7 @@ const SmartTable: React.FC = () => {
           ...new Set(trackingItems.map((item) => {
             return item.from_trackable_system_name;
           })),
-        ], (value) => {
+        ], (value: React.SetStateAction<string[]>) => {
           setFromSelection(value);
         });
       },
@@ -180,7 +180,7 @@ const SmartTable: React.FC = () => {
           ...new Set(trackingItems.map((item) => {
             return item.to_trackable_system_name;
           })),
-        ], (value) => {
+        ], (value: React.SetStateAction<string[]>) => {
           setToSelection(value);
         });
       },
@@ -217,7 +217,7 @@ const SmartTable: React.FC = () => {
           ...new Set(trackingItems.map((item) => {
             return item.status;
           })),
-        ], (value) => {
+        ], (value: React.SetStateAction<string[]>) => {
           setStatusSelection(value);
         });
       },
@@ -256,7 +256,7 @@ const SmartTable: React.FC = () => {
           ...new Set(trackingItems.map((item) => {
             return item.tracking_item_name;
           })),
-        ], (value) => {
+        ], (value: React.SetStateAction<string[]>) => {
           setTrackingItemsSelection(value);
         });
       },
@@ -278,7 +278,7 @@ const SmartTable: React.FC = () => {
           ...new Set(trackingItems.map((item) => {
             return item.owner_name;
           })),
-        ], (value) => {
+        ], (value: React.SetStateAction<string[]>) => {
           setOwnerSelection(value);
         });
       },

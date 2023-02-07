@@ -14,7 +14,7 @@ export const ConfirmationSuccessful: React.FC = () => {
     <Result
       extra={[
         <Button
-          key='console' onClick={() => {
+          key='button-navigate-to-root' onClick={() => {
             navigate('/');
           }} type='primary'
         >

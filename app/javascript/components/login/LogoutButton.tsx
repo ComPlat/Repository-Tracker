@@ -3,7 +3,7 @@ import {
 } from 'antd';
 import React from 'react';
 
-export const LogoutButton = ({
+export const LogoutButton: React.FC = ({
   ...buttonProps
 }) => {
   return (

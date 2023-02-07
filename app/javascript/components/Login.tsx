@@ -41,7 +41,7 @@ import {
   RegisterButton,
 } from './registration/RegisterButton';
 
-export const Login = () => {
+export const Login: React.FC = () => {
   const [
     api,
     contextHolder,

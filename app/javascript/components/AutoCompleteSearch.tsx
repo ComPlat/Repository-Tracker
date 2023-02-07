@@ -7,7 +7,7 @@ import {
   FilterObjectsHelper,
 } from '../helpers/FilterObjectsHelper';
 
-export const AutoCompleteSearch = (data: string[], onChange: ((value: never[], option: Array<{ text: string, value: string, }> | { text: string, value: string, }) => void)) => {
+export const AutoCompleteSearch: React.FC<string[]> = (data: string[], onChange: ((value: never[], option: Array<{ text: string, value: string, }> | { text: string, value: string, }) => void)) => {
   return <Card
     bodyStyle={{
       padding: '16px',

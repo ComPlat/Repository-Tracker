@@ -28,7 +28,7 @@ const layout = {
   },
 };
 
-export const RegisterForm = () => {
+export const RegisterForm: React.FC = () => {
   const [
     api,
     contextHolder,

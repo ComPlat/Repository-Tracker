@@ -3,7 +3,7 @@ import {
 } from 'antd';
 import React from 'react';
 
-export const RegisterButton = ({
+export const RegisterButton: React.FC = ({
   ...buttonProps
 }) => {
   return (
