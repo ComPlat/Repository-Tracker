@@ -12,6 +12,9 @@ import React, {
   useContext,
 } from 'react';
 import {
+  NavLink,
+} from 'react-router-dom';
+import {
   RegisterContext,
 } from '../contexts/RegisterContext';
 import type {
@@ -56,9 +59,15 @@ export const Login: React.FC = () => {
     setRegister,
   } = useContext(RegisterContext);
 
-  const Notification = useCallback((placement: NotificationPlacement, message: string, description: string) => {
+  type NotificationProps = {
+    children: React.ReactNode,
+  };
+
+  const Notification = useCallback((placement: NotificationPlacement, message: string, {
+    children,
+  }: NotificationProps) => {
     api.info({
-      description,
+      description: children,
       message,
       placement,
     });
@@ -73,7 +82,11 @@ export const Login: React.FC = () => {
       await RevokeToken(token.access_token);
       localStorage.clear();
       setUser(null);
-      Notification('bottomRight', 'Logged out', 'You have successfully logged out.');
+      Notification('bottomRight',
+        'Logged out',
+        {
+          children: <div>You have successfully logged out.</div>,
+        });
     }
   }, [
     Notification,
@@ -91,14 +104,26 @@ export const Login: React.FC = () => {
     if (token.error === undefined) {
       storeUserInLocalStorage(userData);
       setUser(userData);
-      Notification('bottomRight', 'Login successful', 'You have now access to the data.');
+      Notification('bottomRight',
+        'Login successful',
+        {
+          children: <div>You have now access to the data.</div>,
+        });
     } else {
-      Notification('bottomRight', 'Login failed', 'The account data does not exist.');
+      Notification('bottomRight',
+        'Login failed',
+        {
+          children:
+  <div>
+    The account data does not exist.
+    <p>Forgot your password? <NavLink to='/spa/password_reset'>Click here</NavLink></p>
+  </div>,
+        });
     }
   };
 
   return (
-    <>
+    <Space>
       {contextHolder}
       <Form
         className='login-form'
@@ -132,6 +157,6 @@ export const Login: React.FC = () => {
           }
         })()}
       </Form>
-    </>
+    </Space>
   );
 };

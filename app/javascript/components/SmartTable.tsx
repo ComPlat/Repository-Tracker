@@ -41,10 +41,10 @@ import {
 } from '../helpers/TrackingItemsHelper';
 import {
   AutoCompleteSearch,
-} from './AutoCompleteSearch';
+} from './smart-table/AutoCompleteSearch';
 import {
   CustomFilterIcon,
-} from './CustomFilterIcon';
+} from './smart-table/CustomFilterIcon';
 
 // Types
 type DataType = {
