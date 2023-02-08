@@ -7,7 +7,10 @@ Rails.application.routes.draw do
     mount API::Base => "/api"
     mount GrapeSwaggerRails::Engine => "/swagger"
 
-    devise_for :users, controllers: {registrations: "users/registrations", confirmations: "users/confirmations"}
+    devise_for :users,
+      controllers: {registrations: "users/registrations",
+                    confirmations: "users/confirmations",
+                    passwords: "users/passwords"}
 
     use_doorkeeper do
       skip_controllers :authorizations, :applications,
