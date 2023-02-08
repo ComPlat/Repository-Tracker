@@ -26,13 +26,12 @@ class Authorization::TrackingItemsGet
 
   def admin_or_super_records = TrackingItem.all
 
-  # TODO: This gives us all TrackingItems that had contact to a certain system via TrackingItem. However, we need to filter the Tracking Items again after this to only show those relevant.
-  def trackable_system_admin_records = TrackingItem.where(tracking_id: tracking_ids)
+  def trackable_system_admin_records = TrackingItem.where(id: tracking_item_ids)
 
   def user_records = TrackingItem.where(user: current_user)
 
-  def tracking_ids = @tracking_ids ||= Tracking.where(from_trackable_system_id: trackable_system_ids)
-    .or(Tracking.where(to_trackable_system_id: trackable_system_ids))
+  def tracking_item_ids = @tracking_ids ||= Tracking.where(from_trackable_system_id: trackable_system_ids)
+    .or(Tracking.where(to_trackable_system_id: trackable_system_ids)).pluck(:tracking_item_id)
 
   def trackable_system_ids = @trackable_system_ids ||= TrackableSystem.where(user: current_user).ids
 
