@@ -22,6 +22,9 @@ class Authorization::TrackingItemsGet
 
   def one = @one ||= all.find(id)
 
+  # TODO: Write specs for this!
+  def tracking_ids = @tracking_ids ||= trackings.ids
+
   private
 
   def admin_or_super_records = TrackingItem.all
@@ -30,8 +33,10 @@ class Authorization::TrackingItemsGet
 
   def user_records = TrackingItem.where(user: current_user)
 
-  def tracking_item_ids = @tracking_ids ||= Tracking.where(from_trackable_system_id: trackable_system_ids)
-    .or(Tracking.where(to_trackable_system_id: trackable_system_ids)).pluck(:tracking_item_id)
+  def tracking_item_ids = @tracking_item_ids ||= trackings.pluck(:tracking_item_id)
+
+  def trackings = @trackings ||= Tracking.where(from_trackable_system_id: trackable_system_ids)
+    .or(Tracking.where(to_trackable_system_id: trackable_system_ids))
 
   def trackable_system_ids = @trackable_system_ids ||= TrackableSystem.where(user: current_user).ids
 

@@ -9,7 +9,7 @@ class API::V1::TrackingItems < Grape::API
     desc "Return list of tracking_items"
     get do
       authorization = Authorization::TrackingItemsGet.new self
-      present authorization.all, with: API::Entities::Tracking
+      present authorization.all, with: API::Entities::TrackingItem, tracking_ids: authorization.tracking_ids
     end
 
     desc "Return a tracking_item"
@@ -19,7 +19,7 @@ class API::V1::TrackingItems < Grape::API
     route_param :name, type: String do
       get do
         authorization = Authorization::TrackingItemsGet.new self
-        present authorization.one, with: API::Entities::Tracking
+        present authorization.one, with: API::Entities::TrackingItem, tracking_ids: authorization.tracking_ids
       end
     end
   end
