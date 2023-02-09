@@ -13,6 +13,7 @@ describe Users::ConfirmationsController do
       }
 
       it { expect(response.body).to include "/confirmation_successful" }
+      it { expect(response).to redirect_to "/spa/confirmation_successful" }
       it { expect(response).to have_http_status :found }
 
       it { expect(expected_user.reload.confirmed_at).to be_a ActiveSupport::TimeWithZone }
@@ -27,10 +28,11 @@ describe Users::ConfirmationsController do
       }
 
       it { expect(response.body).to include "/confirmation_error" }
+      it { expect(response).to redirect_to "/spa/confirmation_error?confirmation_token=invalid" }
       it { expect(response).to have_http_status :found }
 
-      it { expect(expected_user.confirmed_at).to be_nil }
-      it { expect(expected_user.confirmed?).to be false }
+      it { expect(expected_user.reload.confirmed_at).to be_nil }
+      it { expect(expected_user.reload.confirmed?).to be false }
     end
   end
 end
