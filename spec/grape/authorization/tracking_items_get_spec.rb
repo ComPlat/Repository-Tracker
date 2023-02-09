@@ -155,4 +155,69 @@ RSpec.describe Authorization::TrackingItemsGet do
       it { expect { one }.to raise_error ActiveRecord::RecordNotFound }
     end
   end
+
+  describe "#tracking_ids" do
+    subject(:tracking_ids) { tracking_items_get.tracking_ids }
+
+    let(:params) { {} }
+
+    context "when user role is :user" do
+      let(:user) { create(:user, :with_required_attributes_as_user) }
+      let(:owned_tracking_items) { create_list(:tracking_item, 2, :with_required_attributes, user:) }
+      let!(:owned_trackings) do
+        owned_tracking_items.map { |tracking_item|
+          create(:tracking, :with_required_attributes, :with_required_dependencies, tracking_item:)
+        }
+      end
+
+      before { create(:tracking, :with_required_attributes, :with_required_dependencies) }
+
+      it { is_expected.to eq owned_trackings.pluck :id }
+    end
+
+    context "when user role is :super" do
+      let(:user) { create(:user, :with_required_attributes_as_super) }
+      let(:tracking_items) { create_list(:tracking_item, 2, :with_required_attributes, :with_required_dependencies) }
+      let!(:trackings) do
+        tracking_items.map { |tracking_item|
+          create(:tracking, :with_required_attributes, :with_required_dependencies, tracking_item:)
+        }
+      end
+
+      it { is_expected.to eq trackings.pluck :id }
+    end
+
+    context "when user role is :admin" do
+      let(:user) { create(:user, :with_required_attributes_as_admin) }
+      let(:tracking_items) { create_list(:tracking_item, 2, :with_required_attributes, :with_required_dependencies) }
+      let!(:trackings) do
+        tracking_items.map { |tracking_item|
+          create(:tracking, :with_required_attributes, :with_required_dependencies, tracking_item:)
+        }
+      end
+
+      it { is_expected.to eq trackings.pluck :id }
+    end
+
+    context "when user role is :trackable_system_admin and trackable_system_admin belong to a trackable system" do
+      let(:user) { create(:user, :with_required_attributes_as_trackable_system_admin) }
+      let(:tracking_items) { create_list(:tracking_item, 2, :with_required_attributes, :with_required_dependencies) }
+      let!(:trackings) do
+        from_trackable_system = create(:trackable_system, user:, name: "radar4kit")
+        to_trackable_system = create(:trackable_system, :with_required_attributes, :with_required_dependencies, name: "radar4chem")
+
+        tracking_items.map { |tracking_item|
+          create(:tracking, :with_required_attributes, from_trackable_system:, to_trackable_system:, tracking_item:)
+        }
+      end
+
+      before {
+        create(:tracking, :with_required_attributes, :with_required_dependencies,
+          from_trackable_system: create(:trackable_system, :with_required_dependencies, name: "chemotion_repository"),
+          to_trackable_system: create(:trackable_system, :with_required_dependencies, name: "chemotion_electronic_laboratory_notebook"))
+      }
+
+      it { is_expected.to eq trackings.pluck :id }
+    end
+  end
 end

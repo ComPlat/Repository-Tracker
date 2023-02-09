@@ -16,31 +16,45 @@ class Authorization::TrackingItemsGet
     when "user"
       user_records
     else
-      no_records
+      []
     end
   }.call
 
   def one = @one ||= all.find_by!(name:)
 
-  # TODO: Write specs for this!
-  def tracking_ids = @tracking_ids ||= trackings.ids
+  def tracking_ids = @tracking_ids ||= -> {
+    case role
+    when "admin"
+      owned_tracking_ids
+    when "super"
+      owned_tracking_ids
+    when "trackable_system_admin"
+      trackable_system_admin_trackings.ids
+    when "user"
+      owned_tracking_ids
+    else
+      []
+    end
+  }.call
 
   private
 
+  def owned_tracking_ids = @owned_tracking_ids ||= Tracking.where(tracking_item_id: all.ids).ids
+
   def admin_or_super_records = TrackingItem.all
 
-  def trackable_system_admin_records = TrackingItem.where(id: tracking_item_ids)
+  def trackable_system_admin_records = TrackingItem.where(id: trackable_system_admin_tracking_item_ids)
 
   def user_records = TrackingItem.where(user: current_user)
 
-  def tracking_item_ids = @tracking_item_ids ||= trackings.pluck(:tracking_item_id)
+  def trackable_system_admin_tracking_item_ids = @trackable_system_admin_tracking_item_ids ||= trackable_system_admin_trackings
+    .pluck(:tracking_item_id)
 
-  def trackings = @trackings ||= Tracking.where(from_trackable_system_id: trackable_system_ids)
+  def trackable_system_admin_trackings = @trackable_system_admin_trackings ||= Tracking
+    .where(from_trackable_system_id: trackable_system_ids)
     .or(Tracking.where(to_trackable_system_id: trackable_system_ids))
 
   def trackable_system_ids = @trackable_system_ids ||= TrackableSystem.where(user: current_user).ids
-
-  def no_records = []
 
   def role = current_user.role
 
