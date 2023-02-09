@@ -6,43 +6,39 @@ import {
   PasswordChangeContext,
 } from '../contexts/PasswordChangeContext';
 import {
+  NewPasswordErrorResult,
+} from './new-password/NewPasswordErrorResult';
+import {
   NewPasswordForm,
 } from './new-password/NewPasswordForm';
 import {
-  PasswordChangeErrorResult,
-} from './new-password/PasswordChangeErrorResult';
-import {
-  PasswordChangeSuccessfulResult,
-} from './new-password/PasswordChangeSuccessfulResult';
+  NewPasswordSuccessfulResult,
+} from './new-password/NewPasswordSuccessfulResult';
 
 export const NewPassword: React.FC = () => {
   const {
     passwordChange,
   } = useContext(PasswordChangeContext);
 
+  const component = () => {
+    switch (passwordChange) {
+      case 'success': return <div><NewPasswordSuccessfulResult /></div>;
+      case 'error': return <div><NewPasswordErrorResult /></div>;
+      default: return <div>
+        <Title
+          level={3} style={{
+            alignItems: 'center',
+            display: 'flex',
+            justifyContent: 'center',
+            marginBottom: '2em',
+          }}
+        >New password</Title>
+        <NewPasswordForm />
+      </div>;
+    }
+  };
+
   return (
-    <div>
-      {(
-        () => {
-          if (passwordChange === 'success') {
-            return <div><PasswordChangeSuccessfulResult /></div>;
-          } else if (passwordChange === 'error') {
-            return <div><PasswordChangeErrorResult /></div>;
-          } else {
-            return <div>
-              <Title
-                level={3} style={{
-                  alignItems: 'center',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  marginBottom: '2em',
-                }}
-              >New password</Title>
-              <NewPasswordForm />
-            </div>;
-          }
-        }
-      )()}
-    </div>
+    <div>{component()}</div>
   );
 };
