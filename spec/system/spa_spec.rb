@@ -117,7 +117,7 @@ RSpec.describe "SPA" do
         confirm_with_invalid_confirmation_link
       end
 
-      it { expect(page).to have_current_path "/spa/confirmation_error" }
+      it { expect(page).to have_current_path "/spa/confirmation_error", ignore_query: true }
     end
 
     context "when registration is successful and user can login" do

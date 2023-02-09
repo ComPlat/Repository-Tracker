@@ -2,9 +2,13 @@ import {
   Button,
   Result,
 } from 'antd';
+import {
+  capitalize,
+} from 'lodash';
 import React from 'react';
 import {
   useNavigate,
+  useSearchParams,
 } from 'react-router-dom';
 
 export const ConfirmationError: React.FC = () => {
@@ -12,6 +16,18 @@ export const ConfirmationError: React.FC = () => {
 
   const onClick = () => {
     navigate('/');
+  };
+
+  const [
+    searchParameters,
+  ] = useSearchParams();
+
+  const errorType = () => {
+    return searchParameters.toString().split('=');
+  };
+
+  const errorMessage = () => {
+    return `${capitalize(errorType()[0]).replace('_', ' ')}: ${errorType()[1]}`;
   };
 
   return (
@@ -22,7 +38,7 @@ export const ConfirmationError: React.FC = () => {
         </Button>,
       ]}
       status='error'
-      subTitle='Please check your confirmation link and try again.'
+      subTitle={`${errorMessage()}`}
       title='E-Mail confirmation failed!'
     />
   );

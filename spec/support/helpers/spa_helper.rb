@@ -57,7 +57,8 @@ module SpaHelper
 
   def visit_reset_password_page
     login_with_wrong_credentials
-    click_link(href: "/spa/password_reset")
+    sleep 1
+    click_link(href: "/spa/password_reset", wait: 5)
   end
 
   def valid_password_reset_request
