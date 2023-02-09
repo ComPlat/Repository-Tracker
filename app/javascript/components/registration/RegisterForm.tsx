@@ -19,15 +19,6 @@ import {
   Register,
 } from '../../helpers/RegistrationHelper';
 
-const layout = {
-  labelCol: {
-    span: 16,
-  },
-  wrapperCol: {
-    span: 16,
-  },
-};
-
 export const RegisterForm: React.FC = () => {
   const [
     api,
@@ -76,12 +67,11 @@ export const RegisterForm: React.FC = () => {
       >Sign up</Title>
       {contextHolder}
       <Form
-        style={{
-          left: '-50%',
+        layout='vertical'
+        name='nest-messages'
+        onFinish={onFinish} style={{
           marginTop: '48px',
-          position: 'relative',
         }}
-        {...layout} name='nest-messages' onFinish={onFinish}
       >
         <Form.Item
           label='Name'
@@ -180,11 +170,7 @@ export const RegisterForm: React.FC = () => {
             type='password'
           />
         </Form.Item>
-        <Form.Item wrapperCol={{
-          ...layout.wrapperCol,
-          offset: 16,
-        }}
-        >
+        <Form.Item>
           <Button htmlType='submit' type='primary'>
             Submit
           </Button>

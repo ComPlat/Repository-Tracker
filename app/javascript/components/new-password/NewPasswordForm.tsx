@@ -16,15 +16,6 @@ import {
   PasswordChangeContext,
 } from '../../contexts/PasswordChangeContext';
 
-const layout = {
-  labelCol: {
-    span: 16,
-  },
-  wrapperCol: {
-    span: 16,
-  },
-};
-
 export const NewPasswordForm: React.FC = () => {
   const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&-])[A-Za-z\d@$!%*?&-]{6,}$/u;
 
@@ -63,12 +54,11 @@ export const NewPasswordForm: React.FC = () => {
 
   return (
     <Form
-      style={{
-        left: '-50%',
+      layout='vertical'
+      name='nest-messages'
+      onFinish={onFinish} style={{
         marginTop: '48px',
-        position: 'relative',
       }}
-      {...layout} name='nest-messages' onFinish={onFinish}
     >
       <Form.Item
         hasFeedback
@@ -129,11 +119,7 @@ export const NewPasswordForm: React.FC = () => {
           type='password'
         />
       </Form.Item>
-      <Form.Item wrapperCol={{
-        ...layout.wrapperCol,
-        offset: 16,
-      }}
-      >
+      <Form.Item>
         <Button htmlType='submit' type='primary'>
           Submit
         </Button>
