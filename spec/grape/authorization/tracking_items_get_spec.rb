@@ -1,16 +1,17 @@
 RSpec.describe Authorization::TrackingItemsGet do
-  let(:trackings_grape_api_mock) {
-    Class.new do
+  let(:tracking_items_get) {
+    doorkeeper_access_token = create(:doorkeeper_access_token, :with_required_dependencies, resource_owner_id: user.id)
+    trackings_grape_api_mock = Class.new do
       def initialize(doorkeeper_token, params)
         @doorkeeper_token = doorkeeper_token
         @params = params
       end
 
       attr_reader :doorkeeper_token, :params
-    end.new(create(:doorkeeper_access_token, :with_required_dependencies, resource_owner_id: user.id), params)
-  }
+    end.new(doorkeeper_access_token, params)
 
-  let(:tracking_items_get) { described_class.new trackings_grape_api_mock }
+    described_class.new trackings_grape_api_mock
+  }
 
   describe ".new" do
     subject { tracking_items_get }
@@ -71,24 +72,33 @@ RSpec.describe Authorization::TrackingItemsGet do
     end
   end
 
-  # TODO: Replicate NOT to be found record from specs for # all!
   describe "#one" do
     subject(:one) { tracking_items_get.one }
 
-    let(:params) { {"id" => tracking_item.id} }
-
-    context "when user role is :user" do
+    context "when user role is :user and item is owned" do
       let(:user) { create(:user, :with_required_attributes_as_user) }
-      let(:tracking_item) { create(:tracking_item, :with_required_attributes, user:) }
+      let(:params) { {"name" => owned_tracking_items.first.name} }
+      let(:owned_tracking_items) { create_list(:tracking_item, 2, :with_required_attributes, user:) }
 
-      before { create(:tracking, :with_required_attributes, :with_required_dependencies, tracking_item:) }
+      before { create(:tracking_item, :with_required_attributes, :with_required_dependencies) }
 
-      it { is_expected.to eq tracking_item }
+      it { is_expected.to eq owned_tracking_items.first }
+    end
+
+    context "when user role is :user and item is NOT owned" do
+      let(:user) { create(:user, :with_required_attributes_as_user) }
+      let(:params) { {"name" => not_owned_tracking_item.name} }
+      let(:not_owned_tracking_item) { create(:tracking_item, :with_required_attributes, :with_required_dependencies) }
+
+      before { create_list(:tracking_item, 2, :with_required_attributes, user:) }
+
+      it { expect { one }.to raise_error ActiveRecord::RecordNotFound }
     end
 
     context "when user role is :super" do
       let(:user) { create(:user, :with_required_attributes_as_super) }
       let(:tracking_item) { create(:tracking_item, :with_required_attributes, :with_required_dependencies) }
+      let(:params) { {"name" => tracking_item.name} }
 
       before { create(:tracking, :with_required_attributes, :with_required_dependencies) }
 
@@ -98,29 +108,49 @@ RSpec.describe Authorization::TrackingItemsGet do
     context "when user role is :admin" do
       let(:user) { create(:user, :with_required_attributes_as_admin) }
       let(:tracking_item) { create(:tracking_item, :with_required_attributes, :with_required_dependencies) }
+      let(:params) { {"name" => tracking_item.name} }
 
       before { create(:tracking, :with_required_attributes, :with_required_dependencies) }
 
       it { is_expected.to eq tracking_item }
     end
 
-    context "when user role is :trackable_system_admin and trackable_system_admin belongs to a trackable system" do
+    context "when user role is :trackable_system_admin and trackable_system_admin belong to a trackable system" do
       let(:user) { create(:user, :with_required_attributes_as_trackable_system_admin) }
-      let(:tracking_item) { create(:tracking_item, :with_required_attributes, :with_required_dependencies) }
+      let(:tracking_items) { create_list(:tracking_item, 2, :with_required_attributes, :with_required_dependencies) }
+      let(:params) { {"name" => tracking_items.first.name} }
 
-      before do
-        create(:tracking, :with_required_attributes, :with_required_dependencies, tracking_item:,
-          from_trackable_system: create(:trackable_system, :with_required_attributes, :with_required_dependencies, user:))
-      end
+      before {
+        from_trackable_system = create(:trackable_system, user:, name: "radar4kit")
+        to_trackable_system = create(:trackable_system, :with_required_attributes, :with_required_dependencies, name: "radar4chem")
+        create(:tracking, :with_required_attributes,
+          tracking_item: tracking_items.first, from_trackable_system:, to_trackable_system:)
+        create(:tracking, :with_required_attributes,
+          tracking_item: tracking_items.second, from_trackable_system:, to_trackable_system:)
+        create(:tracking, :with_required_attributes, :with_required_dependencies,
+          from_trackable_system: create(:trackable_system, :with_required_dependencies, name: "chemotion_repository"),
+          to_trackable_system: create(:trackable_system, :with_required_dependencies, name: "chemotion_electronic_laboratory_notebook"))
+      }
 
-      it { is_expected.to eq tracking_item }
+      it { is_expected.to eq tracking_items.first }
     end
 
-    context "when user role is :trackable_system_admin and trackable_system_admin belongs NOT to a trackable system" do
+    context "when user role is :trackable_system_admin and trackable_system_admin does NOT belong to a trackable system" do
       let(:user) { create(:user, :with_required_attributes_as_trackable_system_admin) }
-      let(:tracking_item) { create(:tracking_item, :with_required_attributes, :with_required_dependencies) }
+      let(:tracking_items) { create_list(:tracking_item, 2, :with_required_attributes, :with_required_dependencies) }
+      let(:params) { {"name" => tracking_items.first.name} }
 
-      before { create(:tracking, :with_required_attributes, :with_required_dependencies) }
+      before {
+        from_trackable_system = create(:trackable_system, :with_required_dependencies, name: "radar4kit")
+        to_trackable_system = create(:trackable_system, :with_required_attributes, :with_required_dependencies, name: "radar4chem")
+        create(:tracking, :with_required_attributes,
+          tracking_item: tracking_items.first, from_trackable_system:, to_trackable_system:)
+        create(:tracking, :with_required_attributes,
+          tracking_item: tracking_items.second, from_trackable_system:, to_trackable_system:)
+        create(:tracking, :with_required_attributes, :with_required_dependencies,
+          from_trackable_system: create(:trackable_system, :with_required_dependencies, name: "chemotion_repository"),
+          to_trackable_system: create(:trackable_system, :with_required_dependencies, name: "chemotion_electronic_laboratory_notebook"))
+      }
 
       it { expect { one }.to raise_error ActiveRecord::RecordNotFound }
     end

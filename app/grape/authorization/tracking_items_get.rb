@@ -20,7 +20,7 @@ class Authorization::TrackingItemsGet
     end
   }.call
 
-  def one = @one ||= all.find(id)
+  def one = @one ||= all.find_by!(name:)
 
   # TODO: Write specs for this!
   def tracking_ids = @tracking_ids ||= trackings.ids
@@ -44,7 +44,7 @@ class Authorization::TrackingItemsGet
 
   def role = current_user.role
 
-  def id = params["id"]
+  def name = params["name"]
 
   def current_user = @current_user ||= User.find(doorkeeper_token.resource_owner_id)
 
