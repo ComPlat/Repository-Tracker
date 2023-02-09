@@ -163,6 +163,15 @@ RSpec.describe "SPA" do
     end
   end
 
+  describe "Password reset" do
+    before do
+      visit "/"
+      visit_reset_password_page
+    end
+
+    it { expect(page).to have_current_path "/spa/password_reset" }
+  end
+
   describe "Buttons to sort the items in a certain order" do
     before do
       visit "/"

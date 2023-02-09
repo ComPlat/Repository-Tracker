@@ -1,18 +1,18 @@
 module SpaHelper
   def login_with_wrong_credentials
-    fill_in_email_input("notauser@example.com")
+    fill_in_email_login("notauser@example.com")
     fill_in_password_input("notapassword")
     click_button "Login"
   end
 
   def login_with_correct_credentials
-    fill_in_email_input(user.email)
+    fill_in_email_login(user.email)
     fill_in_password_input(user.password)
     click_button "Login"
   end
 
   def login_new_user
-    fill_in_email_input("newuser@example.com")
+    fill_in_email_login("newuser@example.com")
     fill_in_password_input("SecurePassword123-")
     click_button "Login"
   end
@@ -55,9 +55,21 @@ module SpaHelper
 
   def confirm_with_invalid_confirmation_link = visit "/users/confirmation?confirmation_token=notavalidconfirmationtoken"
 
+  def visit_reset_password_page
+    login_with_wrong_credentials
+    click_link(href: "/spa/password_reset")
+  end
+
+  def send_password_reset_request
+    fill_in_email_password_reset(user.email)
+    click_button "Submit"
+  end
+
   private
 
-  def fill_in_email_input(email) = find_by_id("normal_login_email").click.fill_in(with: email)
+  def fill_in_email_login(email) = find_by_id("normal_login_email").click.fill_in(with: email)
+
+  def fill_in_email_password_reset(email) = find_by_id("nest-messages_email").click.fill_in(with: email)
 
   def fill_in_password_input(password) = find_by_id("normal_login_password").click.fill_in(with: password)
 
