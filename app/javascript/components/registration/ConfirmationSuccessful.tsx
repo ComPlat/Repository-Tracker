@@ -10,14 +10,14 @@ import {
 export const ConfirmationSuccessful: React.FC = () => {
   const navigate = useNavigate();
 
+  const onClick = () => {
+    navigate('/');
+  };
+
   return (
     <Result
       extra={[
-        <Button
-          key='button-navigate-to-root' onClick={() => {
-            navigate('/');
-          }} type='primary'
-        >
+        <Button key='button-navigate-to-root' onClick={onClick} type='primary'>
           Back Home
         </Button>,
       ]}

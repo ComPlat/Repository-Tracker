@@ -59,6 +59,10 @@ export const RegisterForm: React.FC = () => {
 
   const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&-])[A-Za-z\d@$!%*?&-]{6,}$/u;
 
+  const onClick = () => {
+    setRegister(false);
+  };
+
   return (
     <div>
       <Title
@@ -182,12 +186,7 @@ export const RegisterForm: React.FC = () => {
                 </Button>
               </Col>
               <Col span={4}>
-                <Button
-                  htmlType='button' key='button-navigate-to-root' onClick={() => {
-                    setRegister(false);
-                  }}
-                  type='default'
-                >
+                <Button htmlType='button' key='button-navigate-to-root' onClick={onClick} type='default'>
                   Back Home
                 </Button>
               </Col>

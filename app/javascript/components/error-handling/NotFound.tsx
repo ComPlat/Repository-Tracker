@@ -10,12 +10,16 @@ import {
 export const NotFound: React.FC = () => {
   const navigate = useNavigate();
 
+  const onClick = () => {
+    navigate('/');
+  };
+
   return <Result
-    extra={<Button
-      onClick={() => {
-        navigate('/');
-      }} type='primary'
-    >Back Home</Button>}
+    extra={
+      <Button onClick={onClick} type='primary'>
+        Back Home
+      </Button>
+    }
     status='404'
     subTitle="Sorry, the page you were looking for doesn't exist.
         You may have mistyped the address or the page may have moved."

@@ -60,6 +60,10 @@ export const PasswordResetForm: React.FC = () => {
     });
   };
 
+  const onClick = () => {
+    navigate('/');
+  };
+
   return (
     <div>
       {contextHolder}
@@ -101,12 +105,7 @@ export const PasswordResetForm: React.FC = () => {
                 </Button>
               </Col>
               <Col span={4}>
-                <Button
-                  htmlType='button' key='button-navigate-to-root' onClick={() => {
-                    navigate('/');
-                  }}
-                  type='default'
-                >
+                <Button htmlType='button' key='button-navigate-to-root' onClick={onClick} type='default'>
                   Back Home
                 </Button>
               </Col>

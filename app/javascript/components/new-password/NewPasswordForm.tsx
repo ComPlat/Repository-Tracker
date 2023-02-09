@@ -58,6 +58,10 @@ export const NewPasswordForm: React.FC = () => {
     });
   };
 
+  const onClick = () => {
+    navigate('/');
+  };
+
   return (
     <Form
       layout='vertical'
@@ -134,12 +138,7 @@ export const NewPasswordForm: React.FC = () => {
               </Button>
             </Col>
             <Col span={4}>
-              <Button
-                htmlType='button' key='button-navigate-to-root' onClick={() => {
-                  navigate('/');
-                }}
-                type='default'
-              >
+              <Button htmlType='button' key='button-navigate-to-root' onClick={onClick} type='default'>
                 Back Home
               </Button>
             </Col>

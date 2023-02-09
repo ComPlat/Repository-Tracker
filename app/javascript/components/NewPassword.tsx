@@ -20,11 +20,9 @@ export const NewPassword: React.FC = () => {
     passwordChange,
   } = useContext(PasswordChangeContext);
 
-  const component = () => {
-    switch (passwordChange) {
-      case 'success': return <div><NewPasswordSuccessfulResult /></div>;
-      case 'error': return <div><NewPasswordErrorResult /></div>;
-      default: return <div>
+  const defaultComponent = () => {
+    return (
+      <div>
         <Title
           level={3} style={{
             alignItems: 'center',
@@ -32,9 +30,18 @@ export const NewPassword: React.FC = () => {
             justifyContent: 'center',
             marginBottom: '2em',
           }}
-        >New password</Title>
+        >New password
+        </Title>
         <NewPasswordForm />
-      </div>;
+      </div>
+    );
+  };
+
+  const component = () => {
+    switch (passwordChange) {
+      case 'success': return <div><NewPasswordSuccessfulResult /></div>;
+      case 'error': return <div><NewPasswordErrorResult /></div>;
+      default: return defaultComponent();
     }
   };
 
