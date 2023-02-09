@@ -80,11 +80,11 @@ module SpaHelper
 
   private
 
-  def fill_in_email_login(email) = find_by_id("normal_login_email").click.fill_in(with: email)
+  def fill_in_email_login(email) = find_by_id("normal_login_email", wait: 5).click.fill_in(with: email)
 
-  def fill_in_email_password_reset(email) = find_by_id("nest-messages_email").click.fill_in(with: email)
+  def fill_in_email_password_reset(email) = find_by_id("nest-messages_email", wait: 5).click.fill_in(with: email)
 
-  def fill_in_password_input(password) = find_by_id("normal_login_password").click.fill_in(with: password)
+  def fill_in_password_input(password) = find_by_id("normal_login_password", wait: 5).click.fill_in(with: password)
 
   def registration_user(name, email, password, confirmation)
     click_button "Register"
