@@ -7,7 +7,7 @@ import {
   useNavigate,
 } from 'react-router-dom';
 
-export const PasswordChangeSuccessfulResult = () => {
+export const NewPasswordSuccessfulResult: React.FC = () => {
   const navigate = useNavigate();
 
   return (

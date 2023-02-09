@@ -1,12 +1,16 @@
 import {
   Button,
+  Col,
   Form,
   Input,
+  Row,
+  Space,
 } from 'antd';
 import React, {
   useContext,
 } from 'react';
 import {
+  useNavigate,
   useSearchParams,
 } from 'react-router-dom';
 import {
@@ -17,6 +21,8 @@ import {
 } from '../../contexts/PasswordChangeContext';
 
 export const NewPasswordForm: React.FC = () => {
+  const navigate = useNavigate();
+
   const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&-])[A-Za-z\d@$!%*?&-]{6,}$/u;
 
   const [
@@ -120,9 +126,25 @@ export const NewPasswordForm: React.FC = () => {
         />
       </Form.Item>
       <Form.Item>
-        <Button htmlType='submit' type='primary'>
-          Submit
-        </Button>
+        <Row justify='space-between'>
+          <Space>
+            <Col span={4}>
+              <Button htmlType='submit' type='primary'>
+                Submit
+              </Button>
+            </Col>
+            <Col span={4}>
+              <Button
+                htmlType='button' key='button-navigate-to-root' onClick={() => {
+                  navigate('/');
+                }}
+                type='default'
+              >
+                Back Home
+              </Button>
+            </Col>
+          </Space>
+        </Row>
       </Form.Item>
     </Form>
   );

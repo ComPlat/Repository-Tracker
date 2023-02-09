@@ -14,10 +14,15 @@ import React, {
   useCallback,
 } from 'react';
 import {
+  useNavigate,
+} from 'react-router-dom';
+import {
   csrfToken,
 } from '../../container';
 
 export const PasswordResetForm: React.FC = () => {
+  const navigate = useNavigate();
+
   const [
     api,
     contextHolder,
@@ -96,7 +101,12 @@ export const PasswordResetForm: React.FC = () => {
                 </Button>
               </Col>
               <Col span={4}>
-                <Button htmlType='button' type='default'>
+                <Button
+                  htmlType='button' key='button-navigate-to-root' onClick={() => {
+                    navigate('/');
+                  }}
+                  type='default'
+                >
                   Back Home
                 </Button>
               </Col>

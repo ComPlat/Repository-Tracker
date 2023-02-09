@@ -7,7 +7,7 @@ import {
   useNavigate,
 } from 'react-router-dom';
 
-export const PasswordChangeErrorResult = () => {
+export const NewPasswordErrorResult: React.FC = () => {
   const navigate = useNavigate();
 
   return (

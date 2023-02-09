@@ -1,8 +1,11 @@
 import {
   Button,
+  Col,
   Form,
   Input,
   notification,
+  Row,
+  Space,
 } from 'antd';
 import type {
   NotificationPlacement,
@@ -171,9 +174,25 @@ export const RegisterForm: React.FC = () => {
           />
         </Form.Item>
         <Form.Item>
-          <Button htmlType='submit' type='primary'>
-            Submit
-          </Button>
+          <Row justify='space-between'>
+            <Space>
+              <Col span={4}>
+                <Button htmlType='submit' type='primary'>
+                  Submit
+                </Button>
+              </Col>
+              <Col span={4}>
+                <Button
+                  htmlType='button' key='button-navigate-to-root' onClick={() => {
+                    setRegister(false);
+                  }}
+                  type='default'
+                >
+                  Back Home
+                </Button>
+              </Col>
+            </Space>
+          </Row>
         </Form.Item>
       </Form>
     </div>
