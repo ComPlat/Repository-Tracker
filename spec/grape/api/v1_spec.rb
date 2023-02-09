@@ -15,6 +15,7 @@ describe "API::V1" do
 
       before {
         register(user.name, user.email, user.password)
+        confirm_email(user.email)
         login(user.email, user.password)
         get "/api/v1/not_existing_path", params: {access_token: application.access_tokens.last&.token}
       }

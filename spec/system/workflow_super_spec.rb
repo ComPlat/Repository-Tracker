@@ -2,7 +2,7 @@ RSpec.describe "WorkflowSuper" do
   include AuthHelper
 
   let(:application) { create(:doorkeeper_application, :with_required_attributes) }
-  let(:super_user) { create(:user, :with_required_attributes_as_super) }
+  let(:super_user) { create(:user, :with_required_attributes_as_super, confirmed_at: DateTime.now) }
 
   describe "1. Login" do
     before { login(super_user.email, super_user.password) }
@@ -12,7 +12,6 @@ RSpec.describe "WorkflowSuper" do
 
   describe "2. Login and empty index" do
     before {
-      register(super_user.name, super_user.email, super_user.password)
       login(super_user.email, super_user.password)
       get "/api/v1/trackings", params: {access_token: application.access_tokens.last&.token}
     }
@@ -23,7 +22,6 @@ RSpec.describe "WorkflowSuper" do
 
   describe "3. Login and create entry" do
     before {
-      register(super_user.name, super_user.email, super_user.password)
       login(super_user.email, super_user.password)
       create_entry(super_user.name)
     }
@@ -33,7 +31,6 @@ RSpec.describe "WorkflowSuper" do
 
   describe "4. Login, create entry and filled index" do
     before {
-      register(super_user.name, super_user.email, super_user.password)
       login(super_user.email, super_user.password)
       create_entry(super_user.name)
       get "/api/v1/trackings", params: {access_token: application.access_tokens.last&.token}
@@ -45,7 +42,6 @@ RSpec.describe "WorkflowSuper" do
 
   describe "5. Login, create entry and show" do
     before {
-      register(super_user.name, super_user.email, super_user.password)
       login(super_user.email, super_user.password)
       create_entry(super_user.name)
       get "/api/v1/trackings/#{create_entry(super_user.name)}", params: {access_token: application.access_tokens.last&.token}
@@ -56,7 +52,6 @@ RSpec.describe "WorkflowSuper" do
 
   describe "6. Login, and expired token" do
     before {
-      register(super_user.name, super_user.email, super_user.password)
       login(super_user.email, super_user.password)
       at = Doorkeeper::AccessToken.last
       at.expires_in = 0
@@ -70,7 +65,6 @@ RSpec.describe "WorkflowSuper" do
 
   describe "7. Login and request new refresh token" do
     before {
-      register(super_user.name, super_user.email, super_user.password)
       login(super_user.email, super_user.password)
       revoke(super_user.email, super_user.password)
       login(super_user.email, super_user.password)

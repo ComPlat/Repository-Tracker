@@ -15,6 +15,7 @@ RSpec.describe Doorkeeper::AccessToken do
 
     before do
       register(user.name, user.email, user.password)
+      confirm_email(user.email)
       login(user.email, user.password)
     end
 

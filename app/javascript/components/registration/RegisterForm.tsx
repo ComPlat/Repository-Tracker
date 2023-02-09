@@ -1,8 +1,11 @@
 import {
   Button,
+  Col,
   Form,
   Input,
   notification,
+  Row,
+  Space,
 } from 'antd';
 import type {
   NotificationPlacement,
@@ -19,16 +22,7 @@ import {
   Register,
 } from '../../helpers/RegistrationHelper';
 
-const layout = {
-  labelCol: {
-    span: 16,
-  },
-  wrapperCol: {
-    span: 16,
-  },
-};
-
-export const RegisterForm = () => {
+export const RegisterForm: React.FC = () => {
   const [
     api,
     contextHolder,
@@ -54,7 +48,7 @@ export const RegisterForm = () => {
         if (response.email[0] === 'has already been taken') {
           Notification('bottomRight', 'Registration unsuccessful', 'E-Mail has already been taken.');
         } else {
-          Notification('bottomRight', 'Registration successful', 'You have successfully signed up. You will be redirected to the main page.');
+          Notification('bottomRight', 'Confirmation required', 'Please check your email mailbox and confirm your account.');
           setInterval(() => {
             setRegister(false);
           }, 3_000);
@@ -64,6 +58,10 @@ export const RegisterForm = () => {
   };
 
   const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&-])[A-Za-z\d@$!%*?&-]{6,}$/u;
+
+  const onClick = () => {
+    setRegister(false);
+  };
 
   return (
     <div>
@@ -76,12 +74,11 @@ export const RegisterForm = () => {
       >Sign up</Title>
       {contextHolder}
       <Form
-        style={{
-          left: '-50%',
+        layout='vertical'
+        name='nest-messages'
+        onFinish={onFinish} style={{
           marginTop: '48px',
-          position: 'relative',
         }}
-        {...layout} name='nest-messages' onFinish={onFinish}
       >
         <Form.Item
           label='Name'
@@ -180,14 +177,21 @@ export const RegisterForm = () => {
             type='password'
           />
         </Form.Item>
-        <Form.Item wrapperCol={{
-          ...layout.wrapperCol,
-          offset: 16,
-        }}
-        >
-          <Button htmlType='submit' type='primary'>
-            Submit
-          </Button>
+        <Form.Item>
+          <Row justify='space-between'>
+            <Space>
+              <Col span={4}>
+                <Button htmlType='submit' type='primary'>
+                  Submit
+                </Button>
+              </Col>
+              <Col span={4}>
+                <Button htmlType='button' key='button-navigate-to-root' onClick={onClick} type='default'>
+                  Back Home
+                </Button>
+              </Col>
+            </Space>
+          </Row>
         </Form.Item>
       </Form>
     </div>

@@ -9,7 +9,7 @@ import {
 } from 'antd';
 import React from 'react';
 
-export const LoginForm = () => {
+export const LoginForm: React.FC = () => {
   return (
     <Space.Compact>
       <Form.Item

@@ -7,10 +7,7 @@ export const RegisterButton = ({
   ...buttonProps
 }) => {
   return (
-    <Button
-      type='default'
-      {...buttonProps}
-    >
+    <Button type='default' {...buttonProps}>
       Register
     </Button>
   );
