@@ -38,8 +38,8 @@ export const PasswordResetForm: React.FC = () => {
     api,
   ]);
 
-  const onFinish = async (values: { email: string, }) => {
-    await fetch('/users/password', {
+  const onFinish = async (values: { email: string, }): Promise<void> => {
+    const response = await fetch('/users/password', {
       body: JSON.stringify({
         authenticity_token: csrfToken,
         commit: 'Send me reset password instructions',
@@ -51,13 +51,12 @@ export const PasswordResetForm: React.FC = () => {
         'Content-Type': 'application/json',
       },
       method: 'POST',
-    }).then((response) => {
-      if (response.status === 200) {
-        Notification('bottomRight', 'Password reset instructions sent', 'Please check your email mailbox and follow the instructions.');
-      } else {
-        Notification('bottomRight', 'Sending password reset instructions failed', 'Try again.');
-      }
     });
+
+    switch (response.status) {
+      case 200: return Notification('bottomRight', 'Password reset instructions sent', 'Please check your email mailbox and follow the instructions.');
+      default: return Notification('bottomRight', 'Sending password reset instructions failed', 'Try again.');
+    }
   };
 
   const onClick = () => {

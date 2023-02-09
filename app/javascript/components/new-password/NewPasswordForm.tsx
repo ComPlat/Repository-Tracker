@@ -35,8 +35,8 @@ export const NewPasswordForm: React.FC = () => {
     setPasswordChange,
   } = useContext(PasswordChangeContext);
 
-  const onFinish = async (values: { confirm: string, password: string, }) => {
-    await fetch('/users/password', {
+  const onFinish = async (values: { confirm: string, password: string, }): Promise<void> => {
+    const response = await fetch('/users/password', {
       body: JSON.stringify({
         authenticity_token: csrfToken,
         user: {
@@ -49,13 +49,13 @@ export const NewPasswordForm: React.FC = () => {
         'Content-Type': 'application/json',
       },
       method: 'PUT',
-    }).then((response) => {
-      if (response.status === 200) {
-        setPasswordChange('success');
-      } else if (response.status === 422) {
-        setPasswordChange('error');
-      }
     });
+
+    switch (response.status) {
+      case 200: return setPasswordChange('success');
+      case 422: return setPasswordChange('error');
+      default: throw new Error('Unexpected error');
+    }
   };
 
   const onClick = () => {
