@@ -170,6 +170,36 @@ RSpec.describe "SPA" do
     end
 
     it { expect(page).to have_current_path "/spa/password_reset" }
+
+    context "when email is valid and request has been submitted successfully" do
+      before do
+        valid_password_reset_request
+      end
+
+      it { expect(page).to have_content("Password reset instructions sent", wait: 5) }
+      it { expect(page).to have_content("Please check your email mailbox and follow the instructions.", wait: 5) }
+    end
+
+    context "when email is NOT valid and request submission has been failed" do
+      before do
+        invalid_password_reset_request
+      end
+
+      it { expect(page).to have_content("Sending password reset instructions failed", wait: 5) }
+      it { expect(page).to have_content("Try again.", wait: 5) }
+    end
+
+    context "when password reset link in mailbox has been clicked and new password has been entered" do
+      before do
+        valid_password_reset_request
+        sleep 1
+        visit_new_password_link
+        enter_new_password
+      end
+
+      it { expect(page).to have_content("Password change successful!", wait: 5) }
+      it { expect(page).to have_content("You can now login with your new password.", wait: 5) }
+    end
   end
 
   describe "Buttons to sort the items in a certain order" do

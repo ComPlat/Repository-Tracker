@@ -51,7 +51,7 @@ module SpaHelper
     find(".ant-radio-group", text: size).click
   end
 
-  def confirm_user_by_email = visit confirmation_link
+  def confirm_user_by_email = visit account_confirmation_link
 
   def confirm_with_invalid_confirmation_link = visit "/users/confirmation?confirmation_token=notavalidconfirmationtoken"
 
@@ -60,8 +60,21 @@ module SpaHelper
     click_link(href: "/spa/password_reset")
   end
 
-  def send_password_reset_request
+  def valid_password_reset_request
     fill_in_email_password_reset(user.email)
+    click_button "Submit"
+  end
+
+  def invalid_password_reset_request
+    fill_in_email_password_reset("#{user.email}.invalid")
+    click_button "Submit"
+  end
+
+  def visit_new_password_link = visit password_reset_link
+
+  def enter_new_password
+    find_by_id("nest-messages_password").click.fill_in(with: user.password)
+    find_by_id("nest-messages_confirm").click.fill_in(with: user.password)
     click_button "Submit"
   end
 
@@ -82,12 +95,17 @@ module SpaHelper
     click_button "Submit"
   end
 
-  def confirmation_email = ActionMailer::Base.deliveries.last
+  def email_from_mailbox = ActionMailer::Base.deliveries.last
 
-  def confirmation_html = Nokogiri::HTML(confirmation_email.body.raw_source)
+  def email_body = Nokogiri::HTML(email_from_mailbox.body.raw_source)
 
-  def confirmation_link
+  def account_confirmation_link
     # HINT: We just want the request uri because test environment host is "www.example.com" but Capybara tests on "localhost"
-    URI.parse(confirmation_html.at("a:contains('Confirm my account')")["href"]).request_uri
+    URI.parse(email_body.at("a:contains('Confirm my account')")["href"]).request_uri
+  end
+
+  def password_reset_link
+    # HINT: We just want the request uri because test environment host is "www.example.com" but Capybara tests on "localhost"
+    URI.parse(email_body.at("a:contains('Change my password')")["href"]).request_uri
   end
 end
