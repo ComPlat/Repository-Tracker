@@ -46,6 +46,17 @@ describe Users::PasswordsController do
     let(:new_password) { "VerySecurePassword1!-" }
 
     context "when password has been changed successfully" do
+      let(:expected_response) {
+        {
+          created_at: user.reload.created_at.iso8601(3),
+          email: user.reload.email,
+          id: user.reload.id,
+          name: user.reload.name,
+          role: user.reload.role,
+          updated_at: user.reload.updated_at.iso8601(3)
+        }
+      }
+
       before do
         reset_password(user.email)
         email_body = Nokogiri::HTML(ActionMailer::Base.deliveries.first.body.raw_source)
@@ -56,6 +67,7 @@ describe Users::PasswordsController do
       end
 
       it { expect(response).to have_http_status :ok }
+      it { expect(response.parsed_body).to eq expected_response.as_json }
     end
 
     context "when password has NOT been changed successfully" do
