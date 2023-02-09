@@ -18,6 +18,6 @@ module API
     end
 
     mount API::V1::Trackings
-    add_swagger_documentation host: ENV["HOST_URI"]
+    add_swagger_documentation host: "#{ENV["APP_HOST"]}:#{ENV["APP_PORT"]}"
   end
 end

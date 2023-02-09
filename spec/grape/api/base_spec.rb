@@ -68,7 +68,7 @@ describe API::Base do
     it { expect(parsed_and_symbolized_response_body[:info]).to eq(title: "API title", version: "0.0.1") }
     it { expect(parsed_and_symbolized_response_body[:swagger]).to eq "2.0" }
     it { expect(parsed_and_symbolized_response_body[:produces]).to eq ["application/json"] }
-    it { expect(parsed_and_symbolized_response_body[:host]).to eq ENV["HOST_URI"] }
+    it { expect(parsed_and_symbolized_response_body[:host]).to eq "#{ENV["APP_HOST"]}:#{ENV["APP_PORT"]}" }
     it { expect(parsed_and_symbolized_response_body[:basePath]).to eq "/api" }
     it { expect(parsed_and_symbolized_response_body[:tags]).to eq [{description: "Operations about trackings", name: "trackings"}] }
     it { expect(parsed_and_symbolized_response_body[:paths].keys.size).to eq 2 }
