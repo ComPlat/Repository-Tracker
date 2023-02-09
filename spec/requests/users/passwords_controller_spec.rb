@@ -23,13 +23,22 @@ describe Users::PasswordsController do
       it { expect { reset_password(user.email) }.to change(ActionMailer::Base.deliveries, :count).from(0).to(1) }
     end
 
-    context "when request for resetting password has failed" do
+    context "when email is blank and request for resetting password has failed" do
       before do
         reset_password("")
       end
 
       it { expect(response).to have_http_status :unprocessable_entity }
       it { expect(response.parsed_body).to eq({"email" => ["can't be blank"]}) }
+    end
+
+    context "when email is not found and request for resetting password has failed" do
+      before do
+        reset_password("notfound@example.com")
+      end
+
+      it { expect(response).to have_http_status :unprocessable_entity }
+      it { expect(response.parsed_body).to eq({"email" => ["not found"]}) }
     end
   end
 
