@@ -27,23 +27,22 @@ describe API::V1::TrackingItems, ".index_authenticated_admin" do
       it { expect(response.content_type).to eq "application/json" }
       it { expect(response.parsed_body).to be_a Array }
       it { expect(response.parsed_body.size).to eq 2 }
-      it { expect(response.parsed_body).to eq expected_json_array }
 
       it {
         expect(response.parsed_body.first)
           .to eq JSON.parse(
-            API::Entities::TrackingItem.new(tracking_items.first, {tracking_ids: tracking_items.first.trackings.ids})
-                                       .to_json
+            API::Entities::TrackingItem.new(tracking_items.first, {tracking_ids: authorization.tracking_ids}).to_json
           )
       }
 
       it {
         expect(response.parsed_body.second)
           .to eq JSON.parse(
-            API::Entities::TrackingItem.new(tracking_items.second, {tracking_ids: tracking_items.second.trackings.ids})
-                                       .to_json
+            API::Entities::TrackingItem.new(tracking_items.second, tracking_ids: authorization.tracking_ids).to_json
           )
       }
+
+      it { expect(response.parsed_body).to eq expected_json_array }
     end
 
     context "when trackings do NOT exist" do
