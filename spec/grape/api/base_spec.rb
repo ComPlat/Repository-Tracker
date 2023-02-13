@@ -24,7 +24,7 @@ describe API::Base do
     it { expect(combined_routes).to include({"swagger_doc" => []}) }
 
     describe "trackings routes" do
-      let(:expected_routes) do
+      let(:expected_trackings_routes) do
         # HINT: combined_routes["trackings"].map { |route|  [route.path, route.version] }
         {"trackings" => [
           be_a(Grape::Router::Route).and(have_attributes(path: "/:version/trackings(.json)", version: "v1")),
@@ -33,7 +33,16 @@ describe API::Base do
         ]}
       end
 
-      it { expect(combined_routes).to include expected_routes }
+      let(:expected_tracking_items_routes) do
+        # HINT: combined_routes["tracking_items"].map { |route|  [route.path, route.version] }
+        {"tracking_items" => [
+          be_a(Grape::Router::Route).and(have_attributes(path: "/:version/tracking_items(.json)", version: "v1")),
+          be_a(Grape::Router::Route).and(have_attributes(path: "/:version/tracking_items/:name(.json)", version: "v1"))
+        ]}
+      end
+
+      it { expect(combined_routes).to include expected_trackings_routes }
+      it { expect(combined_routes).to include expected_tracking_items_routes }
     end
   end
 
@@ -70,10 +79,17 @@ describe API::Base do
     it { expect(parsed_and_symbolized_response_body[:produces]).to eq ["application/json"] }
     it { expect(parsed_and_symbolized_response_body[:host]).to eq "#{ENV["APP_HOST"]}:#{ENV["APP_PORT"]}" }
     it { expect(parsed_and_symbolized_response_body[:basePath]).to eq "/api" }
-    it { expect(parsed_and_symbolized_response_body[:tags]).to eq [{description: "Operations about trackings", name: "trackings"}] }
-    it { expect(parsed_and_symbolized_response_body[:paths].keys.size).to eq 2 }
+
+    it {
+      expect(parsed_and_symbolized_response_body[:tags]).to eq [{description: "Operations about trackings", name: "trackings"},
+        {description: "Operations about tracking_items", name: "tracking_items"}]
+    }
+
+    it { expect(parsed_and_symbolized_response_body[:paths].keys.size).to eq 4 }
     it { expect(parsed_and_symbolized_response_body[:paths][:"/v1/trackings"].keys.size).to eq 2 }
     it { expect(parsed_and_symbolized_response_body[:paths][:"/v1/trackings"][:get].keys.size).to eq 5 }
+    it { expect(parsed_and_symbolized_response_body[:paths][:"/v1/tracking_items"].keys.size).to eq 1 }
+    it { expect(parsed_and_symbolized_response_body[:paths][:"/v1/tracking_items"][:get].keys.size).to eq 5 }
 
     it {
       expect(parsed_and_symbolized_response_body[:paths][:"/v1/trackings"][:get]).to eq(description: "Return list of trackings",
@@ -84,6 +100,14 @@ describe API::Base do
     }
 
     it { expect(parsed_and_symbolized_response_body[:paths][:"/v1/trackings"][:post].keys.size).to eq 7 }
+
+    it {
+      expect(parsed_and_symbolized_response_body[:paths][:"/v1/tracking_items"][:get]).to eq(description: "Return list of tracking_items",
+        operationId: "getV1TrackingItems",
+        produces: ["application/json"],
+        responses: {"200": {description: "Return list of tracking_items"}},
+        tags: ["tracking_items"])
+    }
 
     describe ":paths, [:''/v1/trackings'], :post" do
       let(:expected_result) {

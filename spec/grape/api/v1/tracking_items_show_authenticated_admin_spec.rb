@@ -30,7 +30,7 @@ describe API::V1::TrackingItems, ".show_authenticated_admin" do
       before { get "/api/v1/tracking_items/name", params: {access_token: access_token.token} }
 
       it { expect(response).to have_http_status :not_found }
-      it { expect(response.parsed_body).to eq("error" => "Couldn't find TrackingItem with 'name'=name") }
+      it { expect(response.parsed_body).to eq("error" => "Couldn't find TrackingItem with 'id'=") }
       it { expect(response.content_type).to eq "application/json" }
     end
   end
