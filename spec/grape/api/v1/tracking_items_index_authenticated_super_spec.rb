@@ -1,8 +1,8 @@
-describe API::V1::TrackingItems, ".index_authenticated_admin" do
+describe API::V1::TrackingItems, ".index_authenticated_super" do
   describe "GET /api/v1/tracking_items/:name" do
-    # HINT: Admin user is always authorized
+    # HINT: Super user is always authorized
 
-    let(:user) { create(:user, :with_required_attributes_as_admin) }
+    let(:user) { create(:user, :with_required_attributes_as_super) }
     let(:access_token) { create(:doorkeeper_access_token, :with_required_dependencies, resource_owner_id: user.id) }
 
     context "when trackings exist and user is authorized" do

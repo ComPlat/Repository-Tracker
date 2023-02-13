@@ -18,7 +18,10 @@ describe API::Entities::TrackingItem do
     subject(:serializable_hash) { tracking_item_entity.serializable_hash }
 
     let(:expected_result) {
-      {id: tracking_item.id, name: tracking_item.name, tracking_ids: [tracking.id], owner_name: tracking_item.user.name}
+      {id: tracking_item.id,
+       name: tracking_item.name,
+       tracking_ids: [tracking.id],
+       owner_name: tracking_item.user.name}
     }
 
     it { expect(serializable_hash).to eq expected_result }
@@ -28,7 +31,10 @@ describe API::Entities::TrackingItem do
     subject(:as_json) { tracking_item_entity.as_json }
 
     let(:expected_result) {
-      {id: tracking_item.id, name: tracking_item.name, tracking_ids: [tracking.id], owner_name: tracking_item.user.name}
+      {id: tracking_item.id,
+       name: tracking_item.name,
+       tracking_ids: [tracking.id],
+       owner_name: tracking_item.user.name}
     }
 
     it { expect(as_json.deep_symbolize_keys).to eq expected_result }
@@ -38,7 +44,10 @@ describe API::Entities::TrackingItem do
     subject(:to_json) { tracking_item_entity.to_json }
 
     let(:expected_result) {
-      {id: tracking_item.id, name: tracking_item.name, tracking_ids: [tracking.id], owner_name: tracking_item.user.name}
+      {id: tracking_item.id,
+       name: tracking_item.name,
+       tracking_ids: [tracking.id],
+       owner_name: tracking_item.user.name}
     }
 
     it { expect(JSON.parse(to_json).deep_symbolize_keys).to eq expected_result }
