@@ -7,6 +7,29 @@ module AuthHelper
     }.call
   end
 
+  def confirm_email(email)
+    get "/users/confirmation", params: {confirmation_token: User.find_by(email:).confirmation_token}
+  end
+
+  def reset_password(email)
+    post "/users/password", params: {
+      commit: "Send me reset password instructions",
+      user: {
+        email:
+      }
+    }, as: :json
+  end
+
+  def change_password(password, confirmation, reset_password_token)
+    put "/users/password", params: {
+      user: {
+        password:,
+        password_confirmation: confirmation,
+        reset_password_token:
+      }
+    }, as: :json
+  end
+
   def login(email, password)
     post "/oauth/token",
       params: {

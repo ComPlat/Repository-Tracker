@@ -7,6 +7,14 @@ FactoryBot.define do
       role { :user }
     end
 
+    trait :with_required_attributes_as_confirmed_user do
+      sequence(:name) { |i| "confirmed_user#{i}" }
+      sequence(:email) { |i| "confirmed_user#{i}@example.com" }
+      sequence(:password) { |i| "SecureUserPassword#{i}!" }
+      role { :user }
+      confirmed_at { DateTime.now }
+    end
+
     trait :with_required_attributes_as_super do
       sequence(:name) { |i| "super#{i}" }
       sequence(:email) { |i| "super#{i}@example.com" }

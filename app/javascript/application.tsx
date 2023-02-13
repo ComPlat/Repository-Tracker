@@ -12,8 +12,19 @@ import {
   createRoot,
 } from 'react-dom/client';
 import {
+  BrowserRouter,
+  Route,
+  Routes,
+} from 'react-router-dom';
+import {
   Login,
 } from './components/Login';
+import {
+  NewPassword,
+} from './components/NewPassword';
+import {
+  PasswordReset,
+} from './components/PasswordReset';
 import {
   Registration,
 } from './components/Registration';
@@ -25,8 +36,20 @@ import {
   Padding,
 } from './components/custom-styling/Padding';
 import {
+  NotFound,
+} from './components/error-handling/NotFound';
+import {
+  ConfirmationError,
+} from './components/registration/ConfirmationError';
+import {
+  ConfirmationSuccessful,
+} from './components/registration/ConfirmationSuccessful';
+import {
   container,
 } from './container';
+import {
+  PasswordChangeContext,
+} from './contexts/PasswordChangeContext';
 import {
   RegisterContext,
 } from './contexts/RegisterContext';
@@ -55,6 +78,11 @@ const App: React.FC = () => {
     setRegister,
   ] = useState(false);
 
+  const [
+    passwordChange,
+    setPasswordChange,
+  ] = useState(null);
+
   const userProviderValue = useMemo(() => {
     return {
       setUser,
@@ -74,6 +102,15 @@ const App: React.FC = () => {
     register,
   ]);
 
+  const passwordChangeProviderValue = useMemo(() => {
+    return {
+      passwordChange,
+      setPasswordChange,
+    };
+  }, [
+    passwordChange,
+  ]);
+
   useEffect(() => {
     storeUserInLocalStorage(user);
   }, [
@@ -81,21 +118,32 @@ const App: React.FC = () => {
   ]);
 
   return (
-    <UserContext.Provider value={userProviderValue}>
-      <RegisterContext.Provider value={registerProviderValue}>
-        <Padding>
-          <Header>
-            <Row justify='space-between'>
-              <Col><Title>Repository-Tracker</Title></Col>
-              <Col><Login /></Col>
-            </Row>
-          </Header>
-          <Row justify='center'>
-            {register ? <Registration /> : <SmartTable />}
-          </Row>
-        </Padding>
-      </RegisterContext.Provider>
-    </UserContext.Provider>
+    <BrowserRouter>
+      <UserContext.Provider value={userProviderValue}>
+        <RegisterContext.Provider value={registerProviderValue}>
+          <PasswordChangeContext.Provider value={passwordChangeProviderValue}>
+            <Padding>
+              <Header>
+                <Row justify='space-between'>
+                  <Col><Title>Repository-Tracker</Title></Col>
+                  <Col><Login /></Col>
+                </Row>
+              </Header>
+              <Row justify='center'>
+                <Routes>
+                  <Route element={register ? <Registration /> : <SmartTable />} path='/' />
+                  <Route element={<ConfirmationSuccessful />} path='/spa/confirmation_successful' />
+                  <Route element={<ConfirmationError />} path='/spa/confirmation_error' />
+                  <Route element={<PasswordReset />} path='/spa/password_reset' />
+                  <Route element={<NewPassword />} path='/spa/new_password/*' />
+                  <Route element={<NotFound />} path='/spa/*' />
+                </Routes>
+              </Row>
+            </Padding>
+          </PasswordChangeContext.Provider>
+        </RegisterContext.Provider>
+      </UserContext.Provider>
+    </BrowserRouter>
   );
 };
 

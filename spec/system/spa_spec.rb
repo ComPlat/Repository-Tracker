@@ -1,7 +1,7 @@
 RSpec.describe "SPA" do
   include SpaHelper
 
-  let(:user) { create(:user, :with_required_attributes_as_user) }
+  let(:user) { create(:user, :with_required_attributes_as_confirmed_user) }
   let(:tracking_item) { create(:tracking_item, :with_required_attributes, user:) }
   let(:trackings) do
     [create(:tracking, :with_required_attributes, tracking_item:,
@@ -96,8 +96,28 @@ RSpec.describe "SPA" do
         registration_new_user
       end
 
-      it { expect(page).to have_content("Registration successful", wait: 5) }
-      it { expect(page).to have_content("You have successfully signed up. You will be redirected to the main page.", wait: 5) }
+      it { expect(page).to have_content("Confirmation required", wait: 5) }
+      it { expect(page).to have_content("Please check your email mailbox and confirm your account.", wait: 5) }
+    end
+
+    context "when registration form is filled and user email must be confirmed" do
+      before do
+        visit "/"
+        registration_new_user
+        confirm_user_by_email
+      end
+
+      it { expect(page).to have_current_path "/spa/confirmation_successful" }
+    end
+
+    context "when confirmation link is invalid" do
+      before do
+        visit "/"
+        registration_new_user
+        confirm_with_invalid_confirmation_link
+      end
+
+      it { expect(page).to have_current_path "/spa/confirmation_error", ignore_query: true }
     end
 
     context "when registration is successful and user can login" do
@@ -105,11 +125,13 @@ RSpec.describe "SPA" do
         visit "/"
         registration_new_user
         sleep 3
-        login_with_correct_credentials
+        confirm_user_by_email
+        click_button "Back Home"
+        login_new_user
         close_notification
       end
 
-      it { expect(page).to have_content(trackings.pluck(:id).min, wait: 5) }
+      it { expect(page).to have_selector(".ant-typography", text: User.last.email) }
     end
 
     context "when email is already taken" do
@@ -138,6 +160,45 @@ RSpec.describe "SPA" do
       end
 
       it { expect(page).to have_content("The two passwords that you entered do not match!", wait: 5) }
+    end
+  end
+
+  describe "Password reset" do
+    before do
+      visit "/"
+      visit_reset_password_page
+    end
+
+    it { expect(page).to have_current_path "/spa/password_reset" }
+
+    context "when email is valid and request has been submitted successfully" do
+      before do
+        valid_password_reset_request
+      end
+
+      it { expect(page).to have_content("Password reset instructions sent", wait: 5) }
+      it { expect(page).to have_content("Please check your email mailbox and follow the instructions.", wait: 5) }
+    end
+
+    context "when email is NOT valid and request submission has been failed" do
+      before do
+        invalid_password_reset_request
+      end
+
+      it { expect(page).to have_content("Sending password reset instructions failed", wait: 5) }
+      it { expect(page).to have_content("Try again.", wait: 5) }
+    end
+
+    context "when password reset link in mailbox has been clicked and new password has been entered" do
+      before do
+        valid_password_reset_request
+        sleep 1
+        visit_new_password_link
+        enter_new_password
+      end
+
+      it { expect(page).to have_content("Password change successful!", wait: 5) }
+      it { expect(page).to have_content("You can now login with your new password.", wait: 5) }
     end
   end
 

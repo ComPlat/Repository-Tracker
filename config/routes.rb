@@ -2,16 +2,21 @@ Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   Rails.application.routes.draw do
-    root "spa#index"
+    root "spa#index", to: redirect("/spa")
 
-    devise_for :users, controllers: {registrations: "users/registrations"}
+    mount API::Base => "/api"
+    mount GrapeSwaggerRails::Engine => "/swagger"
+
+    devise_for :users,
+      controllers: {registrations: "users/registrations",
+                    confirmations: "users/confirmations",
+                    passwords: "users/passwords"}
 
     use_doorkeeper do
       skip_controllers :authorizations, :applications,
         :authorized_applications
     end
 
-    mount API::Base => "/api"
-    mount GrapeSwaggerRails::Engine => "/swagger"
+    get "/spa/*path", to: "spa#index"
   end
 end

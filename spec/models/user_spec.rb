@@ -53,6 +53,22 @@ describe User do
     it { is_expected.to have_db_column(:remember_created_at).of_type(:datetime) }
   end
 
+  describe "#confirmation_token" do
+    it { is_expected.to have_db_column(:confirmation_token).of_type(:string) }
+  end
+
+  describe "#confirmed_at" do
+    it { is_expected.to have_db_column(:confirmed_at).of_type(:datetime) }
+  end
+
+  describe "#confirmation_sent_at" do
+    it { is_expected.to have_db_column(:confirmation_sent_at).of_type(:datetime) }
+  end
+
+  describe "#unconfirmed_email" do
+    it { is_expected.to have_db_column(:unconfirmed_email).of_type(:string) }
+  end
+
   describe "#trackable_systems" do
     subject(:user) { create(:user, :with_required_attributes_as_trackable_system_admin) }
 

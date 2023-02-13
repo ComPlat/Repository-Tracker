@@ -6,7 +6,7 @@ import {
   RegisterForm,
 } from './registration/RegisterForm';
 
-export const Registration = () => {
+export const Registration: React.FC = () => {
   return (
     <Space>
       <RegisterForm />
