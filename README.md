@@ -12,7 +12,7 @@
    These two values refer to how the app is reachable from Internet. 
    If they are not correctly set, features like email conformation, password reset, etc. will not work.
 4. Execute run_docker-compose.production.sh. 
-   If it is your first run replace db:migrate with db:setup, but do not forget to change it back later, otherwise app will not boot, because it would existing destroy database. 
+   If it is your first run replace db:migrate with db:setup, but do not forget to change it back later, otherwise app will not boot, because it would destroy existing database. 
 
 ## Development
 
