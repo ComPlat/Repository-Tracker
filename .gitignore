@@ -94,6 +94,9 @@ yarn-debug.log*
 .idea/**/uiDesigner.xml
 .idea/**/dbnavigator.xml
 
+# Sonarlint Plugin
+.idea/sonarlint/issuestore
+
 ## File-based project format
 *.iws
 
