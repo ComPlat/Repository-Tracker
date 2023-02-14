@@ -20,25 +20,25 @@ describe API::Base do
   describe ".combined_routes" do
     subject(:combined_routes) { described_class.combined_routes }
 
-    it { expect(combined_routes.length).to eq 2 }
+    it { expect(combined_routes.length).to eq 3 }
     it { expect(combined_routes).to include({"swagger_doc" => []}) }
 
     describe "trackings routes" do
       let(:expected_trackings_routes) do
         # HINT: combined_routes["trackings"].map { |route|  [route.path, route.version] }
-        {"trackings" => [
+        {"trackings" => match_array([
           be_a(Grape::Router::Route).and(have_attributes(path: "/:version/trackings(.json)", version: "v1")),
           be_a(Grape::Router::Route).and(have_attributes(path: "/:version/trackings/:id(.json)", version: "v1")),
           be_a(Grape::Router::Route).and(have_attributes(path: "/:version/trackings(.json)", version: "v1"))
-        ]}
+        ])}
       end
 
       let(:expected_tracking_items_routes) do
         # HINT: combined_routes["tracking_items"].map { |route|  [route.path, route.version] }
-        {"tracking_items" => [
-          be_a(Grape::Router::Route).and(have_attributes(path: "/:version/tracking_items(.json)", version: "v1")),
-          be_a(Grape::Router::Route).and(have_attributes(path: "/:version/tracking_items/:name(.json)", version: "v1"))
-        ]}
+        {"tracking_items" => match_array(
+          [be_a(Grape::Router::Route).and(have_attributes(path: "/:version/tracking_items(.json)", version: "v1")),
+            be_a(Grape::Router::Route).and(have_attributes(path: "/:version/tracking_items/:name(.json)", version: "v1"))]
+        )}
       end
 
       it { expect(combined_routes).to include expected_trackings_routes }
