@@ -1,0 +1,29 @@
+services:
+  db:
+    environment:
+      - POSTGRES_USER=${TRACKER_DB_USERNAME}
+      - POSTGRES_PASSWORD=${TRACKER_DB_PASSWORD}
+    image: postgres:14.6-alpine3.16
+    restart: always
+    volumes:
+      - "${TRACKER_DB_DATA_FOLDER}:/var/lib/postgresql/data"
+  tracker:
+    build: .
+    command: sh -c "gem update --system &&
+                    bundle config set --local without 'development test' &&
+                    bundle install && 
+                    ./bin/rails db:migrate &&
+                    ./bin/rails s"
+    environment:
+      - RAILS_ENV=production
+      - TRACKER_DB_HOST=db
+      - TRACKER_DB_USERNAME=${TRACKER_DB_USERNAME}
+      - TRACKER_DB_PASSWORD=${TRACKER_DB_PASSWORD}
+      - SECRET_KEY_BASE=${TRACKER_SECRET_KEY_BASE}
+    links:
+      - db
+    ports:
+      - '3000:3000'
+    restart: always
+    volumes:
+      - ./:/repository-tracker
