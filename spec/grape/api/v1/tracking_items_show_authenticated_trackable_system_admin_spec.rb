@@ -10,7 +10,7 @@ describe API::V1::TrackingItems, ".show_authenticated_trackable_system_admin" do
     }
     let(:access_token) { create(:doorkeeper_access_token, :with_required_dependencies, resource_owner_id: user.id) }
 
-    context "when tracking id exists, user is authorized but tracking do NOT belong to trackable system" do
+    context "when tracking name exists, user is authorized but tracking do NOT belong to trackable system" do
       before do
         create_list(:tracking, 3, :with_required_attributes, :with_required_dependencies, tracking_item:)
 
@@ -18,7 +18,7 @@ describe API::V1::TrackingItems, ".show_authenticated_trackable_system_admin" do
       end
 
       it { expect(response).to have_http_status :not_found }
-      it { expect(response.parsed_body).to eq({"error" => "Couldn't find TrackingItem with 'id'="}) }
+      it { expect(response.parsed_body).to eq({"error" => "Couldn't find TrackingItem with 'name'=#{tracking_item.name}"}) }
     end
 
     context "when tracking id exists, user is authorized but trackings do belong to from_trackable_system" do
@@ -52,7 +52,7 @@ describe API::V1::TrackingItems, ".show_authenticated_trackable_system_admin" do
       it { expect(response.parsed_body).to eq expected_json_hash }
     end
 
-    context "when tracking id exists and user is NOT authorized" do
+    context "when tracking name exists and user is NOT authorized" do
       before do
         create_list(:tracking, 3, :with_required_attributes, :with_required_dependencies, tracking_item:)
 
@@ -61,14 +61,16 @@ describe API::V1::TrackingItems, ".show_authenticated_trackable_system_admin" do
 
       it { expect(response).to have_http_status :not_found }
       it { expect(response.content_type).to eq "application/json" }
-      it { expect(response.parsed_body).to eq({"error" => "Couldn't find TrackingItem with 'id'="}) }
+      it { expect(response.parsed_body).to eq({"error" => "Couldn't find TrackingItem with 'name'=#{tracking_item.name}"}) }
     end
 
-    context "when tracking id does NOT exist" do
-      before { get "/api/v1/tracking_items/0", params: {access_token: access_token.token} }
+    context "when tracking name does NOT exist" do
+      let(:not_existing_name) { "does_not_exist" }
+
+      before { get "/api/v1/tracking_items/#{not_existing_name}", params: {access_token: access_token.token} }
 
       it { expect(response).to have_http_status :not_found }
-      it { expect(response.parsed_body).to eq("error" => "Couldn't find TrackingItem with 'id'=") }
+      it { expect(response.parsed_body).to eq("error" => "Couldn't find TrackingItem with 'name'=#{not_existing_name}") }
       it { expect(response.content_type).to eq "application/json" }
     end
   end

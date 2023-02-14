@@ -35,14 +35,16 @@ describe API::V1::TrackingItems, ".show_authenticated_user" do
 
       it { expect(response).to have_http_status :not_found }
       it { expect(response.content_type).to eq "application/json" }
-      it { expect(response.parsed_body).to eq({"error" => "Couldn't find TrackingItem with 'id'="}) }
+      it { expect(response.parsed_body).to eq({"error" => "Couldn't find TrackingItem with 'name'=#{tracking_item.name}"}) }
     end
 
-    context "when tracking id does NOT exist" do
-      before { get "/api/v1/tracking_items/0", params: {access_token: access_token.token} }
+    context "when tracking name does NOT exist" do
+      let(:not_existing_name) { "does_not_exist" }
+
+      before { get "/api/v1/tracking_items/#{not_existing_name}", params: {access_token: access_token.token} }
 
       it { expect(response).to have_http_status :not_found }
-      it { expect(response.parsed_body).to eq("error" => "Couldn't find TrackingItem with 'id'=") }
+      it { expect(response.parsed_body).to eq("error" => "Couldn't find TrackingItem with 'name'=#{not_existing_name}") }
       it { expect(response.content_type).to eq "application/json" }
     end
   end

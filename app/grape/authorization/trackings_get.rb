@@ -20,7 +20,11 @@ class Authorization::TrackingsGet
     end
   }.call
 
-  def one = @one ||= all.find(id)
+  def one
+    @one ||= all.find(id)
+  rescue ActiveRecord::RecordNotFound => error
+    @trackings_grape_api.error! "Couldn't find #{error.model} with 'id'=#{id}", 404
+  end
 
   private
 
