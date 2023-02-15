@@ -21,7 +21,7 @@ describe API::V1::TrackingItems, ".show_authenticated_trackable_system_admin" do
       it { expect(response.parsed_body).to eq({"error" => "Couldn't find TrackingItem with 'name'=#{tracking_item.name}"}) }
     end
 
-    context "when tracking id exists, user is authorized but trackings do belong to from_trackable_system" do
+    context "when tracking id exists, user is authorized and trackings do belong to from_trackable_system" do
       before do
         create_list(:tracking, 3, :with_required_attributes, :with_required_dependencies, tracking_item:,
           from_trackable_system:

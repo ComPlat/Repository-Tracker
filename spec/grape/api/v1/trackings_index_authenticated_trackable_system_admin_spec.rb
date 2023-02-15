@@ -28,7 +28,7 @@ describe API::V1::Trackings, ".index_authenticated_trackable_system_admin" do
       it { expect(response.parsed_body).to eq [] }
     end
 
-    context "when trackings exist, user is authorized but trackings do belong to from_trackable_system" do
+    context "when trackings exist, user is authorized and trackings do belong to from_trackable_system" do
       let(:trackings) {
         create_list(:tracking, 2, :with_required_attributes, :with_required_dependencies, tracking_item:, from_trackable_system: create(:trackable_system, :with_required_attributes, :with_required_dependencies,
           name: "chemotion_electronic_laboratory_notebook", user:))

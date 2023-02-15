@@ -25,7 +25,7 @@ describe API::V1::TrackingItems, ".index_authenticated_trackable_system_admin" d
       it { expect(response.parsed_body).to eq [] }
     end
 
-    context "when trackings exist but trackings do belong to from_trackable_system" do
+    context "when trackings exist and trackings do belong to from_trackable_system" do
       let(:tracking_items) { create_list(:tracking_item, 2, :with_required_dependencies, :with_required_attributes) }
       let(:from_trackable_system) {
         create(:trackable_system, :with_required_attributes, :with_required_dependencies,
