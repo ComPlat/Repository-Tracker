@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 class Authorization::TrackingItemsGet
-  def initialize(trackings_grape_api)
-    @trackings_grape_api = trackings_grape_api
-  end
+  include Authorization::Helper
 
   def all = @all ||= -> {
     case role
@@ -23,7 +21,7 @@ class Authorization::TrackingItemsGet
   def one
     @one ||= all.find_by!(name:)
   rescue ActiveRecord::RecordNotFound => error
-    @trackings_grape_api.error! "Couldn't find #{error.model} with 'name'=#{name}", 404
+    not_found_error!(error.model, "name", name)
   end
 
   def tracking_ids = @tracking_ids ||= -> {
@@ -33,7 +31,7 @@ class Authorization::TrackingItemsGet
     when "super"
       owned_tracking_ids
     when "trackable_system_admin"
-      trackable_system_admin_trackings.ids
+      trackable_system_admin_trackings_ids
     when "user"
       owned_tracking_ids
     else
@@ -42,6 +40,8 @@ class Authorization::TrackingItemsGet
   }.call
 
   private
+
+  def trackable_system_admin_trackings_ids = @trackable_system_admin_trackings_ids ||= trackable_system_admin_trackings.ids
 
   def owned_tracking_ids = @owned_tracking_ids ||= Tracking.where(tracking_item_id: all.ids).ids
 
@@ -63,10 +63,4 @@ class Authorization::TrackingItemsGet
   def role = current_user.role
 
   def name = params["name"]
-
-  def current_user = @current_user ||= User.find(doorkeeper_token.resource_owner_id)
-
-  def doorkeeper_token = @trackings_grape_api.send(:doorkeeper_token)
-
-  def params = @trackings_grape_api.params
 end

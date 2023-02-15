@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 class Authorization::TrackingsGet
-  def initialize(trackings_grape_api)
-    @trackings_grape_api = trackings_grape_api
-  end
+  include Authorization::Helper
 
   def all = @all ||= -> {
     case role
@@ -23,7 +21,7 @@ class Authorization::TrackingsGet
   def one
     @one ||= all.find(id)
   rescue ActiveRecord::RecordNotFound => error
-    @trackings_grape_api.error! "Couldn't find #{error.model} with 'id'=#{id}", 404
+    not_found_error!(error.model, "id", id)
   end
 
   private
@@ -44,10 +42,4 @@ class Authorization::TrackingsGet
   def role = current_user.role
 
   def id = params["id"]
-
-  def current_user = @current_user ||= User.find(doorkeeper_token.resource_owner_id)
-
-  def doorkeeper_token = @trackings_grape_api.send(:doorkeeper_token)
-
-  def params = @trackings_grape_api.params
 end

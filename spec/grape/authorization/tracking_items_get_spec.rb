@@ -1,17 +1,19 @@
 RSpec.describe Authorization::TrackingItemsGet do
-  let(:tracking_items_get) {
+  let(:grape_api_mock) {
     doorkeeper_access_token = create(:doorkeeper_access_token, :with_required_dependencies, resource_owner_id: user.id)
-    trackings_grape_api_mock = Class.new do
+    Class.new do
       def initialize(doorkeeper_token, params)
         @doorkeeper_token = doorkeeper_token
         @params = params
       end
 
+      def error!(_message, _status) = nil
+
       attr_reader :doorkeeper_token, :params
     end.new(doorkeeper_access_token, params)
-
-    described_class.new trackings_grape_api_mock
   }
+
+  let(:tracking_items_get) { described_class.new grape_api_mock }
 
   describe ".new" do
     subject { tracking_items_get }
@@ -90,9 +92,16 @@ RSpec.describe Authorization::TrackingItemsGet do
       let(:params) { {"name" => not_owned_tracking_item.name} }
       let(:not_owned_tracking_item) { create(:tracking_item, :with_required_attributes, :with_required_dependencies) }
 
-      before { create_list(:tracking_item, 2, :with_required_attributes, user:) }
+      before {
+        create_list(:tracking_item, 2, :with_required_attributes, user:)
 
-      it { expect { one }.to raise_error ActiveRecord::RecordNotFound }
+        allow(grape_api_mock).to receive(:error!)
+      }
+
+      it {
+        one
+        expect(grape_api_mock).to have_received(:error!).with("Couldn't find TrackingItem with 'name'=#{not_owned_tracking_item.name}", 404).once
+      }
     end
 
     context "when user role is :super" do
@@ -150,9 +159,14 @@ RSpec.describe Authorization::TrackingItemsGet do
         create(:tracking, :with_required_attributes, :with_required_dependencies,
           from_trackable_system: create(:trackable_system, :with_required_dependencies, name: "chemotion_repository"),
           to_trackable_system: create(:trackable_system, :with_required_dependencies, name: "chemotion_electronic_laboratory_notebook"))
+
+        allow(grape_api_mock).to receive(:error!)
       }
 
-      it { expect { one }.to raise_error ActiveRecord::RecordNotFound }
+      it {
+        one
+        expect(grape_api_mock).to have_received(:error!).with("Couldn't find TrackingItem with 'name'=#{tracking_items.first.name}", 404).once
+      }
     end
   end
 
