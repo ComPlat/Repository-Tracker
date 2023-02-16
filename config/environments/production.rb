@@ -65,7 +65,19 @@ Rails.application.configure do
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
-  # config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.raise_delivery_errors = false
+
+  # config.action_mailer.delivery_method = :smtp
+  # https://guides.rubyonrails.org/action_mailer_basics.html#action-mailer-configuration
+  config.action_mailer.smtp_settings = {
+    address: ENV["SMTP_HOST"],
+    port: ENV["SMTP_PORT"],
+    # domain: "yourdomain.com",
+    authentication: ENV["SMTP_AUTHENTICATION"],
+    # enable_starttls_auto: true,
+    user_name: ENV["SMTP_USERNAME"],
+    password: ENV["SMTP_PASSWORD"]
+  }
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).

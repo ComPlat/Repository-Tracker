@@ -2,14 +2,14 @@
 
 ## Production
 ### Setup
-1. Install current version of docker and docker-compose.
-2. Change environment variables in run_docker-compose.production.sh. 
-   HINT: App will start if you change nothing, but all the values are not secure. 
+1. Install current version of [docker](https://docs.docker.com/get-docker/) and [docker-compose](https://docs.docker.com/compose/install/).
+2. Change environment variables in `run_docker-compose.production.sh`. 
+   HINT: App will start if you change nothing, but all the values are not secure and mailing will not work.
    Save those values securely, you will need them to access and run your app later. Loosing or exposing these values will be insecure and dangerous!
-   You can create secure values with RAILS_ENV=production bundle exec rake secret inside container.
-   Do not forget to find a backup solution for your TRACKER_DB_DATA_FOLDER, otherwise complete data loss is a possibility!
-3. Edit APP_HOST and APP_PORT in .env.production. 
-   These two values refer to how the app is reachable from Internet. 
+   You can create secure values with `RAILS_ENV=production bundle exec rake secret` inside container.
+   Do not forget to find a backup solution for your `TRACKER_DB_DATA_FOLDER`, otherwise complete data loss is a possibility!
+3. Change environment variables in `.env.production`. 
+   These two values refer to how the app is reachable from Internet.
    If they are not correctly set, features like email conformation, password reset, etc. will not work.
 4. Execute run_docker-compose.production.sh. 
    If it is your first run replace db:migrate with db:setup, but do not forget to change it back later, otherwise app will not boot, because it would destroy existing database. 
