@@ -1,9 +1,25 @@
 RSpec.describe Authorization::TrackingsGet do
-  let(:trackings_get) { described_class.new self }
-  let(:access_token) { create(:doorkeeper_access_token, :with_required_dependencies, resource_owner_id: user.id) }
+  let(:trackings_get) {
+    doorkeeper_access_token = create(:doorkeeper_access_token, :with_required_dependencies, resource_owner_id: user.id)
+    trackings_grape_api_mock = Class.new do
+      def initialize(doorkeeper_token, params)
+        @doorkeeper_token = doorkeeper_token
+        @params = params
+      end
+
+      def error!(_message, _status) = nil
+
+      attr_reader :doorkeeper_token, :params
+    end.new(doorkeeper_access_token, params)
+
+    described_class.new trackings_grape_api_mock
+  }
 
   describe ".new" do
     subject { trackings_get }
+
+    let(:user) { create(:user, :with_required_attributes_as_user) }
+    let(:params) { {} }
 
     it { is_expected.to be_a described_class }
   end
@@ -11,70 +27,45 @@ RSpec.describe Authorization::TrackingsGet do
   describe "#all" do
     subject(:all) { trackings_get.all }
 
+    let(:params) { {} }
+
     context "when user role is :user" do
       let(:user) { create(:user, :with_required_attributes_as_user) }
       let(:tracking_item) { create(:tracking_item, :with_required_attributes, user:) }
-      let(:trackings) { create_list(:tracking, 3, :with_required_attributes, :with_required_dependencies, tracking_item:) }
-
-      before do
-        trackings
-        allow(trackings_get).to receive(:role).and_return("user")
-        allow(trackings_get).to receive(:doorkeeper_token).and_return(access_token)
-      end
+      let!(:trackings) { create_list(:tracking, 3, :with_required_attributes, :with_required_dependencies, tracking_item:) }
 
       it { is_expected.to eq trackings }
     end
 
     context "when user role is :super" do
       let(:user) { create(:user, :with_required_attributes_as_super) }
-      let(:trackings) { create_list(:tracking, 3, :with_required_attributes, :with_required_dependencies) }
-
-      before do
-        trackings
-        allow(trackings_get).to receive(:role).and_return("super")
-        allow(trackings_get).to receive(:doorkeeper_token).and_return(access_token)
-      end
+      let!(:trackings) { create_list(:tracking, 3, :with_required_attributes, :with_required_dependencies) }
 
       it { is_expected.to eq trackings }
     end
 
     context "when user role is :admin" do
       let(:user) { create(:user, :with_required_attributes_as_admin) }
-      let(:trackings) { create_list(:tracking, 3, :with_required_attributes, :with_required_dependencies) }
-
-      before do
-        trackings
-        allow(trackings_get).to receive(:role).and_return("admin")
-        allow(trackings_get).to receive(:doorkeeper_token).and_return(access_token)
-      end
+      let!(:trackings) { create_list(:tracking, 3, :with_required_attributes, :with_required_dependencies) }
 
       it { is_expected.to eq trackings }
     end
 
     context "when user role is :trackable_system_admin and trackable_system_admin belong to a trackable system" do
       let(:user) { create(:user, :with_required_attributes_as_trackable_system_admin) }
-      let(:trackings) {
+      let!(:trackings) {
         create_list(:tracking, 3, :with_required_attributes, :with_required_dependencies,
           from_trackable_system: create(:trackable_system, :with_required_attributes, :with_required_dependencies, user:))
       }
-
-      before do
-        trackings
-        allow(trackings_get).to receive(:role).and_return("trackable_system_admin")
-        allow(trackings_get).to receive(:doorkeeper_token).and_return(access_token)
-      end
 
       it { is_expected.to eq trackings }
     end
 
     context "when user role is :trackable_system_admin and trackable_system_admin belong NOT to a trackable system" do
       let(:user) { create(:user, :with_required_attributes_as_trackable_system_admin) }
-      let(:trackings) { create_list(:tracking, 3, :with_required_attributes, :with_required_dependencies) }
 
       before do
-        trackings
-        allow(trackings_get).to receive(:role).and_return("trackable_system_admin")
-        allow(trackings_get).to receive(:doorkeeper_token).and_return(access_token)
+        create_list(:tracking, 3, :with_required_attributes, :with_required_dependencies)
       end
 
       it { is_expected.to eq [] }
@@ -87,62 +78,38 @@ RSpec.describe Authorization::TrackingsGet do
     context "when user role is :user" do
       let(:user) { create(:user, :with_required_attributes_as_user) }
       let(:tracking_item) { create(:tracking_item, :with_required_attributes, user:) }
-      let(:trackings) { create_list(:tracking, 3, :with_required_attributes, :with_required_dependencies, tracking_item:) }
+      let(:owned_trackings) { create_list(:tracking, 3, :with_required_attributes, :with_required_dependencies, tracking_item:) }
+      let(:params) { {"id" => owned_trackings.first.id} }
 
-      before do
-        trackings
-        allow(trackings_get).to receive(:role).and_return("user")
-        allow(trackings_get).to receive(:doorkeeper_token).and_return(access_token)
-        allow(trackings_get).to receive(:id).and_return(trackings.first&.id)
-      end
-
-      it { is_expected.to eq trackings.first }
+      it { is_expected.to eq owned_trackings.first }
     end
 
     context "when user role is :super" do
       let(:user) { create(:user, :with_required_attributes_as_super) }
-      let(:trackings) { create_list(:tracking, 3, :with_required_attributes, :with_required_dependencies) }
+      let!(:trackings) { create_list(:tracking, 3, :with_required_attributes, :with_required_dependencies) }
       let(:expected_tracking) { trackings.first }
-
-      before do
-        trackings
-        allow(trackings_get).to receive(:role).and_return("super")
-        allow(trackings_get).to receive(:doorkeeper_token).and_return(access_token)
-        allow(trackings_get).to receive(:id).and_return(expected_tracking.id)
-      end
+      let(:params) { {"id" => expected_tracking.id} }
 
       it { is_expected.to eq expected_tracking }
     end
 
     context "when user role is :admin" do
       let(:user) { create(:user, :with_required_attributes_as_admin) }
-      let(:trackings) { create_list(:tracking, 3, :with_required_attributes, :with_required_dependencies) }
+      let!(:trackings) { create_list(:tracking, 3, :with_required_attributes, :with_required_dependencies) }
       let(:expected_tracking) { trackings.first }
-
-      before do
-        trackings
-        allow(trackings_get).to receive(:role).and_return("admin")
-        allow(trackings_get).to receive(:doorkeeper_token).and_return(access_token)
-        allow(trackings_get).to receive(:id).and_return(expected_tracking.id)
-      end
+      let(:params) { {"id" => expected_tracking.id} }
 
       it { is_expected.to eq expected_tracking }
     end
 
     context "when user role is :trackable_system_admin and trackable_system_admin belongs to a trackable system" do
       let(:user) { create(:user, :with_required_attributes_as_trackable_system_admin) }
-      let(:trackings) {
+      let!(:trackings) {
         create_list(:tracking, 3, :with_required_attributes, :with_required_dependencies,
           from_trackable_system: create(:trackable_system, :with_required_attributes, :with_required_dependencies, user:))
       }
       let(:expected_tracking) { trackings.first }
-
-      before do
-        trackings
-        allow(trackings_get).to receive(:role).and_return("trackable_system_admin")
-        allow(trackings_get).to receive(:doorkeeper_token).and_return(access_token)
-        allow(trackings_get).to receive(:id).and_return(expected_tracking.id)
-      end
+      let(:params) { {"id" => expected_tracking.id} }
 
       it { is_expected.to eq expected_tracking }
     end
@@ -151,15 +118,17 @@ RSpec.describe Authorization::TrackingsGet do
       let(:user) { create(:user, :with_required_attributes_as_trackable_system_admin) }
       let(:trackings) { create_list(:tracking, 3, :with_required_attributes, :with_required_dependencies) }
       let(:expected_tracking) { trackings.first }
+      let(:params) { {"id" => expected_tracking.id} }
 
       before do
-        trackings
-        allow(trackings_get).to receive(:role).and_return("trackable_system_admin")
-        allow(trackings_get).to receive(:doorkeeper_token).and_return(access_token)
-        allow(trackings_get).to receive(:id).and_return(expected_tracking.id)
+        allow(trackings_get.instance_variable_get(:@grape_api)).to receive(:error!)
       end
 
-      it { expect { one }.to raise_error ActiveRecord::RecordNotFound, "Couldn't find Tracking with 'id'=#{expected_tracking.id} [WHERE (1=0 OR 1=0)]" }
+      it {
+        one
+        expect(trackings_get.instance_variable_get(:@grape_api)).to have_received(:error!)
+          .with("Couldn't find Tracking with 'id'=#{expected_tracking.id}", 404).once
+      }
     end
   end
 end
