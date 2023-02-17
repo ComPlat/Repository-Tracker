@@ -1,37 +1,45 @@
-module API::V1
-  class Trackings < Grape::API
-    version "v1", using: :path
+class API::V1::Trackings < Grape::API
+  version "v1", using: :path
 
-    args = [{"tracking1" => "My first tracking"}, {"tracking2" => "My second tracking"}]
+  helpers Doorkeeper::Grape::Helpers
 
-    namespace :trackings do
-      desc "Return list of trackings"
+  before { doorkeeper_authorize! }
+
+  namespace :trackings do
+    desc "Return list of trackings"
+    get do
+      trackings_get_authorization = Authorization::TrackingsGet.new self
+      present trackings_get_authorization.all, with: API::Entities::Tracking
+    end
+
+    desc "Return a tracking" # TODO: Also provide for tracker number
+    params do
+      requires :id, type: Integer, desc: "Tracking ID"
+    end
+    route_param :id, type: Integer do
       get do
-        present args
-      end
-
-      desc "Return a tracking"
-      params do
-        requires :id, type: Integer, desc: "Tracking ID"
-      end
-      route_param :id, type: Integer do
-        get do
-          present args[params[:id]]
-        end
-      end
-
-      desc "Create a tracking"
-      params do
-        requires :title, type: String, desc: "Tracking title"
-        requires :content, type: String, desc: "Tracking content"
-      end
-      post do
-        args.push({params[:title] => params[:content]})
+        trackings_get_authorization = Authorization::TrackingsGet.new self
+        present trackings_get_authorization.one, with: API::Entities::Tracking
       end
     end
 
-    route :any, "*path" do
-      error!("Not found", 404)
+    desc "Create a tracking"
+    params do
+      requires :status, type: String, desc: "Tracking status"
+      requires :metadata, type: JSON, desc: "Tracking metadata"
+      requires :tracking_item_name, type: String, desc: "Tracking unique identifier"
+      requires :tracking_item_owner_name, type: String, desc: "Tracking item owner name"
+      requires :from_trackable_system_name, type: String, desc: "Tracking source"
+      requires :to_trackable_system_name, type: String, desc: "Tracking receiver"
     end
+
+    post do
+      trackings_post_authorization = Authorization::TrackingsPost.new self
+      present TrackingBuilder.new(params).create!, with: API::Entities::Tracking if trackings_post_authorization.authorized?
+    end
+  end
+
+  route :any, "*path" do
+    error! "Not found", 404
   end
 end
