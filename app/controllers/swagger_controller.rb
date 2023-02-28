@@ -1,4 +1,6 @@
-class SwaggerUiController < ApplicationController
+class SwaggerController < ApplicationController
+  layout "swagger"
+
   def index
     @uid = uid
     render "index"

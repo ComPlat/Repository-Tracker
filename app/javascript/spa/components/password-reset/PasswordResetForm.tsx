@@ -18,7 +18,7 @@ import {
 } from 'react-router-dom';
 import {
   csrfToken,
-} from '../../container';
+} from '../../containerSpa';
 
 export const PasswordResetForm: React.FC = () => {
   const navigate = useNavigate();

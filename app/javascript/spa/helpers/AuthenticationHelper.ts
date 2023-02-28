@@ -1,6 +1,6 @@
 import {
   clientId,
-} from '../container';
+} from '../containerSpa';
 import type {
   TokenType,
 } from '../contexts/UserContext';

@@ -1,3 +1,2 @@
 /* Entry point for your PostCSS build */
 @import "antd/dist/reset.css";
-@import "swagger-ui-react/swagger-ui.css";

@@ -16,7 +16,7 @@ Rails.application.routes.draw do
         :authorized_applications
     end
 
-    get "/swagger", to: "swagger_ui#index"
+    get "/swagger", to: "swagger#index"
     get "/spa/*path", to: "spa#index"
   end
 end

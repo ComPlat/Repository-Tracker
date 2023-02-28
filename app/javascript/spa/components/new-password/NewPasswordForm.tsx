@@ -15,7 +15,7 @@ import {
 } from 'react-router-dom';
 import {
   csrfToken,
-} from '../../container';
+} from '../../containerSpa';
 import {
   PasswordChangeContext,
 } from '../../contexts/PasswordChangeContext';

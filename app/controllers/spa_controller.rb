@@ -1,4 +1,6 @@
 class SpaController < ApplicationController
+  layout "spa"
+
   def index
     @uid = uid
     render "index"

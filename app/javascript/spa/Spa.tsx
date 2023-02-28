@@ -15,45 +15,45 @@ import {
 } from 'react-router-dom';
 import {
   Login,
-} from '../components/Login';
+} from './components/Login';
 import {
   NewPassword,
-} from '../components/NewPassword';
+} from './components/NewPassword';
 import {
   PasswordReset,
-} from '../components/PasswordReset';
+} from './components/PasswordReset';
 import {
   Registration,
-} from '../components/Registration';
-import SmartTable from '../components/SmartTable';
+} from './components/Registration';
+import SmartTable from './components/SmartTable';
 import {
   Header,
-} from '../components/custom-styling/Header';
+} from './components/custom-styling/Header';
 import {
   Padding,
-} from '../components/custom-styling/Padding';
+} from './components/custom-styling/Padding';
 import {
   NotFound,
-} from '../components/error-handling/NotFound';
+} from './components/error-handling/NotFound';
 import {
   ConfirmationError,
-} from '../components/registration/ConfirmationError';
+} from './components/registration/ConfirmationError';
 import {
   ConfirmationSuccessful,
-} from '../components/registration/ConfirmationSuccessful';
+} from './components/registration/ConfirmationSuccessful';
 import {
   PasswordChangeContext,
-} from '../contexts/PasswordChangeContext';
+} from './contexts/PasswordChangeContext';
 import {
   RegisterContext,
-} from '../contexts/RegisterContext';
+} from './contexts/RegisterContext';
 import {
   UserContext,
-} from '../contexts/UserContext';
+} from './contexts/UserContext';
 import {
   getUserFromLocalStorage,
   storeUserInLocalStorage,
-} from '../helpers/LocalStorageHelper';
+} from './helpers/LocalStorageHelper';
 
 const {
   Title,
