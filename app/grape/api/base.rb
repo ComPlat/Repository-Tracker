@@ -17,7 +17,7 @@ module API
     mount API::V1::TrackingItems
 
     add_swagger_documentation \
-      host: swagger_host,
+      host: "#{ENV["APP_HOST"]}:#{ENV["APP_PORT"]}",
       security_definitions: {
         oAuth2PasswordFlow: {
           type: "oauth2",
@@ -34,10 +34,6 @@ module API
       ]
 
     private
-
-    def swagger_host
-      "#{ENV["APP_HOST"]}:#{ENV["APP_PORT"]}"
-    end
 
     def client_id
       Doorkeeper::Application.find_by(name: "React SPA API Client")&.uid
