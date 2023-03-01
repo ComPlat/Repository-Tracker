@@ -1,4 +1,4 @@
-describe SpaController do
+describe SwaggerController do
   describe "#new" do
     subject { described_class.new }
 
@@ -28,6 +28,6 @@ describe SpaController do
     end
 
     it { is_expected.to have_http_status :ok }
-    it { is_expected.to have_rendered "spa/index", "layouts/spa" }
+    it { is_expected.to have_rendered "swagger/index", "layouts/swagger" }
   end
 end

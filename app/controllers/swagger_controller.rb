@@ -1,5 +1,5 @@
-class SpaController < ApplicationController
-  layout "spa"
+class SwaggerController < ApplicationController
+  layout "swagger"
 
   def index
     @uid = uid

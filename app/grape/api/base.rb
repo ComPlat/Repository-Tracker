@@ -15,6 +15,24 @@ module API
 
     mount API::V1::Trackings
     mount API::V1::TrackingItems
-    add_swagger_documentation host: "#{ENV["APP_HOST"]}:#{ENV["APP_PORT"]}"
+
+    add_swagger_documentation \
+      host: "#{ENV["APP_HOST"]}:#{ENV["APP_PORT"]}",
+      security_definitions: {
+        oAuth2PasswordFlow: {
+          type: "oauth2",
+          description: "Authorization using `OAuth2` password flow. Field `client_secret` **MUST** be empty!
+\
+client_id: #{Doorkeeper::Application.find_by(name: "React SPA API Client")&.uid}",
+          flow: "password",
+          tokenUrl: "/oauth/token"
+        }
+      },
+      # HINT: Saves the access token so the user can access the data from Swagger UI.
+      security: [
+        {
+          oAuth2PasswordFlow: []
+        }
+      ]
   end
 end
