@@ -17,13 +17,11 @@ module API
     mount API::V1::TrackingItems
 
     add_swagger_documentation \
-      host: "#{ENV["APP_HOST"]}:#{ENV["APP_PORT"]}",
+      host: swagger_host,
       security_definitions: {
         oAuth2PasswordFlow: {
           type: "oauth2",
-          description: "Authorization using `OAuth2` password flow. Field `client_secret` **MUST** be empty!
-\
-client_id: #{Doorkeeper::Application.find_by(name: "React SPA API Client")&.uid}",
+          description: password_flow_description,
           flow: "password",
           tokenUrl: "/oauth/token"
         }
@@ -34,5 +32,21 @@ client_id: #{Doorkeeper::Application.find_by(name: "React SPA API Client")&.uid}
           oAuth2PasswordFlow: []
         }
       ]
+
+    private
+
+    def swagger_host
+      "#{ENV["APP_HOST"]}:#{ENV["APP_PORT"]}"
+    end
+
+    def client_id
+      Doorkeeper::Application.find_by(name: "React SPA API Client")&.uid
+    end
+
+    def password_flow_description
+      "Authorization using `OAuth2` password flow. Field `client_secret` **MUST** be empty!
+\
+client_id: #{client_id}"
+    end
   end
 end

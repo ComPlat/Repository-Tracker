@@ -71,6 +71,13 @@ describe API::Base do
     before { get "/api/swagger_doc.json" }
 
     let(:parsed_and_symbolized_response_body) { response.parsed_body.deep_symbolize_keys }
+    let(:password_flow_config) {
+      {oAuth2PasswordFlow:
+          {description: "Authorization using `OAuth2` password flow. Field `client_secret` **MUST** be empty!\nclient_id: ",
+           flow: "password",
+           tokenUrl: "/oauth/token",
+           type: "oauth2"}}
+    }
 
     it { expect(response).to have_http_status(:ok) }
     it { expect(parsed_and_symbolized_response_body.keys.size).to eq 9 }
@@ -80,13 +87,7 @@ describe API::Base do
     it { expect(parsed_and_symbolized_response_body[:host]).to eq "#{ENV["APP_HOST"]}:#{ENV["APP_PORT"]}" }
     it { expect(parsed_and_symbolized_response_body[:basePath]).to eq "/api" }
 
-    it {
-      expect(parsed_and_symbolized_response_body[:securityDefinitions]).to eq oAuth2PasswordFlow:
-                                                                                {description: "Authorization using `OAuth2` password flow. Field `client_secret` **MUST** be empty!\nclient_id: ",
-                                                                                 flow: "password",
-                                                                                 tokenUrl: "/oauth/token",
-                                                                                 type: "oauth2"}
-    }
+    it { expect(parsed_and_symbolized_response_body[:securityDefinitions]).to eq password_flow_config }
 
     it { expect(parsed_and_symbolized_response_body[:security]).to eq [{oAuth2PasswordFlow: []}] }
 
