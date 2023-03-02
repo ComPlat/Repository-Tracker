@@ -17,6 +17,10 @@ module API
     mount API::V1::TrackingItems
 
     add_swagger_documentation \
+      info: {
+        title: "Repository-Tracker API"
+      },
+      doc_version: "0.1",
       host: "#{ENV["APP_HOST"]}:#{ENV["APP_PORT"]}",
       security_definitions: {
         oAuth2PasswordFlow: {

@@ -74,15 +74,27 @@ describe API::Base do
     let(:uid) { Doorkeeper::Application.find_by!(name: "React SPA API Client")&.uid }
     let(:password_flow_config) {
       {oAuth2PasswordFlow:
-         {description: "Authorization using `OAuth2` password flow. Field `client_secret` **MUST** be empty!",
-          flow: "password",
-          tokenUrl: "/oauth/token",
-          type: "oauth2"}}
+          {description: "Authorization using `OAuth2` password flow. Field `client_secret` **MUST** be empty!",
+           flow: "password",
+           tokenUrl: "/oauth/token",
+           type: "oauth2"}}
+    }
+    let(:definitions) {
+      {postV1Trackings:
+          {type: "object", properties:
+            {status: {type: "string", description: "Tracking status"},
+             metadata: {type: "json", description: "Tracking metadata"},
+             tracking_item_name: {type: "string", description: "Tracking unique identifier"},
+             tracking_item_owner_name: {type: "string", description: "Tracking item owner name"},
+             from_trackable_system_name: {type: "string", description: "Tracking source"},
+             to_trackable_system_name: {type: "string", description: "Tracking receiver"}},
+           required: %w[status metadata tracking_item_name tracking_item_owner_name from_trackable_system_name to_trackable_system_name],
+           description: "Create a tracking"}}
     }
 
     it { expect(response).to have_http_status(:ok) }
-    it { expect(parsed_and_symbolized_response_body.keys.size).to eq 9 }
-    it { expect(parsed_and_symbolized_response_body[:info]).to eq(title: "API title", version: "0.0.1") }
+    it { expect(parsed_and_symbolized_response_body.keys.size).to eq 10 }
+    it { expect(parsed_and_symbolized_response_body[:info]).to eq(title: "Repository-Tracker API", version: "0.1") }
     it { expect(parsed_and_symbolized_response_body[:swagger]).to eq "2.0" }
     it { expect(parsed_and_symbolized_response_body[:produces]).to eq ["application/json"] }
     it { expect(parsed_and_symbolized_response_body[:host]).to eq "#{ENV["APP_HOST"]}:#{ENV["APP_PORT"]}" }
@@ -121,6 +133,8 @@ describe API::Base do
         tags: ["tracking_items"])
     }
 
+    it { expect(parsed_and_symbolized_response_body[:definitions]).to eq definitions }
+
     describe ":paths, [:''/v1/trackings'], :post" do
       let(:expected_result) {
         {consumes: ["application/json"],
@@ -137,12 +151,7 @@ describe API::Base do
 
     describe ":paths, [:'/v1/trackings'], :post, :parameters" do
       let(:expected_result) {
-        [{description: "Tracking status", in: "formData", name: "status", required: true, type: "string"},
-          {description: "Tracking metadata", in: "formData", name: "metadata", required: true, type: "json"},
-          {description: "Tracking unique identifier", in: "formData", name: "tracking_item_name", required: true, type: "string"},
-          {description: "Tracking item owner name", in: "formData", name: "tracking_item_owner_name", required: true, type: "string"},
-          {description: "Tracking source", in: "formData", name: "from_trackable_system_name", required: true, type: "string"},
-          {description: "Tracking receiver", in: "formData", name: "to_trackable_system_name", required: true, type: "string"}]
+        [{in: "body", name: "postV1Trackings", required: true, schema: {:$ref => "#/definitions/postV1Trackings"}}]
       }
 
       it { expect(parsed_and_symbolized_response_body[:paths][:"/v1/trackings"][:post][:parameters]).to eq expected_result }
