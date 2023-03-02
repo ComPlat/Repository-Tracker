@@ -71,12 +71,13 @@ describe API::Base do
     before { get "/api/swagger_doc.json" }
 
     let(:parsed_and_symbolized_response_body) { response.parsed_body.deep_symbolize_keys }
+    let(:uid) { Doorkeeper::Application.find_by!(name: "React SPA API Client")&.uid }
     let(:password_flow_config) {
       {oAuth2PasswordFlow:
-          {description: "Authorization using `OAuth2` password flow. Field `client_secret` **MUST** be empty!\nclient_id: ",
-           flow: "password",
-           tokenUrl: "/oauth/token",
-           type: "oauth2"}}
+         {description: "Authorization using `OAuth2` password flow. Field `client_secret` **MUST** be empty!\nclient_id: #{uid}",
+          flow: "password",
+          tokenUrl: "/oauth/token",
+          type: "oauth2"}}
     }
 
     it { expect(response).to have_http_status(:ok) }

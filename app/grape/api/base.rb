@@ -21,7 +21,9 @@ module API
       security_definitions: {
         oAuth2PasswordFlow: {
           type: "oauth2",
-          description: "Authorization using `OAuth2` password flow. Field `client_secret` **MUST** be empty!",
+          description: "Authorization using `OAuth2` password flow. Field `client_secret` **MUST** be empty!
+\
+client_id: #{Doorkeeper::Application.find_by!(name: "React SPA API Client")&.uid}",
           flow: "password",
           tokenUrl: "/oauth/token"
         }
