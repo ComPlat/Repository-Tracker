@@ -4,11 +4,17 @@ import {
 } from 'react-dom/client';
 import SwaggerUIReact from 'swagger-ui-react';
 import {
+  clientId,
   containerSwagger,
 } from './swagger/containerSwagger';
 
 const App: React.FC = () => {
-  return <SwaggerUIReact deepLinking persistAuthorization url='/api/swagger_doc.json' />;
+  return (
+    <div>
+      <h2>Client ID: {clientId}</h2>
+      <SwaggerUIReact deepLinking persistAuthorization url='/api/swagger_doc.json' />
+    </div>
+  );
 };
 
 const root = createRoot(containerSwagger);

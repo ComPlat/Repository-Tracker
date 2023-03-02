@@ -8,3 +8,13 @@ export const containerSwagger = (() => {
 
   return result;
 })();
+
+export const clientId = (() => {
+  const result = containerSwagger.dataset['clientId'];
+
+  if (result === undefined) {
+    throw new Error(`Unable to find client-id on dataset of element #${containerSwagger.id}`);
+  }
+
+  return result;
+})();
