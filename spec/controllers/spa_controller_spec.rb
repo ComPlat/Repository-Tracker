@@ -7,7 +7,7 @@ describe SpaController do
   end
 
   describe "Assigns @uid" do
-    let(:application) { create(:doorkeeper_application, :with_required_attributes) }
+    let(:application) { Doorkeeper::Application.find_by!(name: "React SPA API Client") }
 
     before do
       application
@@ -20,7 +20,7 @@ describe SpaController do
   describe "GET index" do
     subject { response }
 
-    let(:application) { create(:doorkeeper_application, :with_required_attributes) }
+    let(:application) { Doorkeeper::Application.find_by!(name: "React SPA API Client") }
 
     before do
       application

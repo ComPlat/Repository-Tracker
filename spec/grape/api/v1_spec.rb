@@ -11,7 +11,7 @@ describe "API::V1" do
 
     context "when path does not exist and authenticated" do
       let(:user) { build(:user, :with_required_attributes_as_user) }
-      let(:application) { create(:doorkeeper_application, :with_required_attributes) }
+      let(:application) { Doorkeeper::Application.find_by!(name: "React SPA API Client") }
 
       before {
         register(user.name, user.email, user.password)

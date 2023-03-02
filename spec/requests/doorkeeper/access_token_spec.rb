@@ -3,7 +3,7 @@ RSpec.describe Doorkeeper::AccessToken do
 
   describe "POST /oauth/token" do
     let(:user) { build(:user, :with_required_attributes_as_user) }
-    let(:application) { create(:doorkeeper_application, :with_required_attributes) }
+    let(:application) { Doorkeeper::Application.find_by!(name: "React SPA API Client") }
 
     let(:expected_response) {
       {"access_token" => application.access_tokens.last&.token,
