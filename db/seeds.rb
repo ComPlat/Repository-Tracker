@@ -6,11 +6,9 @@
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
 
-# Initial application setup for development and production - do NOT remove!
+# Initial application setup - do NOT remove!
 
-if Rails.env.development? || Rails.env.production?
-  Doorkeeper::Application.create!(name: "React SPA API Client", redirect_uri: "")
-end
+Doorkeeper::Application.create!(name: "React SPA API Client", redirect_uri: "")
 
 # Example seeds for development and testing
 
