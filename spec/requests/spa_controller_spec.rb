@@ -2,7 +2,7 @@ describe SpaController do
   describe "GET /" do
     subject { response }
 
-    let(:application) { create(:doorkeeper_application, :with_required_attributes) }
+    let(:application) { create(:doorkeeper_application, :with_required_attributes, uid: ENV["DOORKEEPER_CLIENT_ID"]) }
 
     before do
       application
