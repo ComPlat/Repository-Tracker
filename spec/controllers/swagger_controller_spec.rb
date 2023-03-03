@@ -7,14 +7,11 @@ describe SwaggerController do
   end
 
   describe "Assigns @uid" do
-    let(:application) { create(:doorkeeper_application, :with_required_attributes) }
-
     before do
-      application
       get :index
     end
 
-    it { expect(assigns(:uid)).to eq application.uid }
+    it { expect(assigns(:uid)).to eq ENV["DOORKEEPER_CLIENT_ID"] }
   end
 
   describe "GET index" do

@@ -7,14 +7,11 @@ describe SpaController do
   end
 
   describe "Assigns @uid" do
-    let(:application) { create(:doorkeeper_application, :with_required_attributes, uid: ENV["DOORKEEPER_CLIENT_ID"]) }
-
     before do
-      application
       get :index
     end
 
-    it { expect(assigns(:uid)).to eq application.uid }
+    it { expect(assigns(:uid)).to eq ENV["DOORKEEPER_CLIENT_ID"] }
   end
 
   describe "GET index" do
