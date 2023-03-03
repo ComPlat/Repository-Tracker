@@ -13,7 +13,7 @@ RSpec.describe "SPA" do
   end
   let(:access_token) {
     create(:doorkeeper_access_token, :with_required_dependencies,
-      application: create(:doorkeeper_application, :with_required_attributes, uid: ENV["DOORKEEPER_CLIENT_ID"]))
+      application: create(:doorkeeper_application, :with_required_attributes))
   }
   # HINT: Database has UTC timestamp, we format it to format used in frontend and zone used on machine (like frontend).
   let(:time) { trackings.map { |tracking| tracking.date_time.in_time_zone(Time.now.getlocal.zone).strftime("%d.%m.%Y, %H:%M:%S") }.min }
