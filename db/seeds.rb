@@ -14,21 +14,22 @@ Doorkeeper::Application.create!(name: "React SPA API Client", redirect_uri: "")
 
 if Rails.env.development?
   password = "VerySecurePassword1!"
+  datetime_now = DateTime.now
 
-  normal_user = User.create!(email: "user@example.com", password:, name: "User1", role: :user, confirmed_at: DateTime.now)
-  User.create!(email: "super@example.com", password:, name: "Super1", role: :super, confirmed_at: DateTime.now)
-  User.create!(email: "admin@example.com", password:, name: "Admin1", role: :admin, confirmed_at: DateTime.now)
+  normal_user = User.create!(email: "user@example.com", password:, name: "User1", role: :user, confirmed_at: datetime_now)
+  User.create!(email: "super@example.com", password:, name: "Super1", role: :super, confirmed_at: datetime_now)
+  User.create!(email: "admin@example.com", password:, name: "Admin1", role: :admin, confirmed_at: datetime_now)
 
   ts_radar4kit = TrackableSystem.create!(name: :radar4kit,
-    user: User.create!(name: "radar4kit", email: "radar4@kit.de", password:, role: :trackable_system_admin, confirmed_at: DateTime.now))
+    user: User.create!(name: "radar4kit", email: "radar4@kit.de", password:, role: :trackable_system_admin, confirmed_at: datetime_now))
   ts_radar4chem = TrackableSystem.create!(name: :radar4chem,
-    user: User.create!(name: "radar4chem", email: "radar4@chem.de", password:, role: :trackable_system_admin, confirmed_at: DateTime.now))
+    user: User.create!(name: "radar4chem", email: "radar4@chem.de", password:, role: :trackable_system_admin, confirmed_at: datetime_now))
   ts_chemotion_repository = TrackableSystem.create!(name: :chemotion_repository,
-    user: User.create!(name: "chemotionrepository", email: "chemotion@reposito.ry", password:, role: :trackable_system_admin, confirmed_at: DateTime.now))
+    user: User.create!(name: "chemotionrepository", email: "chemotion@reposito.ry", password:, role: :trackable_system_admin, confirmed_at: datetime_now))
   ts_chemotion_electronic_laboratory_notebook = TrackableSystem.create!(name: :chemotion_electronic_laboratory_notebook,
-    user: User.create!(name: "chemotioneln", email: "chemotion@repository.eln", password:, role: :trackable_system_admin, confirmed_at: DateTime.now))
+    user: User.create!(name: "chemotioneln", email: "chemotion@repository.eln", password:, role: :trackable_system_admin, confirmed_at: datetime_now))
   ts_nmrxiv = TrackableSystem.create!(name: :nmrxiv,
-    user: User.create!(name: "nmrxiv", email: "nm@rx.iv", password:, role: :trackable_system_admin, confirmed_at: DateTime.now))
+    user: User.create!(name: "nmrxiv", email: "nm@rx.iv", password:, role: :trackable_system_admin, confirmed_at: datetime_now))
 
   tracking_item1 = TrackingItem.create!(name: "Tracking Item 1", user: normal_user)
   tracking_item2 = TrackingItem.create!(name: "Tracking Item 2", user: normal_user)
