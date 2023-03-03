@@ -8,5 +8,5 @@ class SwaggerController < ApplicationController
 
   private
 
-  def uid = Doorkeeper::Application.find_by!(name: "React SPA API Client").uid
+  def uid = ENV["DOORKEEPER_CLIENT_ID"]
 end

@@ -25,7 +25,11 @@ module API
       security_definitions: {
         oAuth2PasswordFlow: {
           type: "oauth2",
-          description: "Authorization using `OAuth2` password flow. Field `client_secret` **MUST** be empty!",
+          description: "Authorization using `OAuth2` password flow. Field `client_secret` **MUST** be empty!
+\
+Use the client_id below:
+\
+client_id: **#{ENV["DOORKEEPER_CLIENT_ID"]}**",
           flow: "password",
           tokenUrl: "/oauth/token"
         }

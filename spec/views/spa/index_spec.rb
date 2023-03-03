@@ -4,7 +4,7 @@ describe "spa/index" do
     render
   end
 
-  let(:application) { Doorkeeper::Application.find_by!(name: "React SPA API Client") }
+  let(:application) { create(:doorkeeper_application, :with_required_attributes) }
 
   it { expect(controller.request.path_parameters).to eq action: "index", controller: "spa" }
   it { expect(rendered).to include "<div id=\"spa\" data-client-id=\"#{application.uid}\"></div>" }

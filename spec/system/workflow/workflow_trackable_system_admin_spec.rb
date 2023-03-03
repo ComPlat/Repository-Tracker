@@ -1,7 +1,7 @@
 RSpec.describe "WorkflowTrackableSystemAdmin" do
   include AuthHelper
 
-  let(:application) { Doorkeeper::Application.find_by!(name: "React SPA API Client") }
+  let(:application) { create(:doorkeeper_application, :with_required_attributes) }
   let(:trackable_system_admin) { create(:user, :with_required_attributes_as_trackable_system_admin, confirmed_at: DateTime.now) }
 
   describe "1. Login" do

@@ -8,7 +8,7 @@
 
 # Initial application setup - do NOT remove!
 
-Doorkeeper::Application.create!(name: "React SPA API Client", redirect_uri: "")
+Doorkeeper::Application.create!(name: "React SPA API Client", redirect_uri: "", uid: ENV["DOORKEEPER_CLIENT_ID"])
 
 # Example seeds for development and testing
 

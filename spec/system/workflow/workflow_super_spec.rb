@@ -1,7 +1,7 @@
 RSpec.describe "WorkflowSuper" do
   include AuthHelper
 
-  let(:application) { Doorkeeper::Application.find_by!(name: "React SPA API Client") }
+  let(:application) { create(:doorkeeper_application, :with_required_attributes) }
   let(:super_user) { create(:user, :with_required_attributes_as_super, confirmed_at: DateTime.now) }
 
   describe "1. Login" do

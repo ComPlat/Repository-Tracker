@@ -2,7 +2,7 @@ describe SpaController do
   describe "GET /" do
     subject { response }
 
-    let(:application) { Doorkeeper::Application.find_by!(name: "React SPA API Client") }
+    let(:application) { create(:doorkeeper_application, :with_required_attributes) }
 
     before do
       application
