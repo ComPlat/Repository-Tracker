@@ -2,10 +2,7 @@ describe SwaggerController do
   describe "GET /" do
     subject { response }
 
-    let(:application) { create(:doorkeeper_application, :with_required_attributes) }
-
     before do
-      application
       get "/swagger"
     end
 
