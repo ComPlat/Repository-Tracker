@@ -91,6 +91,11 @@ RSpec.describe "SPA" do
 
     it { expect(page).to have_content("Login failed", wait: 5) }
     it { expect(page).to have_content("The account data does not exist.", wait: 5) }
+
+    it {
+      logs = page.driver.browser.logs.get(:browser).map { |log| log.message }.sort
+      expect(logs.first).to include "Failed to load resource: the server responded with a status of 400 (Bad Request)"
+    }
   end
 
   describe "Register" do
@@ -102,6 +107,7 @@ RSpec.describe "SPA" do
 
       it { expect(page).to have_content("Confirmation required", wait: 5) }
       it { expect(page).to have_content("Please check your email mailbox and confirm your account.", wait: 5) }
+      it { expect(page.driver.browser.logs.get(:browser)).to eq [] }
     end
 
     context "when registration form is filled and user email must be confirmed" do
@@ -112,6 +118,7 @@ RSpec.describe "SPA" do
       end
 
       it { expect(page).to have_current_path "/spa/confirmation_successful" }
+      it { expect(page.driver.browser.logs.get(:browser)).to eq [] }
     end
 
     context "when confirmation link is invalid" do
@@ -122,6 +129,7 @@ RSpec.describe "SPA" do
       end
 
       it { expect(page).to have_current_path "/spa/confirmation_error", ignore_query: true }
+      it { expect(page.driver.browser.logs.get(:browser)).to eq [] }
     end
 
     context "when registration is successful and user can login" do
@@ -136,6 +144,7 @@ RSpec.describe "SPA" do
       end
 
       it { expect(page).to have_selector(".ant-typography", text: User.last.email) }
+      it { expect(page.driver.browser.logs.get(:browser)).to eq [] }
     end
 
     context "when email is already taken" do
@@ -146,6 +155,11 @@ RSpec.describe "SPA" do
 
       it { expect(page).to have_content("Registration unsuccessful", wait: 5) }
       it { expect(page).to have_content("E-Mail has already been taken", wait: 5) }
+
+      it {
+        logs = page.driver.browser.logs.get(:browser).map { |log| log.message }.sort
+        expect(logs.first).to include "Failed to load resource: the server responded with a status of 422 (Unprocessable Entity)"
+      }
     end
 
     context "when password has not a valid format" do
@@ -155,6 +169,7 @@ RSpec.describe "SPA" do
       end
 
       it { expect(page).to have_content("Password must be at least 6 characters long, have at least 1 number, 1 uppercase letter and 1 special character (@$!%*?&-)", wait: 5) }
+      it { expect(page.driver.browser.logs.get(:browser)).to eq [] }
     end
 
     context "when password and confirmation of password do NOT match" do
@@ -164,6 +179,7 @@ RSpec.describe "SPA" do
       end
 
       it { expect(page).to have_content("The two passwords that you entered do not match!", wait: 5) }
+      it { expect(page.driver.browser.logs.get(:browser)).to eq [] }
     end
   end
 
@@ -182,6 +198,11 @@ RSpec.describe "SPA" do
 
       it { expect(page).to have_content("Password reset instructions sent", wait: 5) }
       it { expect(page).to have_content("Please check your email mailbox and follow the instructions.", wait: 5) }
+
+      it {
+        logs = page.driver.browser.logs.get(:browser).map { |log| log.message }.sort
+        expect(logs.first).to include "Failed to load resource: the server responded with a status of 400 (Bad Request)"
+      }
     end
 
     context "when email is NOT valid and request submission has been failed" do
@@ -191,6 +212,11 @@ RSpec.describe "SPA" do
 
       it { expect(page).to have_content("Sending password reset instructions failed", wait: 5) }
       it { expect(page).to have_content("Try again.", wait: 5) }
+
+      it {
+        logs = page.driver.browser.logs.get(:browser).map { |log| log.message }.sort
+        expect(logs.first).to include "Failed to load resource: the server responded with a status of 400 (Bad Request)"
+      }
     end
 
     context "when password reset link in mailbox has been clicked and new password has been entered" do
@@ -203,6 +229,11 @@ RSpec.describe "SPA" do
 
       it { expect(page).to have_content("Password change successful!", wait: 5) }
       it { expect(page).to have_content("You can now login with your new password.", wait: 5) }
+
+      it {
+        logs = page.driver.browser.logs.get(:browser).map { |log| log.message }.sort
+        expect(logs.first).to include "Failed to load resource: the server responded with a status of 400 (Bad Request)"
+      }
     end
   end
 
@@ -253,6 +284,8 @@ RSpec.describe "SPA" do
         first(".ant-table-column-title", text: "Owner").click
         expect(page).to have_content(trackings.map { |tracking| tracking.tracking_item.user.name }.min, wait: 5)
       end
+
+      it { expect(page.driver.browser.logs.get(:browser)).to eq [] }
     end
 
     describe "Descending order" do
@@ -296,6 +329,8 @@ RSpec.describe "SPA" do
         first(".ant-table-column-title", text: "Owner").click.click
         expect(page).to have_content(trackings.map { |tracking| tracking.tracking_item.user.name }.max, wait: 5)
       end
+
+      it { expect(page.driver.browser.logs.get(:browser)).to eq [] }
     end
   end
 
@@ -317,6 +352,8 @@ RSpec.describe "SPA" do
           expect(page).to have_content("chemotion_electronic_laboratory_notebook", wait: 5)
         end
       end
+
+      it { expect(page.driver.browser.logs.get(:browser)).to eq [] }
     end
 
     context "when search for 'radar4kit' in 'To' column" do
@@ -330,6 +367,8 @@ RSpec.describe "SPA" do
           expect(page).to have_content("radar4kit", wait: 5)
         end
       end
+
+      it { expect(page.driver.browser.logs.get(:browser)).to eq [] }
     end
 
     context "when search for 'draft' in 'Status' column" do
@@ -343,6 +382,8 @@ RSpec.describe "SPA" do
           expect(page).to have_content("draft", wait: 5)
         end
       end
+
+      it { expect(page.driver.browser.logs.get(:browser)).to eq [] }
     end
 
     context "when search for 'name1' in 'Tracker Number' column" do
@@ -356,6 +397,8 @@ RSpec.describe "SPA" do
           expect(page).to have_content("name1", wait: 5)
         end
       end
+
+      it { expect(page.driver.browser.logs.get(:browser)).to eq [] }
     end
 
     context "when search for 'chemotion_electronic_laboratory_notebook', 'radar4kit', 'draft' and 'name1' together" do
@@ -390,6 +433,8 @@ RSpec.describe "SPA" do
           expect(page).to have_content("name1", wait: 5)
         end
       end
+
+      it { expect(page.driver.browser.logs.get(:browser)).to eq [] }
     end
 
     context "when first owner is selected for search" do
@@ -406,6 +451,8 @@ RSpec.describe "SPA" do
           expect(page).to have_content(owner_name, wait: 5)
         end
       end
+
+      it { expect(page.driver.browser.logs.get(:browser)).to eq [] }
     end
   end
 
@@ -425,6 +472,8 @@ RSpec.describe "SPA" do
 
       expect(page).to have_none_of_selectors(".ant-table-small", wait: 5)
     end
+
+    it { expect(page.driver.browser.logs.get(:browser)).to eq [] }
   end
 
   describe "Pagination" do
@@ -464,6 +513,8 @@ RSpec.describe "SPA" do
 
         expect(page).to have_content(trackings.pluck(:id).min, wait: 5)
       end
+
+      it { expect(page.driver.browser.logs.get(:browser)).to eq [] }
     end
 
     describe "Number of items per page" do
@@ -494,6 +545,8 @@ RSpec.describe "SPA" do
 
         expect(page).to have_content(trackings[99].id, wait: 5)
       end
+
+      it { expect(page.driver.browser.logs.get(:browser)).to eq [] }
     end
   end
 end
