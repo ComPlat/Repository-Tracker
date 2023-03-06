@@ -79,6 +79,10 @@ RSpec.describe "SPA" do
     end
   end
 
+  describe "Log" do
+    it { expect(page.driver.browser.logs.get(:browser)).to eq [] }
+  end
+
   describe "Failed login" do
     before do
       visit "/"
