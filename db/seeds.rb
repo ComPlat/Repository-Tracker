@@ -8,7 +8,9 @@
 
 # Initial application setup - do NOT remove!
 
-Doorkeeper::Application.create!(name: "React SPA API Client", redirect_uri: "", uid: ENV["DOORKEEPER_CLIENT_ID"])
+if Rails.env.production? || Rails.env.development?
+  Doorkeeper::Application.create!(name: "React SPA API Client", redirect_uri: "", uid: ENV["DOORKEEPER_CLIENT_ID"])
+end
 
 # Example seeds for development and testing
 
