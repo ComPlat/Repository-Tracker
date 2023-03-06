@@ -11,10 +11,7 @@ RSpec.describe "SPA" do
         name: "radar4kit"))] +
       create_list(:tracking, 99, :with_required_attributes, :with_required_dependencies, tracking_item:)
   end
-  let(:access_token) {
-    create(:doorkeeper_access_token, :with_required_dependencies,
-      application: create(:doorkeeper_application, :with_required_attributes, uid: ENV["DOORKEEPER_CLIENT_ID"]))
-  }
+  let(:access_token) { create(:doorkeeper_access_token, :with_required_dependencies) }
   # HINT: Database has UTC timestamp, we format it to format used in frontend and zone used on machine (like frontend).
   let(:time) { trackings.map { |tracking| tracking.date_time.in_time_zone(Time.now.getlocal.zone).strftime("%d.%m.%Y, %H:%M:%S") }.min }
 
