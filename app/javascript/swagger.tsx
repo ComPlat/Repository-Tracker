@@ -8,11 +8,7 @@ import {
 } from './swagger/containerSwagger';
 
 const App: React.FC = () => {
-  return (
-    <div>
-      <SwaggerUIReact deepLinking persistAuthorization url='/api/swagger_doc.json' />
-    </div>
-  );
+  return <SwaggerUIReact deepLinking persistAuthorization url='/api/swagger_doc.json' />;
 };
 
 const root = createRoot(containerSwagger);
