@@ -25,12 +25,12 @@ class API::V1::Trackings < Grape::API
 
     desc "Create a tracking"
     params do
-      requires :status, type: String, desc: "Tracking status"
-      requires :metadata, type: JSON, desc: "Tracking metadata"
-      requires :tracking_item_name, type: String, desc: "Tracking unique identifier"
-      requires :tracking_item_owner_name, type: String, desc: "Tracking item owner name"
-      requires :from_trackable_system_name, type: String, desc: "Tracking source"
-      requires :to_trackable_system_name, type: String, desc: "Tracking receiver"
+      requires :status, type: String, desc: "Tracking status", documentation: {param_type: "body"}
+      requires :metadata, type: JSON, desc: "Tracking metadata", documentation: {param_type: "body"}
+      requires :tracking_item_name, type: String, desc: "Tracking unique identifier", documentation: {param_type: "body"}
+      requires :tracking_item_owner_name, type: String, desc: "Tracking item owner name", documentation: {param_type: "body"}
+      requires :from_trackable_system_name, type: String, desc: "Tracking source", documentation: {param_type: "body"}
+      requires :to_trackable_system_name, type: String, desc: "Tracking receiver", documentation: {param_type: "body"}
     end
 
     post do

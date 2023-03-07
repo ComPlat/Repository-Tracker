@@ -1,4 +1,4 @@
-const container = (() => {
+export const containerSpa = (() => {
   // eslint-disable-next-line unicorn/prefer-query-selector
   const result = document.getElementById('spa');
 
@@ -9,17 +9,17 @@ const container = (() => {
   return result;
 })();
 
-const clientId = (() => {
-  const result = container.dataset['clientId'];
+export const clientId = (() => {
+  const result = containerSpa.dataset['clientId'];
 
   if (result === undefined) {
-    throw new Error('Unable to find client-id on dataset of element #spa');
+    throw new Error(`Unable to find client-id on dataset of element #${containerSpa.id}`);
   }
 
   return result;
 })();
 
-const csrfToken = (() => {
+export const csrfToken = (() => {
   const csrfTokenElement = document.querySelector('[name=csrf-token]');
 
   if (csrfTokenElement === null) {
@@ -34,9 +34,3 @@ const csrfToken = (() => {
 
   return contentAttribute;
 })();
-
-export {
-  container,
-  clientId,
-  csrfToken,
-};

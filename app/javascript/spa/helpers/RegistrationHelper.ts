@@ -1,6 +1,6 @@
 import {
   csrfToken,
-} from '../container';
+} from '../containerSpa';
 
 export const Register = async (email: string, password: string) => {
   const response = await fetch('/users', {

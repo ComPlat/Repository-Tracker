@@ -33,7 +33,7 @@ RSpec.describe "SPA" do
 
   describe "h1" do
     before do
-      visit "/"
+      clear_console_and_visit("/")
     end
 
     it do
@@ -43,7 +43,7 @@ RSpec.describe "SPA" do
 
   describe "Table columns" do
     before do
-      visit "/"
+      clear_console_and_visit("/")
     end
 
     it do
@@ -79,50 +79,67 @@ RSpec.describe "SPA" do
     end
   end
 
+  describe "Log" do
+    it { expect(console_logs.size).to eq 0 }
+    it { expect(console_logs).to eq [] }
+  end
+
   describe "Failed login" do
     before do
-      visit "/"
+      clear_console_and_visit("/")
       login_with_wrong_credentials
     end
 
     it { expect(page).to have_content("Login failed", wait: 5) }
     it { expect(page).to have_content("The account data does not exist.", wait: 5) }
+
+    it { expect(console_logs.size).to eq 1 }
+    it { expect(console_logs.first).to include "/oauth/token - Failed to load resource: the server responded with a status of 400 (Bad Request)" }
   end
 
   describe "Register" do
     context "when registration is successful" do
       before do
-        visit "/"
+        clear_console_and_visit("/")
         registration_new_user
       end
 
       it { expect(page).to have_content("Confirmation required", wait: 5) }
       it { expect(page).to have_content("Please check your email mailbox and confirm your account.", wait: 5) }
+
+      it { expect(console_logs.size).to eq 0 }
+      it { expect(console_logs).to eq [] }
     end
 
     context "when registration form is filled and user email must be confirmed" do
       before do
-        visit "/"
+        clear_console_and_visit("/")
         registration_new_user
         confirm_user_by_email
       end
 
       it { expect(page).to have_current_path "/spa/confirmation_successful" }
+
+      it { expect(console_logs.size).to eq 0 }
+      it { expect(console_logs).to eq [] }
     end
 
     context "when confirmation link is invalid" do
       before do
-        visit "/"
+        clear_console_and_visit("/")
         registration_new_user
         confirm_with_invalid_confirmation_link
       end
 
       it { expect(page).to have_current_path "/spa/confirmation_error", ignore_query: true }
+
+      it { expect(console_logs.size).to eq 0 }
+      it { expect(console_logs).to eq [] }
     end
 
     context "when registration is successful and user can login" do
       before do
-        visit "/"
+        clear_console_and_visit("/")
         registration_new_user
         sleep 3
         confirm_user_by_email
@@ -132,40 +149,52 @@ RSpec.describe "SPA" do
       end
 
       it { expect(page).to have_selector(".ant-typography", text: User.last.email) }
+
+      it { expect(console_logs.size).to eq 0 }
+      it { expect(console_logs).to eq [] }
     end
 
     context "when email is already taken" do
       before do
-        visit "/"
+        clear_console_and_visit("/")
         registration_with_existing_user
       end
 
       it { expect(page).to have_content("Registration unsuccessful", wait: 5) }
       it { expect(page).to have_content("E-Mail has already been taken", wait: 5) }
+
+      it { expect(console_logs.size).to eq 1 }
+      it { expect(console_logs.first).to include "/users - Failed to load resource: the server responded with a status of 422 (Unprocessable Entity)" }
     end
 
     context "when password has not a valid format" do
       before do
-        visit "/"
+        clear_console_and_visit("/")
         registration_password_not_valid
       end
 
       it { expect(page).to have_content("Password must be at least 6 characters long, have at least 1 number, 1 uppercase letter and 1 special character (@$!%*?&-)", wait: 5) }
+
+      it { expect(console_logs.size).to eq 0 }
+      it { expect(console_logs).to eq [] }
     end
 
     context "when password and confirmation of password do NOT match" do
       before do
-        visit "/"
+        clear_console_and_visit("/")
         registration_password_invalid_confirmation
       end
 
       it { expect(page).to have_content("The two passwords that you entered do not match!", wait: 5) }
+
+      it { expect(console_logs.size).to eq 0 }
+      it { expect(console_logs).to eq [] }
     end
   end
 
   describe "Password reset" do
     before do
-      visit "/"
+      clear_console_and_visit("/")
       visit_reset_password_page
     end
 
@@ -178,6 +207,9 @@ RSpec.describe "SPA" do
 
       it { expect(page).to have_content("Password reset instructions sent", wait: 5) }
       it { expect(page).to have_content("Please check your email mailbox and follow the instructions.", wait: 5) }
+
+      it { expect(console_logs.size).to eq 1 }
+      it { expect(console_logs.first).to include "/oauth/token - Failed to load resource: the server responded with a status of 400 (Bad Request)" }
     end
 
     context "when email is NOT valid and request submission has been failed" do
@@ -187,6 +219,10 @@ RSpec.describe "SPA" do
 
       it { expect(page).to have_content("Sending password reset instructions failed", wait: 5) }
       it { expect(page).to have_content("Try again.", wait: 5) }
+
+      it { expect(console_logs.size).to eq 2 }
+      it { expect(console_logs.first).to include "/oauth/token - Failed to load resource: the server responded with a status of 400 (Bad Request)" }
+      it { expect(console_logs.last).to include "/users/password - Failed to load resource: the server responded with a status of 422 (Unprocessable Entity)" }
     end
 
     context "when password reset link in mailbox has been clicked and new password has been entered" do
@@ -199,12 +235,15 @@ RSpec.describe "SPA" do
 
       it { expect(page).to have_content("Password change successful!", wait: 5) }
       it { expect(page).to have_content("You can now login with your new password.", wait: 5) }
+
+      it { expect(console_logs.size).to eq 1 }
+      it { expect(console_logs.first).to include "/oauth/token - Failed to load resource: the server responded with a status of 400 (Bad Request)" }
     end
   end
 
   describe "Buttons to sort the items in a certain order" do
     before do
-      visit "/"
+      clear_console_and_visit("/")
       login_with_correct_credentials
       close_notification
     end
@@ -249,6 +288,9 @@ RSpec.describe "SPA" do
         first(".ant-table-column-title", text: "Owner").click
         expect(page).to have_content(trackings.map { |tracking| tracking.tracking_item.user.name }.min, wait: 5)
       end
+
+      it { expect(console_logs.size).to eq 0 }
+      it { expect(console_logs).to eq [] }
     end
 
     describe "Descending order" do
@@ -292,12 +334,15 @@ RSpec.describe "SPA" do
         first(".ant-table-column-title", text: "Owner").click.click
         expect(page).to have_content(trackings.map { |tracking| tracking.tracking_item.user.name }.max, wait: 5)
       end
+
+      it { expect(console_logs.size).to eq 0 }
+      it { expect(console_logs).to eq [] }
     end
   end
 
   describe "Column search" do
     before do
-      visit "/"
+      clear_console_and_visit("/")
       login_with_correct_credentials
       close_notification
     end
@@ -313,6 +358,9 @@ RSpec.describe "SPA" do
           expect(page).to have_content("chemotion_electronic_laboratory_notebook", wait: 5)
         end
       end
+
+      it { expect(console_logs.size).to eq 0 }
+      it { expect(console_logs).to eq [] }
     end
 
     context "when search for 'radar4kit' in 'To' column" do
@@ -326,6 +374,9 @@ RSpec.describe "SPA" do
           expect(page).to have_content("radar4kit", wait: 5)
         end
       end
+
+      it { expect(console_logs.size).to eq 0 }
+      it { expect(console_logs).to eq [] }
     end
 
     context "when search for 'draft' in 'Status' column" do
@@ -339,6 +390,9 @@ RSpec.describe "SPA" do
           expect(page).to have_content("draft", wait: 5)
         end
       end
+
+      it { expect(console_logs.size).to eq 0 }
+      it { expect(console_logs).to eq [] }
     end
 
     context "when search for 'name1' in 'Tracker Number' column" do
@@ -352,6 +406,9 @@ RSpec.describe "SPA" do
           expect(page).to have_content("name1", wait: 5)
         end
       end
+
+      it { expect(console_logs.size).to eq 0 }
+      it { expect(console_logs).to eq [] }
     end
 
     context "when search for 'chemotion_electronic_laboratory_notebook', 'radar4kit', 'draft' and 'name1' together" do
@@ -386,6 +443,9 @@ RSpec.describe "SPA" do
           expect(page).to have_content("name1", wait: 5)
         end
       end
+
+      it { expect(console_logs.size).to eq 0 }
+      it { expect(console_logs).to eq [] }
     end
 
     context "when first owner is selected for search" do
@@ -402,12 +462,15 @@ RSpec.describe "SPA" do
           expect(page).to have_content(owner_name, wait: 5)
         end
       end
+
+      it { expect(console_logs.size).to eq 0 }
+      it { expect(console_logs).to eq [] }
     end
   end
 
   describe "Buttons to change table size" do
     before do
-      visit "/"
+      clear_console_and_visit("/")
     end
 
     it do
@@ -421,11 +484,14 @@ RSpec.describe "SPA" do
 
       expect(page).to have_none_of_selectors(".ant-table-small", wait: 5)
     end
+
+    it { expect(console_logs.size).to eq 0 }
+    it { expect(console_logs).to eq [] }
   end
 
   describe "Pagination" do
     before do
-      visit "/"
+      clear_console_and_visit("/")
       login_with_correct_credentials
       close_notification
     end
@@ -460,6 +526,9 @@ RSpec.describe "SPA" do
 
         expect(page).to have_content(trackings.pluck(:id).min, wait: 5)
       end
+
+      it { expect(console_logs.size).to eq 0 }
+      it { expect(console_logs).to eq [] }
     end
 
     describe "Number of items per page" do
@@ -490,6 +559,9 @@ RSpec.describe "SPA" do
 
         expect(page).to have_content(trackings[99].id, wait: 5)
       end
+
+      it { expect(console_logs.size).to eq 0 }
+      it { expect(console_logs).to eq [] }
     end
   end
 end
