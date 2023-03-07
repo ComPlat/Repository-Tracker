@@ -33,7 +33,7 @@ RSpec.describe "SPA" do
 
   describe "h1" do
     before do
-      visit "/"
+      clear_console_and_visit("/")
     end
 
     it do
@@ -43,7 +43,7 @@ RSpec.describe "SPA" do
 
   describe "Table columns" do
     before do
-      visit "/"
+      clear_console_and_visit("/")
     end
 
     it do
@@ -89,7 +89,7 @@ RSpec.describe "SPA" do
 
   describe "Failed login" do
     before do
-      visit "/"
+      clear_console_and_visit("/")
       login_with_wrong_credentials
     end
 
@@ -106,7 +106,7 @@ RSpec.describe "SPA" do
   describe "Register" do
     context "when registration is successful" do
       before do
-        visit "/"
+        clear_console_and_visit("/")
         registration_new_user
       end
 
@@ -122,7 +122,7 @@ RSpec.describe "SPA" do
 
     context "when registration form is filled and user email must be confirmed" do
       before do
-        visit "/"
+        clear_console_and_visit("/")
         registration_new_user
         confirm_user_by_email
       end
@@ -138,7 +138,7 @@ RSpec.describe "SPA" do
 
     context "when confirmation link is invalid" do
       before do
-        visit "/"
+        clear_console_and_visit("/")
         registration_new_user
         confirm_with_invalid_confirmation_link
       end
@@ -154,7 +154,7 @@ RSpec.describe "SPA" do
 
     context "when registration is successful and user can login" do
       before do
-        visit "/"
+        clear_console_and_visit("/")
         registration_new_user
         sleep 3
         confirm_user_by_email
@@ -174,7 +174,7 @@ RSpec.describe "SPA" do
 
     context "when email is already taken" do
       before do
-        visit "/"
+        clear_console_and_visit("/")
         registration_with_existing_user
       end
 
@@ -190,7 +190,7 @@ RSpec.describe "SPA" do
 
     context "when password has not a valid format" do
       before do
-        visit "/"
+        clear_console_and_visit("/")
         registration_password_not_valid
       end
 
@@ -205,7 +205,7 @@ RSpec.describe "SPA" do
 
     context "when password and confirmation of password do NOT match" do
       before do
-        visit "/"
+        clear_console_and_visit("/")
         registration_password_invalid_confirmation
       end
 
@@ -221,7 +221,7 @@ RSpec.describe "SPA" do
 
   describe "Password reset" do
     before do
-      visit "/"
+      clear_console_and_visit("/")
       visit_reset_password_page
     end
 
@@ -277,7 +277,7 @@ RSpec.describe "SPA" do
 
   describe "Buttons to sort the items in a certain order" do
     before do
-      visit "/"
+      clear_console_and_visit("/")
       login_with_correct_credentials
       close_notification
     end
@@ -382,7 +382,7 @@ RSpec.describe "SPA" do
 
   describe "Column search" do
     before do
-      visit "/"
+      clear_console_and_visit("/")
       login_with_correct_credentials
       close_notification
     end
@@ -524,7 +524,7 @@ RSpec.describe "SPA" do
 
   describe "Buttons to change table size" do
     before do
-      visit "/"
+      clear_console_and_visit("/")
     end
 
     it do
@@ -548,7 +548,7 @@ RSpec.describe "SPA" do
 
   describe "Pagination" do
     before do
-      visit "/"
+      clear_console_and_visit("/")
       login_with_correct_credentials
       close_notification
     end

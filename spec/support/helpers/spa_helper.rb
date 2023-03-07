@@ -1,4 +1,9 @@
 module SpaHelper
+  def clear_console_and_visit(route)
+    page.driver.browser.logs.get(:browser)
+    visit route
+  end
+
   def login_with_wrong_credentials
     fill_in_email_login("notauser@example.com")
     fill_in_password_input("notapassword")
