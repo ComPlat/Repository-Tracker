@@ -93,6 +93,7 @@ RSpec.describe "SPA" do
     it { expect(page).to have_content("The account data does not exist.", wait: 5) }
 
     it {
+      sleep 1
       logs = page.driver.browser.logs.get(:browser).map { |log| log.message }.sort
       expect(logs.first).to include "Failed to load resource: the server responded with a status of 400 (Bad Request)"
     }
@@ -157,6 +158,7 @@ RSpec.describe "SPA" do
       it { expect(page).to have_content("E-Mail has already been taken", wait: 5) }
 
       it {
+        sleep 1
         logs = page.driver.browser.logs.get(:browser).map { |log| log.message }.sort
         expect(logs.first).to include "Failed to load resource: the server responded with a status of 422 (Unprocessable Entity)"
       }
@@ -200,6 +202,7 @@ RSpec.describe "SPA" do
       it { expect(page).to have_content("Please check your email mailbox and follow the instructions.", wait: 5) }
 
       it {
+        sleep 1
         logs = page.driver.browser.logs.get(:browser).map { |log| log.message }.sort
         expect(logs.first).to include "Failed to load resource: the server responded with a status of 400 (Bad Request)"
       }
@@ -231,6 +234,7 @@ RSpec.describe "SPA" do
       it { expect(page).to have_content("You can now login with your new password.", wait: 5) }
 
       it {
+        sleep 1
         logs = page.driver.browser.logs.get(:browser).map { |log| log.message }.sort
         expect(logs.first).to include "Failed to load resource: the server responded with a status of 400 (Bad Request)"
       }
