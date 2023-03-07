@@ -4,6 +4,12 @@ module SpaHelper
     visit route
   end
 
+  def console_logs
+    # HINT: Waiting time is important because Capybara is faster then Selenium, else, not all logs will be recorded.
+    sleep 1
+    page.driver.browser.logs.get(:browser).map { |log| log.message }.sort
+  end
+
   def login_with_wrong_credentials
     fill_in_email_login("notauser@example.com")
     fill_in_password_input("notapassword")
