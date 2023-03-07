@@ -9,9 +9,6 @@ import React, {
   useState,
 } from 'react';
 import {
-  createRoot,
-} from 'react-dom/client';
-import {
   BrowserRouter,
   Route,
   Routes,
@@ -45,9 +42,6 @@ import {
   ConfirmationSuccessful,
 } from './components/registration/ConfirmationSuccessful';
 import {
-  container,
-} from './container';
-import {
   PasswordChangeContext,
 } from './contexts/PasswordChangeContext';
 import {
@@ -65,7 +59,7 @@ const {
   Title,
 } = Typography;
 
-const App: React.FC = () => {
+export const Spa: React.FC = () => {
   const [
     user,
     setUser,
@@ -146,6 +140,3 @@ const App: React.FC = () => {
     </BrowserRouter>
   );
 };
-
-const root = createRoot(container);
-root.render(<App />);

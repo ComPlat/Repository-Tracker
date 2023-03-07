@@ -5,7 +5,6 @@ Rails.application.routes.draw do
     root "spa#index", to: redirect("/spa")
 
     mount API::Base => "/api"
-    mount GrapeSwaggerRails::Engine => "/swagger"
 
     devise_for :users,
       controllers: {registrations: "users/registrations",
@@ -17,6 +16,7 @@ Rails.application.routes.draw do
         :authorized_applications
     end
 
+    get "/swagger", to: "swagger#index"
     get "/spa/*path", to: "spa#index"
   end
 end
