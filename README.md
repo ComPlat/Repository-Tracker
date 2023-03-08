@@ -52,6 +52,7 @@
 8. `bundle install`
 9. `yarn install`
 10. `asdf reshim`
+11. `bundle exec rails db:setup`
 
 ###### Testing
 
