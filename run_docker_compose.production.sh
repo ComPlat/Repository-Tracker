@@ -8,5 +8,5 @@ SMTP_HOST=mail.smtp2go.com\
   TRACKER_DB_USERNAME=postgres \
   TRACKER_DB_PASSWORD=postgres \
   TRACKER_SECRET_KEY_BASE=secret_key_base \
-  docker compose -f docker_compose.production.yml up --remove-orphans
+  docker compose -f docker_compose.production.yml up -d --remove-orphans
 # For debugging append to first line: --force-recreate --build
