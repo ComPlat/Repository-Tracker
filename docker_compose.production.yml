@@ -13,9 +13,11 @@ services:
       bundle config set --local without 'development test' &&
       bundle install &&
       ./bin/rails db:migrate &&
+      ./bin/rails assets:precompile &&
       ./bin/rails s"
     environment:
       - RAILS_ENV=production
+      - RAILS_SERVE_STATIC_FILES=true
       - TRACKER_DB_HOST=db
       - TRACKER_DB_USERNAME=${TRACKER_DB_USERNAME}
       - TRACKER_DB_PASSWORD=${TRACKER_DB_PASSWORD}
