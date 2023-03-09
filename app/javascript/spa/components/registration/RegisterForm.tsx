@@ -142,6 +142,10 @@ export const RegisterForm: React.FC = () => {
               pattern: specialCharacterPattern,
             },
             {
+              message: 'Password must not contain whitespaces!',
+              whitespace: true,
+            },
+            {
               required: true,
               type: 'regexp',
             },
