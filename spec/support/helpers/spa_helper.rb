@@ -46,6 +46,13 @@ module SpaHelper
     find_by_id("nest-messages_password").click.fill_in(with: "securepassword123-")
   end
 
+  def password_with_no_lowercase_letter
+    click_button "Register"
+    find_by_id("nest-messages_name").click.fill_in(with: user.name)
+    find_by_id("nest-messages_email").click.fill_in(with: user.email)
+    find_by_id("nest-messages_password").click.fill_in(with: "SECUREPASSWORD123-")
+  end
+
   def password_with_no_number
     click_button "Register"
     find_by_id("nest-messages_name").click.fill_in(with: user.name)

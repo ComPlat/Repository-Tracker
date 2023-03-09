@@ -19,6 +19,14 @@ import {
   RegisterContext,
 } from '../../contexts/RegisterContext';
 import {
+  atLeastOneLowercaseLetter,
+  atLeastOneNumber,
+  atLeastOneSpecialCharacter,
+  atLeastOneUppercaseLetter,
+  atLeastSixCharactersLong,
+  noWhitespaces,
+} from '../../helpers/PasswordValidationHelper';
+import {
   Register,
 } from '../../helpers/RegistrationHelper';
 
@@ -56,11 +64,6 @@ export const RegisterForm: React.FC = () => {
       });
     }
   };
-
-  const numberPattern = /(?=.*\d)/u;
-  const upcasePattern = /(?=.*[A-Z])/u;
-  const specialCharacterPattern = /[^\w\s]/u;
-  const whiteSpacePattern = /^\S*$/u;
 
   const onClick = () => {
     setRegister(false);
@@ -126,26 +129,12 @@ export const RegisterForm: React.FC = () => {
           label='Password'
           name='password'
           rules={[
-            {
-              message: 'Password must be at least 6 characters long',
-              min: 6,
-            },
-            {
-              message: 'Password must have at least 1 number',
-              pattern: numberPattern,
-            },
-            {
-              message: 'Password must have at least 1 uppercase letter',
-              pattern: upcasePattern,
-            },
-            {
-              message: 'Password must have at least 1 special character',
-              pattern: specialCharacterPattern,
-            },
-            {
-              message: 'Password must not contain whitespaces!',
-              pattern: whiteSpacePattern,
-            },
+            atLeastSixCharactersLong,
+            atLeastOneNumber,
+            atLeastOneUppercaseLetter,
+            atLeastOneLowercaseLetter,
+            atLeastOneSpecialCharacter,
+            noWhitespaces,
             {
               required: true,
               type: 'regexp',

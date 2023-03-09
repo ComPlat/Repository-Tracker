@@ -191,6 +191,18 @@ RSpec.describe "SPA" do
       it { expect(console_logs).to eq [] }
     end
 
+    context "when password has no lowercase letter" do
+      before do
+        clear_console_and_visit("/")
+        password_with_no_lowercase_letter
+      end
+
+      it { expect(page).to have_content("Password must have at least 1 lowercase letter", wait: 5) }
+
+      it { expect(console_logs.size).to eq 0 }
+      it { expect(console_logs).to eq [] }
+    end
+
     context "when password has no number" do
       before do
         clear_console_and_visit("/")
