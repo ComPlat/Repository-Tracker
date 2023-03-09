@@ -32,11 +32,39 @@ module SpaHelper
 
   def registration_with_existing_user = registration_user(user.name, user.email, user.password, user.password)
 
-  def registration_password_not_valid
+  def password_too_short
     click_button "Register"
     find_by_id("nest-messages_name").click.fill_in(with: user.name)
     find_by_id("nest-messages_email").click.fill_in(with: user.email)
-    find_by_id("nest-messages_password").click.fill_in(with: "notavalidpassword")
+    find_by_id("nest-messages_password").click.fill_in(with: "SeP1-")
+  end
+
+  def password_with_no_uppercase_letter
+    click_button "Register"
+    find_by_id("nest-messages_name").click.fill_in(with: user.name)
+    find_by_id("nest-messages_email").click.fill_in(with: user.email)
+    find_by_id("nest-messages_password").click.fill_in(with: "securepassword123-")
+  end
+
+  def password_with_no_number
+    click_button "Register"
+    find_by_id("nest-messages_name").click.fill_in(with: user.name)
+    find_by_id("nest-messages_email").click.fill_in(with: user.email)
+    find_by_id("nest-messages_password").click.fill_in(with: "SecurePassword-")
+  end
+
+  def password_with_no_special_character
+    click_button "Register"
+    find_by_id("nest-messages_name").click.fill_in(with: user.name)
+    find_by_id("nest-messages_email").click.fill_in(with: user.email)
+    find_by_id("nest-messages_password").click.fill_in(with: "SecurePassword123")
+  end
+
+  def password_with_whitespace
+    click_button "Register"
+    find_by_id("nest-messages_name").click.fill_in(with: user.name)
+    find_by_id("nest-messages_email").click.fill_in(with: user.email)
+    find_by_id("nest-messages_password").click.fill_in(with: "Secure Password 123-")
   end
 
   def registration_password_invalid_confirmation
