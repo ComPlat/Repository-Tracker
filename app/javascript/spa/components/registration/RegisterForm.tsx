@@ -60,6 +60,7 @@ export const RegisterForm: React.FC = () => {
   const numberPattern = /(?=.*\d)/u;
   const upcasePattern = /(?=.*[A-Z])/u;
   const specialCharacterPattern = /[^\w\s]/u;
+  const whiteSpacePattern = /^\S*$/u;
 
   const onClick = () => {
     setRegister(false);
@@ -143,7 +144,7 @@ export const RegisterForm: React.FC = () => {
             },
             {
               message: 'Password must not contain whitespaces!',
-              whitespace: true,
+              pattern: whiteSpacePattern,
             },
             {
               required: true,
