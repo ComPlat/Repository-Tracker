@@ -57,7 +57,9 @@ export const RegisterForm: React.FC = () => {
     }
   };
 
-  const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&-])[A-Za-z\d@$!%*?&-]{6,}$/u;
+  const numberPattern = /(?=.*\d)/u;
+  const upcasePattern = /(?=.*[A-Z])/u;
+  const specialCharacterPattern = /[^\w\s]/u;
 
   const onClick = () => {
     setRegister(false);
@@ -124,8 +126,20 @@ export const RegisterForm: React.FC = () => {
           name='password'
           rules={[
             {
-              message: 'Password must be at least 6 characters long, have at least 1 number, 1 uppercase letter and 1 special character (@$!%*?&-)',
-              pattern: passwordPattern,
+              message: 'Password must be at least 6 characters long',
+              min: 6,
+            },
+            {
+              message: 'Password must have at least 1 number',
+              pattern: numberPattern,
+            },
+            {
+              message: 'Password must have at least 1 uppercase letter',
+              pattern: upcasePattern,
+            },
+            {
+              message: 'Password must have at least 1 special character',
+              pattern: specialCharacterPattern,
             },
             {
               required: true,
