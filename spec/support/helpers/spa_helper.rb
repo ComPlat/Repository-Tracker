@@ -74,6 +74,14 @@ module SpaHelper
     find_by_id("nest-messages_password").click.fill_in(with: "Secure Password 123-")
   end
 
+  def password_field_empty
+    click_button "Register"
+    find_by_id("nest-messages_name").click.fill_in(with: user.name)
+    find_by_id("nest-messages_email").click.fill_in(with: user.email)
+    find_by_id("nest-messages_password").click.fill_in(with: "SecurePassword123-")
+    find_by_id("nest-messages_password").click.fill_in(with: "", fill_options: {clear: :backspace})
+  end
+
   def registration_password_invalid_confirmation
     click_button "Register"
     registration_user(user.name, user.email, user.password, "#{user.password}test")

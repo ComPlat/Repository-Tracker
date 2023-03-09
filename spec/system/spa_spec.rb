@@ -239,6 +239,18 @@ RSpec.describe "SPA" do
       it { expect(console_logs).to eq [] }
     end
 
+    context "when password field is empty" do
+      before do
+        clear_console_and_visit("/")
+        password_field_empty
+      end
+
+      it { expect(page).to have_content("Password field must not be empty!", wait: 5) }
+
+      it { expect(console_logs.size).to eq 0 }
+      it { expect(console_logs).to eq [] }
+    end
+
     context "when password and confirmation of password do NOT match" do
       before do
         clear_console_and_visit("/")
