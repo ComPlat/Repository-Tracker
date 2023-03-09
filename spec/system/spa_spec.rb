@@ -167,13 +167,85 @@ RSpec.describe "SPA" do
       it { expect(console_logs.first).to include "/users - Failed to load resource: the server responded with a status of 422 (Unprocessable Entity)" }
     end
 
-    context "when password has not a valid format" do
+    context "when password is not 6 characters long" do
       before do
         clear_console_and_visit("/")
-        registration_password_not_valid
+        password_too_short
       end
 
-      it { expect(page).to have_content("Password must be at least 6 characters long, have at least 1 number, 1 uppercase letter and 1 special character (@$!%*?&-)", wait: 5) }
+      it { expect(page).to have_content("Password must be at least 6 characters long", wait: 5) }
+
+      it { expect(console_logs.size).to eq 0 }
+      it { expect(console_logs).to eq [] }
+    end
+
+    context "when password has no uppercase letter" do
+      before do
+        clear_console_and_visit("/")
+        password_with_no_uppercase_letter
+      end
+
+      it { expect(page).to have_content("Password must have at least 1 uppercase letter", wait: 5) }
+
+      it { expect(console_logs.size).to eq 0 }
+      it { expect(console_logs).to eq [] }
+    end
+
+    context "when password has no lowercase letter" do
+      before do
+        clear_console_and_visit("/")
+        password_with_no_lowercase_letter
+      end
+
+      it { expect(page).to have_content("Password must have at least 1 lowercase letter", wait: 5) }
+
+      it { expect(console_logs.size).to eq 0 }
+      it { expect(console_logs).to eq [] }
+    end
+
+    context "when password has no number" do
+      before do
+        clear_console_and_visit("/")
+        password_with_no_number
+      end
+
+      it { expect(page).to have_content("Password must have at least 1 number", wait: 5) }
+
+      it { expect(console_logs.size).to eq 0 }
+      it { expect(console_logs).to eq [] }
+    end
+
+    context "when password has no special character" do
+      before do
+        clear_console_and_visit("/")
+        password_with_no_special_character
+      end
+
+      it { expect(page).to have_content("Password must have at least 1 special character", wait: 5) }
+
+      it { expect(console_logs.size).to eq 0 }
+      it { expect(console_logs).to eq [] }
+    end
+
+    context "when password has whitespace character" do
+      before do
+        clear_console_and_visit("/")
+        password_with_whitespace
+      end
+
+      it { expect(page).to have_content("Password must not contain whitespaces!", wait: 5) }
+
+      it { expect(console_logs.size).to eq 0 }
+      it { expect(console_logs).to eq [] }
+    end
+
+    context "when password field is empty" do
+      before do
+        clear_console_and_visit("/")
+        password_field_empty
+      end
+
+      it { expect(page).to have_content("Password field must not be empty!", wait: 5) }
 
       it { expect(console_logs.size).to eq 0 }
       it { expect(console_logs).to eq [] }

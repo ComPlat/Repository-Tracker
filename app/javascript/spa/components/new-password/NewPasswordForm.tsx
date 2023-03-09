@@ -19,11 +19,19 @@ import {
 import {
   PasswordChangeContext,
 } from '../../contexts/PasswordChangeContext';
+import {
+  atLeastOneLowercaseLetter,
+  atLeastOneNumber,
+  atLeastOneSpecialCharacter,
+  atLeastOneUppercaseLetter,
+  atLeastSixCharactersLong,
+  notEmpty,
+  noWhitespaces,
+  regexRuleType,
+} from '../../helpers/PasswordValidationHelper';
 
 export const NewPasswordForm: React.FC = () => {
   const navigate = useNavigate();
-
-  const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&-])[A-Za-z\d@$!%*?&-]{6,}$/u;
 
   const [
     searchParameters,
@@ -75,14 +83,14 @@ export const NewPasswordForm: React.FC = () => {
         label='Password'
         name='password'
         rules={[
-          {
-            message: 'Password must be at least 6 characters long, have at least 1 number, 1 uppercase letter and 1 special character (@$!%*?&-)',
-            pattern: passwordPattern,
-          },
-          {
-            required: true,
-            type: 'regexp',
-          },
+          atLeastSixCharactersLong,
+          atLeastOneNumber,
+          atLeastOneUppercaseLetter,
+          atLeastOneLowercaseLetter,
+          atLeastOneSpecialCharacter,
+          noWhitespaces,
+          notEmpty,
+          regexRuleType,
         ]}
       >
         <Input
