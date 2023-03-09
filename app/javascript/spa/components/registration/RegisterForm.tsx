@@ -24,7 +24,9 @@ import {
   atLeastOneSpecialCharacter,
   atLeastOneUppercaseLetter,
   atLeastSixCharactersLong,
+  notEmpty,
   noWhitespaces,
+  regexRuleType,
 } from '../../helpers/PasswordValidationHelper';
 import {
   Register,
@@ -135,10 +137,8 @@ export const RegisterForm: React.FC = () => {
             atLeastOneLowercaseLetter,
             atLeastOneSpecialCharacter,
             noWhitespaces,
-            {
-              required: true,
-              type: 'regexp',
-            },
+            notEmpty,
+            regexRuleType,
           ]}
         >
           <Input
